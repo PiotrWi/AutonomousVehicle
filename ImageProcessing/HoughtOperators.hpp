@@ -18,10 +18,10 @@ struct DoublePointLinesPlusColor
     cv::Scalar color = cv::Scalar(0,0,255);
 };
 
-cv::Mat operator+ (const cv::Mat& in, DoublePointLinesPlusColor& params);
+cv::Mat operator+ (const cv::Mat& in, const DoublePointLinesPlusColor& params);
 cv::Mat operator+ (const cv::Mat& in, const RoThetaLinesPlusColor& params);
 
 RoThetaLinesPlusColor calculateHoughLines(const cv::Mat& in);
-DoublePointLinesPlusColor calculateHoughPLines(const cv::Mat& frameToAnalyze, cv::Mat& frameToModify);
+DoublePointLinesPlusColor calculateHoughPLines(const cv::Mat& in);
 
 }  // namespace image_processing

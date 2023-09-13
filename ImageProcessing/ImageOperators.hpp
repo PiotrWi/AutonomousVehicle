@@ -107,4 +107,19 @@ cv::Mat operator|(const cv::Mat &in, const Canny &params)
     return out;
 }
 
+class FilterByMask
+{
+public:
+    std::vector<cv::Point> points;
+};
+
+cv::Mat operator|(const cv::Mat& in, const FilterByMask &params)
+{
+    cv::Mat mask = cv::Mat::zeros(in.size(), CV_8U);
+    cv::Mat out = in;
+
+    cv::fillConvexPoly(mask, params.points.data(), params.points.size(), cv::Scalar(255));
+    return cv::min(out, mask);
+}
+
 }  // namespace image_processing

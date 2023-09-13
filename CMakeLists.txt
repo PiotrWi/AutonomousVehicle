@@ -23,6 +23,8 @@ add_executable(Autonomous_vehicle main.cpp
         ImageProcessing/RoadLineDetection.hpp
         ImageProcessing/HoughtOperators.hpp
         ImageProcessing/HoughtOperators.cpp
-        ImageProcessing/RoadLineDetection.cpp)
+        ImageProcessing/RoadLineDetection.cpp
+        Components/CameraProcessingComponent.cpp
+        Components/CameraProcessingComponent.hpp)
 
 target_link_libraries(Autonomous_vehicle boost_program_options opencv_highgui)

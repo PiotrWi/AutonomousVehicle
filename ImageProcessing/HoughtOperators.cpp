@@ -3,7 +3,7 @@
 namespace image_processing
 {
 
-cv::Mat operator+(const cv::Mat &in, DoublePointLinesPlusColor &params)
+cv::Mat operator+(const cv::Mat &in, const DoublePointLinesPlusColor &params)
 {
     const cv::Mat out = in;
 
@@ -40,14 +40,14 @@ cv::Mat operator+(const cv::Mat &in, const RoThetaLinesPlusColor &params)
 RoThetaLinesPlusColor calculateHoughLines(const cv::Mat &in)
 {
     RoThetaLinesPlusColor out;
-    cv::HoughLines(in, out.lines, 3, 0.03, 100);
+    cv::HoughLines(in, out.lines, 3, 0.1, 100);
     return out;
 }
 
-DoublePointLinesPlusColor calculateHoughPLines(const cv::Mat &frameToAnalyze, cv::Mat &frameToModify)
+DoublePointLinesPlusColor calculateHoughPLines(const cv::Mat &in)
 {
     DoublePointLinesPlusColor out;
-    cv::HoughLinesP(frameToAnalyze, out.lines, 3, 0.03, 100, 25);
+    cv::HoughLinesP(in, out.lines, 3, 0.1, 50, 20);
     return out;
 }
 

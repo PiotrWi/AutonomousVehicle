@@ -6,10 +6,14 @@
 
 #include "../ImageProcessing/RoadLineDetection.hpp"
 
+namespace
+{
+// TODO: Temporary. It shall be invested to some proper gui.
+
 auto openVideo(const std::string& location)
 {
     cv::VideoCapture cap;
-    cap.open(location, cv::ImreadModes::IMREAD_GRAYSCALE);
+    cap.open(location);
     return cap;
 }
 
@@ -30,13 +34,18 @@ auto showMovie(cv::VideoCapture& cap)
     }
 }
 
-std::unique_ptr<VideoProcessingComponent> createVideoProcessingComponent(const std::string& input)
+}  // namespace
+
+namespace components
+{
+
+std::unique_ptr<Component> createVideoProcessingComponent(const std::string &input)
 {
     return std::make_unique<VideoProcessingComponent>(input);
 }
 
-VideoProcessingComponent::VideoProcessingComponent(const std::string& input)
-    : input_(input)
+VideoProcessingComponent::VideoProcessingComponent(const std::string &input)
+        : input_(input)
 {
 }
 
@@ -45,3 +54,5 @@ void VideoProcessingComponent::start()
     auto inputVideo = openVideo(input_);
     showMovie(inputVideo);
 }
+
+}  // namespace components

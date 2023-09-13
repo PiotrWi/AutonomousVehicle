@@ -3,6 +3,9 @@
 #include <memory>
 #include "Component.hpp"
 
+namespace components
+{
+
 class VideoProcessingComponent : public Component
 {
 public:
@@ -12,4 +15,6 @@ private:
     std::string input_;
 };
 
-std::unique_ptr<VideoProcessingComponent> createVideoProcessingComponent(const std::string& input);
+std::unique_ptr<Component> createVideoProcessingComponent(const std::string& input);
+
+}  // namespace components

@@ -6,4 +6,4 @@
 
 #include "Components/Component.hpp"
 
-std::vector<std::unique_ptr<Component>> createComponentsBasedOnParserInput(int argc, char** argv);
+std::vector<std::unique_ptr<components::Component>> createComponentsBasedOnParserInput(int argc, char** argv);
