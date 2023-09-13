@@ -1,6 +1,12 @@
-#include <iostream>
+#include "InputArgumentsParser.hpp"
 
-int main() {
-    std::cout << "Hello, World!" << std::endl;
+int main(int argc, char** argv)
+{
+    auto components = createComponentsBasedOnParserInput(argc, argv);
+
+    for (auto&& component: components)
+    {
+        component->start();
+    }
     return 0;
 }
