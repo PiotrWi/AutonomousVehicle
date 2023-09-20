@@ -10,7 +10,7 @@ class VideoProcessingComponent : public Component
 {
 public:
     VideoProcessingComponent(const std::string& input);
-    void start();
+    void start() override;
 private:
     std::string input_;
 };
