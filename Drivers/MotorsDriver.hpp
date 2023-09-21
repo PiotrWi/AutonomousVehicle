@@ -4,6 +4,8 @@
 #include "GpioDriver.hpp"
 #include "PwmDriver.hpp"
 
+// Left motor is lighter
+
 namespace drivers
 {
 

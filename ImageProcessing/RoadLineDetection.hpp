@@ -7,6 +7,7 @@ namespace image_processing
 namespace road_lane_detection
 {
 
+
 cv::Mat applyLinesToImage(const cv::Mat& in);
 
 }  // namespace road_lane_detection

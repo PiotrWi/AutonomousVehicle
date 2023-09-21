@@ -4,10 +4,10 @@ namespace drivers
 {
 
 MotorsDrivers::MotorsDrivers()
-    : phasePinLeftMotor_(5)
-    , phasePinRightMotor_(6)
-    , leftMotorPwm_(0)
-    , rightMotorPwm_(1)
+    : phasePinLeftMotor_(6)
+    , phasePinRightMotor_(5)
+    , leftMotorPwm_(1)
+    , rightMotorPwm_(0)
 {
 }
 
