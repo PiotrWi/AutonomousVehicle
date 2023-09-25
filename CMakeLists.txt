@@ -46,6 +46,22 @@ add_executable(Autonomous_vehicle main.cpp
         Components/MotorTestComponents.hpp
         tools/StringAlgorithms.hpp
         tools/StringAlgorithms.cpp
+        Networking/AccessPoint.hpp
+        Networking/AccessPoint.cpp
+        Networking/Session.cpp
+        Networking/Session.hpp
+        Components/RobotComponent.cpp
+        Components/RobotComponent.hpp
+        EventLoop/EventIds.hpp
+        EventLoop/GuiSpeedRequest.hpp
+        EventLoop/Event.hpp
+        EventLoop/EventLoop.hpp
+        EventLoop/EventLoop.cpp
+        EventLoop/Event.cpp
+        EventLoop/MessageDecoder.hpp
+        EventLoop/MessageDecoder.cpp
+        Services/SpeedControlService.cpp
+        Services/SpeedControlService.hpp
 )
 
 target_link_libraries(Autonomous_vehicle boost_program_options opencv_highgui drivers)

@@ -1,6 +1,19 @@
 
 #include "KeyPressController.hpp"
 
+#include <Backend/RobotAccessPoint.hpp>
+
+namespace
+{
+
+std::string createMessage(int leftWheel, int rightWheel)
+{
+    using namespace std;
+    return "Set speed: "s + to_string(leftWheel) + " "s + to_string(rightWheel);
+}
+
+}  // namespace
+
 namespace gui_controller
 {
 
@@ -24,17 +37,41 @@ std::optional<Key> keyArrowToEnumKey(int keyNr)
 
 void KeyPressController::start()
 {
+    desiredSpeeds_ = {0, 0};
 
 }
 
-void KeyPressController::setKeyClicked()
+void KeyPressController::setKeyClicked(Key key)
 {
+    keyPressed_[static_cast<int>(key)] = true;
+    if (key == Key::Up)
+    {
+        desiredSpeeds_.leftMotorSpeed_ += 10;
+        desiredSpeeds_.rightMotorSpeed_ += 10;
+    }
+    if (key == Key::Right)
+    {
+        desiredSpeeds_.leftMotorSpeed_ -= 10;
+        desiredSpeeds_.rightMotorSpeed_ += 10;
+    }
+    if (key == Key::Left)
+    {
+        desiredSpeeds_.leftMotorSpeed_ += 10;
+        desiredSpeeds_.rightMotorSpeed_ -= 10;
+    }
+    if (key == Key::Down)
+    {
+        desiredSpeeds_.leftMotorSpeed_ -= 10;
+        desiredSpeeds_.rightMotorSpeed_ += 10;
+    }
 
+    backend::RobotAccessPoint::getInstance().send(
+            createMessage(desiredSpeeds_.leftMotorSpeed_, desiredSpeeds_.rightMotorSpeed_));
 }
 
-void KeyPressController::setKeyReleased()
+void KeyPressController::setKeyReleased(Key key)
 {
-
+    keyPressed_[static_cast<int>(key)] = false;
 }
 
 }  // namespace gui_controller

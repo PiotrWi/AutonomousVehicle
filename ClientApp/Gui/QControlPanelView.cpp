@@ -5,6 +5,8 @@
 #include <QKeyEvent>
 #include <QLabel>
 
+#include <GuiController/KeyPressController.hpp>
+
 namespace gui
 {
 
@@ -16,6 +18,8 @@ QControlPanelView::QControlPanelView()
     setMinimumSize(320, 240);
     setStyleSheet("background-color:white;color:white;");
     this->setFocusPolicy(Qt::ClickFocus);
+
+    connect(this, &QControlPanelView::changeEvent, [&](auto&&){ std::cout << "Enable changed" << std::endl; });
 }
 
 void QControlPanelView::keyPressEvent(QKeyEvent* ev)
@@ -29,6 +33,7 @@ void QControlPanelView::keyPressEvent(QKeyEvent* ev)
     }
 
     std::cout << "[QControlPanelView] Key pressed: " << *gui_controller::keyArrowToName(ev->key()) << std::endl;
+
     QWidget::keyPressEvent(ev);
 }
 

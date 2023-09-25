@@ -3,30 +3,27 @@
 #include <QMainWindow>
 #include <QGridLayout>
 #include "Gui/QControlPanelView.hpp"
-
-class QCameraView : public QWidget
-{
-public:
-    explicit QCameraView();
-Q_OBJECT;
-};
-
-class QLadarView : public QWidget
-{
-public:
-    explicit QLadarView();
-Q_OBJECT;
-};
+#include "Gui/QCameraView.hpp"
+#include "Gui/QLadarVier.hpp"
+#include "GuiController/ConnectionController.hpp"
 
 class MainApplication : public QMainWindow
 {
     Q_OBJECT;
 public:
     MainApplication();
+signals:
+    void ConnectionStateChanged(bool);
 private:
-    QCameraView leftCameraView_;
-    QCameraView rightCameraView_;
-    QLadarView ladarView_;
-    gui::QControlPanelView controlPanelView_;
+    QWidget* createCentralWidget();
+    QWidget* createMenuWidget();
+    QStatusBar* createStatusBar();
+
+    gui::QCameraView* leftCameraView_;
+    gui::QCameraView* rightCameraView_;
+    gui::QLadarView* ladarView_;
+    gui::QControlPanelView* controlPanelView_;
+
+    gui_controller::ConnectionController connectionController_;
 };
 
