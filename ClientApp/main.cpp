@@ -1,12 +1,12 @@
 #include <QApplication>
 
-#include "MainApplication.hpp"
+#include "Gui/MainApplication.hpp"
 
-#include <Backend/RobotAccessPoint.hpp>
+#include "../RobotClientLib/RobotInterface.hpp"
 
 int main(int argc, char** argv)
 {
-    backend::RobotAccessPoint::getInstance().start();
+    robot_interface::init();
 
     QApplication app(argc, argv);
     MainApplication window;

@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <memory>
-#include <Tools/SingletonAddOn.hpp>
+#include "../../Tools/SingletonAddOn.hpp"
 
 namespace gui_controller
 {

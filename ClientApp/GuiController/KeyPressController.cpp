@@ -1,18 +1,7 @@
 
 #include "KeyPressController.hpp"
 
-#include <Backend/RobotAccessPoint.hpp>
-
-namespace
-{
-
-std::string createMessage(int leftWheel, int rightWheel)
-{
-    using namespace std;
-    return "Set speed: "s + to_string(leftWheel) + " "s + to_string(rightWheel);
-}
-
-}  // namespace
+#include "RobotClientLib/RobotInterface.hpp"
 
 namespace gui_controller
 {
@@ -35,10 +24,27 @@ std::optional<Key> keyArrowToEnumKey(int keyNr)
     return {};
 }
 
+Speeds &operator+=(Speeds &lhs, const Speeds &rhs)
+{
+    lhs.leftMotorSpeed_ += rhs.leftMotorSpeed_;
+    lhs.rightMotorSpeed_ += rhs.rightMotorSpeed_;
+    return lhs;
+}
+
 void KeyPressController::start()
 {
     desiredSpeeds_ = {0, 0};
+    sendRequestedSpeedToRobot();
+}
 
+void KeyPressController::sendRequestedSpeedToRobot()
+{
+    robot_interface::setRequestedSpeed(robot_interface::Speed{desiredSpeeds_.leftMotorSpeed_, desiredSpeeds_.rightMotorSpeed_});
+}
+
+void KeyPressController::stop()
+{
+    desiredSpeeds_ = {0, 0};
 }
 
 void KeyPressController::setKeyClicked(Key key)
@@ -46,32 +52,41 @@ void KeyPressController::setKeyClicked(Key key)
     keyPressed_[static_cast<int>(key)] = true;
     if (key == Key::Up)
     {
-        desiredSpeeds_.leftMotorSpeed_ += 10;
-        desiredSpeeds_.rightMotorSpeed_ += 10;
+        desiredSpeeds_ += Speeds{10, 10};
     }
     if (key == Key::Right)
     {
-        desiredSpeeds_.leftMotorSpeed_ -= 10;
-        desiredSpeeds_.rightMotorSpeed_ += 10;
+        desiredSpeeds_ += Speeds{-10, 10};
     }
     if (key == Key::Left)
     {
-        desiredSpeeds_.leftMotorSpeed_ += 10;
-        desiredSpeeds_.rightMotorSpeed_ -= 10;
+        desiredSpeeds_ += Speeds{10, -10};
     }
     if (key == Key::Down)
     {
-        desiredSpeeds_.leftMotorSpeed_ -= 10;
-        desiredSpeeds_.rightMotorSpeed_ += 10;
+        desiredSpeeds_ += Speeds{-10, -10};
     }
 
-    backend::RobotAccessPoint::getInstance().send(
-            createMessage(desiredSpeeds_.leftMotorSpeed_, desiredSpeeds_.rightMotorSpeed_));
+    sendRequestedSpeedToRobot();
 }
 
 void KeyPressController::setKeyReleased(Key key)
 {
     keyPressed_[static_cast<int>(key)] = false;
 }
+
+void KeyPressController::subscribeToSpeeds(std::function<void(Speeds)> callback)
+{
+    robot_interface::subscribeForRequestedSpeedChange([callback](auto&& robotSpeeds) {
+        callback({robotSpeeds.leftWheel, robotSpeeds.rightWheel});
+    });
+}
+
+Speeds KeyPressController::getCurrentSetSpeeds()
+{
+    auto robotSpeeds = robot_interface::getRequestedSpeed();
+    return {robotSpeeds.leftWheel, robotSpeeds.rightWheel};
+}
+
 
 }  // namespace gui_controller
