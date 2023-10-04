@@ -4,10 +4,11 @@
 
 #include "RobotAccessPoint.hpp"
 
-void RequestedSpeed::handle(std::string message)
+void RequestedSpeed::handle(const std::string& message)
 {
     std::stringstream ss(message.substr(getPrefix().size()));
     robot_interface::Speed speed;
+    ss >> speed.leftWheel >> speed.rightWheel;
     reactOnChange(speed);
 }
 
@@ -19,7 +20,7 @@ std::string RequestedSpeed::getPrefix()
 void RequestedSpeed::setRequestedSpeed(robot_interface::Speed speed)
 {
     using namespace std;
-    auto message = "Set speed: "s + to_string(speed.leftWheel) + " "s + to_string(speed.rightWheel);
+    auto message = "Set speed: "s + to_string(speed.leftWheel) + " "s + to_string(speed.rightWheel) + "/n";
     backend::RobotAccessPoint::getInstance().send(message);
 }
 

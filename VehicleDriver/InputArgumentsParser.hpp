@@ -5,5 +5,6 @@
 #include <vector>
 
 #include "Components/Component.hpp"
+#include "Application.hpp"
 
-std::vector<std::unique_ptr<components::Component>> createComponentsBasedOnParserInput(int argc, char** argv);
+void createComponentsBasedOnParserInput(int argc, char** argv, Application& applicationContext);

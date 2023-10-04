@@ -5,17 +5,19 @@
 #include <string>
 #include "Types.hpp"
 
-class RequestedSpeed
+#include "IMessageHandler.hpp"
+
+class RequestedSpeed : public IMessageHandler
 {
 public:
-    void handle(std::string);
-    std::string getPrefix();
+    void handle(const std::string& message) override;
+    std::string getPrefix() override;
     void setRequestedSpeed(robot_interface::Speed);
     robot_interface::Speed getRequestedSpeed();
     unsigned int subscribeForRequestedSpeedChange(std::function<void(robot_interface::Speed )> callback);
     unsigned int subscribeForRequestedSpeedChange(std::function<void(robot_interface::Speed )> callback, robot_interface::Speed& outCurrentValue);
 
-    void clear();
+    void clear() override;
 private:
     void reactOnChange(robot_interface::Speed);
     std::mutex currentRequestedSpeed_mutex;

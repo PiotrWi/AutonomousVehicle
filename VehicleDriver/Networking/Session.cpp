@@ -6,10 +6,12 @@
 namespace networking
 {
 
-Session::Session(boost::asio::ip::tcp::socket&& socket, std::function<void()> notifyConnectionDroped)
+Session::Session(boost::asio::ip::tcp::socket&& socket,
+                 std::function<void()> notifyConnectionDroped,
+                 std::function<void(const std::string&)> messageHandler)
     : socket_(std::move(socket))
-    , buffer_( boost::asio::buffer(data_, 1024))
     , notifyConnectionDroped_(notifyConnectionDroped)
+    , messageHandler_(messageHandler)
 {
 }
 
@@ -22,6 +24,7 @@ void Session::receive_single()
 {
     std::shared_ptr<std::array<char, 100>> buff(new std::array<char, 100>);
     auto buffer = boost::asio::buffer(*buff);
+    std::lock_guard<std::mutex> lg(socketMutex_);
     socket_.async_receive(buffer, [&, keepAlive = buff, buffer](auto&& ec, auto&& bytes_transferred)
     {
         if (ec)
@@ -33,13 +36,14 @@ void Session::receive_single()
         }
         std::string line(keepAlive.get()->begin(), bytes_transferred);
         std::cout << line << std::endl;
-
+        messageHandler_(line);
         receive_single();
     });
 }
 
 void Session::send(std::string message)
 {
+    std::lock_guard<std::mutex> lg(socketMutex_);
     socket_.send(boost::asio::buffer(message));
 }
 

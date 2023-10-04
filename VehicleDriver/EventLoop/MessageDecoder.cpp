@@ -5,8 +5,10 @@
 #include "GuiSpeedRequest.hpp"
 #include "../../Tools/StringAlgorithms.hpp"
 
-NotHandledMessage::NotHandledMessage()
-    : std::logic_error("Not handled message")
+using namespace std;
+
+NotHandledMessage::NotHandledMessage(std::string message)
+    : std::logic_error("Not handled message"s + message )
 {
 }
 
@@ -29,5 +31,5 @@ Event decode(std::string message)
     {
         return decodeGuiSpeedRequest(message);
     }
-    throw NotHandledMessage();
+    throw NotHandledMessage(message);
 }

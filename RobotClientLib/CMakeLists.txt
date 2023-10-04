@@ -5,8 +5,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 add_library(AutonomousVehicleInterface SHARED
         detail/MessageDispatcher.cpp
         detail/MessageDispatcher.hpp
-        detail/MessageReceiver.cpp
-        detail/MessageReceiver.hpp
+        detail/Connection.cpp
+        detail/Connection.hpp
         detail/RequestedSpeed.cpp
         detail/RequestedSpeed.hpp
         detail/RobotAccessPoint.cpp
@@ -16,5 +16,8 @@ add_library(AutonomousVehicleInterface SHARED
         Types.hpp
         CRobotInterface.h
         detail/CRobotInterface.cpp
+        detail/ImageHandler.cpp
+        detail/ImageHandler.hpp
+        detail/IMessageHandler.hpp
 )
 

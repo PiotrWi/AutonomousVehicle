@@ -3,6 +3,7 @@
 #include <iostream>
 #include "RobotAccessPoint.hpp"
 #include "RequestedSpeed.hpp"
+#include "ImageHandler.hpp"
 #include "MessageDispatcher.hpp"
 
 namespace robot_interface
@@ -10,6 +11,7 @@ namespace robot_interface
 
 MessageDispatcher messageDispatcher_;
 RequestedSpeed requestedSpeed_;
+ImageHandler imageHandler_;
 
 void clearModelOnConnectionChange(bool)
 {
@@ -27,6 +29,7 @@ void init()
     });
 
     messageDispatcher_.subscribeFor(requestedSpeed_.getPrefix(), [](auto&& message) {requestedSpeed_.handle(message); } );
+    messageDispatcher_.subscribeFor(imageHandler_.getPrefix(), [](auto&& message) {imageHandler_.handle(message); } );
 }
 
 bool connect()
@@ -81,6 +84,16 @@ void subscribeForRequestedSpeedChange(std::function<void(Speed )> callback)
 void subscribeForRequestedSpeedChange(std::function<void(Speed )> callback, Speed& outCurrentValue)
 {
     requestedSpeed_.subscribeForRequestedSpeedChange(callback, outCurrentValue);
+}
+
+void subscribeForPicture(CameraSide cameraSide, std::function<void(IntegerPicture)> callback)
+{
+    imageHandler_.subscribeForPicture(cameraSide, callback);
+}
+
+IntegerPicture getPicture(CameraSide cameraSide)
+{
+    return imageHandler_.getImage(cameraSide);
 }
 
 }  // namespace robot_interface

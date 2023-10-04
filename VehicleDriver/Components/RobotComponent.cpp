@@ -5,27 +5,22 @@
 namespace components
 {
 
-RobotComponent::RobotComponent()
-        : access_point_([this](const std::string& message){ eventLoop_.pushEvent(decode(message)); })
-        , messageSender_(access_point_)
+RobotComponent::RobotComponent(ApplicationContext& applicationContext)
+        : eventLoop_(applicationContext.eventLoop_)
+        , access_point_(applicationContext.accessPoint_)
+        , messageSender_(applicationContext.messageSender_)
         , speedControlService_(eventLoop_, messageSender_)
 {
 }
 
 void RobotComponent::start()
 {
-    access_point_.start();
     speedControlService_.start();
-
-    while (true)
-    {
-        eventLoop_.dispatchEvent();
-    }
 }
 
-std::unique_ptr<Component> createRobotComponent()
+std::unique_ptr<Component> createRobotComponent(ApplicationContext& applicationContext)
 {
-    return std::make_unique<RobotComponent>();
+    return std::make_unique<RobotComponent>(applicationContext);
 }
 
 }  // namespace components

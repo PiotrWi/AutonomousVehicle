@@ -1,0 +1,41 @@
+#include "Pipeline.hpp"
+
+namespace image_processing
+{
+
+void Pipeline::init()
+{
+    for (auto &&[task, name]: pipelineTasks_) {
+        task->init();
+    }
+}
+
+void Pipeline::execute()
+{
+    for (auto &&[task, name]: pipelineTasks_) {
+        task->execute();
+    }
+}
+
+void Pipeline::add(IProducerPipelineEntity *producer, std::string name)
+{
+    pipelineTasks_.emplace_back(producer, name);
+}
+
+void Pipeline::add(IConsumerPipelineEntity *consumer, std::string name, std::vector<PipelinePortMappings> portMapping)
+{
+    pipelineTasks_.emplace_back(consumer, name);
+    for (auto &&singleMapping: portMapping) {
+        auto producerIt = std::find_if(pipelineTasks_.begin(), pipelineTasks_.end(),
+                                       [&singleMapping](auto &&producerToName) {
+                                           return producerToName.second == singleMapping.producerName;
+                                       });
+        if (producerIt == std::end(pipelineTasks_)) {
+            throw ProducerInstanceNotFindInPipeline();
+        }
+        consumer->setInput(singleMapping.inputPort, dynamic_cast<IProducerPipelineEntity *>(producerIt->first),
+                           singleMapping.producerOutputPort);
+    }
+}
+
+}  // namespace image_processing

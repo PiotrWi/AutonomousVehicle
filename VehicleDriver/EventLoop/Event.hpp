@@ -12,6 +12,10 @@ public:
     }
     ~Event();
 
+    Event(const Event&) = delete;
+    Event& operator=(const Event&) = delete;
+    Event(Event&&) noexcept ;
+
     template<typename TConcreteEvent>
     TConcreteEvent* get()
     {
@@ -20,8 +24,8 @@ public:
     unsigned int getId();
 private:
     unsigned int eventId_;
-    void *payload_;
-    void(*deleter_)(void* payload);
+    void *payload_ = nullptr;
+    void(*deleter_)(void* payload) = nullptr;
 };
 
 template<typename TConcreteEvent>

@@ -8,6 +8,7 @@
 #include <memory>
 #include <mutex>
 #include <vector>
+#include <condition_variable>
 
 class EventLoop
 {
@@ -36,6 +37,7 @@ class EventLoop
     public:
         std::function<void(Event*)> handler_;
     };
+
     class SubsciptionRaii
     {
     public:
@@ -48,16 +50,19 @@ class EventLoop
     };
 
 public:
+    using SubscriptionPtr = std::unique_ptr<EventLoop::SubsciptionRaii>;
+
     void pushEvent(Event&&);
-    std::unique_ptr<EventLoop::SubsciptionRaii> subscribeForEvent(std::function<void(Event*)> handler, unsigned int eventId);
+    SubscriptionPtr subscribeForEvent(std::function<void(Event*)> handler, unsigned int eventId);
 
     template<typename TEvent>
-    std::unique_ptr<EventLoop::SubsciptionRaii> subscribeForEvent(std::function<void(Event*)> handler)
+    SubscriptionPtr subscribeForEvent(std::function<void(Event*)> handler)
     {
         return subscribeForEvent(handler, getId<TEvent>());
     }
     void dispatchEvent();
 private:
+    std::condition_variable eventQueue_ConditionVariable_;
     std::mutex eventsQueueMutex_;
     std::queue<Event> eventsQueue_;
 

@@ -71,7 +71,8 @@ EventLoop::SubsciptionRaii::~SubsciptionRaii()
 void EventLoop::pushEvent(Event&& event)
 {
     std::lock_guard<std::mutex> m(eventsQueueMutex_);
-    eventsQueue_.push(event);
+    eventsQueue_.push(std::move(event));
+    eventQueue_ConditionVariable_.notify_one();
 }
 
 std::unique_ptr<EventLoop::SubsciptionRaii> EventLoop::subscribeForEvent(std::function<void(Event*)> handler, unsigned int eventId)
@@ -94,7 +95,8 @@ std::unique_ptr<EventLoop::SubsciptionRaii> EventLoop::subscribeForEvent(std::fu
 
 void EventLoop::dispatchEvent()
 {
-    std::lock_guard<std::mutex> m(eventsQueueMutex_);
+    std::unique_lock<std::mutex> lk(eventsQueueMutex_);
+    eventQueue_ConditionVariable_.wait(lk, [&](){return not eventsQueue_.empty();});
     if (not eventsQueue_.empty())
     {
         auto& event = eventsQueue_.front();
@@ -107,5 +109,6 @@ void EventLoop::dispatchEvent()
                 subscriber.handler_(&event);
             }
         }
+        eventsQueue_.pop();
     }
 }

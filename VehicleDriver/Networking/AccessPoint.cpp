@@ -15,10 +15,10 @@ AccessPoint::AccessPoint(std::function<void(const std::string&)> messageHandler)
 void AccessPoint::start()
 {
     std::thread t([&](){
+        accept_one();
         io_service_.run();
+        std::cout << "Why end??";
     });
-
-    accept_one();
 
     t.detach();
 }
@@ -36,11 +36,11 @@ void AccessPoint::accept_one()
         {
             std::cout << "Incomming connection" << std::endl;
             std::lock_guard<std::mutex> lg(sessionMutex_);
-            session_ = Session(std::move(socket), [this]() {
+            session_ = std::make_unique<Session>(std::move(socket), [this]() {
                 std::cout << "Connection dropped" << std::endl;
                 session_ = {};
                 accept_one();
-            });
+                }, messageHandler_);
             session_->start();
         }
     });
@@ -48,8 +48,10 @@ void AccessPoint::accept_one()
 
 void AccessPoint::send(std::string message)
 {
-    session_->send(message);
-
+    if (session_)
+    {
+        session_->send(message);
+    }
 }
 
 }  // namespace networking

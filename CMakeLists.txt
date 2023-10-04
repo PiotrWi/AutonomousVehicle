@@ -1,8 +1,13 @@
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.15)
 project(Autonomous_vehicle)
 
-set(CMAKE_CXX_STANDARD 20)
-SET(CMAKE_CXX_FLAGS  "-Wall -Wextra -Werror -std=c++20")
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+
+    SET(CMAKE_CXX_FLAGS  "-Og -g -std=c++20 -lrt -latomic -pthread") # due te opencv internal: -Wall -Wextra -Werror
+else()
+    SET(CMAKE_CXX_FLAGS  "-Ofast -std=c++20 -flto -lrt -latomic -pthread") # due te opencv internal: -Wall -Wextra -Werror
+endif()
+
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 

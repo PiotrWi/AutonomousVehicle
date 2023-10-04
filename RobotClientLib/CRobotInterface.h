@@ -19,4 +19,19 @@ void c_setRequestedSpeed(Speed);
 Speed c_getRequestedSpeed();
 void c_subscribeForRequestedSpeedChange(void(*callback)(Speed));
 
+struct IntegerPicture
+{
+    int format;
+    int rows;
+    unsigned int* pixels;
+};
+
+enum Side
+{
+    Left,
+    Right
+};
+
+IntegerPicture getPicture(Side);
+
 }  // extern "C"

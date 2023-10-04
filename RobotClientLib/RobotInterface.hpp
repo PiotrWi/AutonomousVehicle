@@ -18,4 +18,7 @@ Speed getRequestedSpeed();
 void subscribeForRequestedSpeedChange(std::function<void(Speed )> callback);
 void subscribeForRequestedSpeedChange(std::function<void(Speed )> callback, Speed& outCurrentValue);
 
+IntegerPicture getPicture(CameraSide);
+void subscribeForPicture(CameraSide, std::function<void(IntegerPicture)> callback);
+
 }  // namespace robot_interface

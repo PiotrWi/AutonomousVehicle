@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.15)
 project(Autonomous_vehicle)
 
 find_package(Boost)
@@ -10,7 +10,6 @@ find_package(OpenCV)
 if(OpenCV_FOUND)
     include_directories(${OpenCV_INCLUDE_DIRS})
 endif()
-
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
@@ -25,31 +24,11 @@ add_library(drivers STATIC
         Drivers/SysHelper.cpp
         Drivers/FDRaiiWrapper.cpp
         Drivers/FDRaiiWrapper.hpp
+        Drivers/CameraDriver.cpp
+        Drivers/CameraDriver.hpp
 )
 
-add_executable(Autonomous_vehicle main.cpp
-        InputArgumentsParser.hpp
-        InputArgumentsParser.cpp
-        Components/Component.hpp
-        Components/VideoProccessingComponent.cpp
-        Components/VideoProccessingComponent.hpp
-        ImageProcessing/ImageOperators.hpp
-        ImageProcessing/RoadLineDetection.hpp
-        ImageProcessing/HoughtOperators.hpp
-        ImageProcessing/HoughtOperators.cpp
-        ImageProcessing/RoadLineDetection.cpp
-        Components/CameraProcessingComponent.cpp
-        Components/CameraProcessingComponent.hpp
-        Components/MotorTestComponents.cpp
-        Components/MotorTestComponents.hpp
-        ../Tools/StringAlgorithms.hpp
-        ../Tools/StringAlgorithms.cpp
-        Networking/AccessPoint.hpp
-        Networking/AccessPoint.cpp
-        Networking/Session.cpp
-        Networking/Session.hpp
-        Components/RobotComponent.cpp
-        Components/RobotComponent.hpp
+add_library(eventLoop STATIC
         EventLoop/EventIds.hpp
         EventLoop/GuiSpeedRequest.hpp
         EventLoop/Event.hpp
@@ -58,14 +37,59 @@ add_executable(Autonomous_vehicle main.cpp
         EventLoop/Event.cpp
         EventLoop/MessageDecoder.hpp
         EventLoop/MessageDecoder.cpp
-        Services/SpeedControlService.cpp
-        Services/SpeedControlService.hpp
-        Networking/MessageSender.hpp
-        Networking/MessageSender.cpp
         EventLoop/MessageEncoder.hpp
         EventLoop/MessageEncoder.cpp
 )
 
-target_link_libraries(Autonomous_vehicle boost_program_options opencv_highgui drivers)
+add_executable(Autonomous_vehicle main.cpp
+        InputArgumentsParser.hpp
+        InputArgumentsParser.cpp
+        Components/Component.hpp
+        Components/VideoProccessingComponent.cpp
+        Components/VideoProccessingComponent.hpp
+        ImageProcessing/ImageOperations/ImageOperators.hpp
+        ImageProcessing/ImageOperations/RoadLineDetection.hpp
+        ImageProcessing/ImageOperations/HoughtOperators.hpp
+        ImageProcessing/ImageOperations/HoughtOperators.cpp
+        ImageProcessing/ImageOperations/RoadLineDetection.cpp
+        Components/CameraProcessingComponent.cpp
+        Components/CameraProcessingComponent.hpp
+        Components/MotorTestComponents.cpp
+        Components/MotorTestComponents.hpp
+        Networking/AccessPoint.hpp
+        Networking/AccessPoint.cpp
+        Networking/Session.cpp
+        Networking/Session.hpp
+        Components/RobotComponent.cpp
+        Components/RobotComponent.hpp
+        Services/SpeedControlService.cpp
+        Services/SpeedControlService.hpp
+        Networking/MessageSender.hpp
+        Networking/MessageSender.cpp
+        ImageProcessing/Pipeline.hpp
+        ImageProcessing/ImagePipelines/IPipelineEntity.hpp
+        ImageProcessing/Pipeline.cpp
+        ImageProcessing/ImagePipelines/ImageFromCamera.hpp
+        ImageProcessing/ImagePipelines/PreviewEntity.hpp
+        ImageProcessing/PipelineFactory.hpp
+        ImageProcessing/PipelineFactory.cpp
+        ImageProcessing/ImagePipelines/ImageFromCamera.cpp
+        ImageProcessing/ImagePipelines/PreviewEntity.cpp
+        ImageProcessing/ImagePipelines/PicturePublisher.cpp
+        ImageProcessing/ImagePipelines/PicturePublisher.hpp
+        ImageProcessing/ImagePipelines/SingleInputConsumer.hpp
+        ApplicationContext.hpp
+        ApplicationContext.cpp
+        Application.cpp
+        Application.hpp
+        Common/ImageTypes.hpp
+)
+
+target_link_libraries(Autonomous_vehicle
+        boost_program_options
+        opencv_highgui
+        drivers
+        eventLoop
+        tools)
 
 add_subdirectory(test EXCLUDE_FROM_ALL)

@@ -8,7 +8,7 @@
 class NotHandledMessage : public std::logic_error
 {
 public:
-    NotHandledMessage();
+    NotHandledMessage(std::string message);
 };
 
 Event decode(std::string message);

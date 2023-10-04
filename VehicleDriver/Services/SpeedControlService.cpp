@@ -15,12 +15,13 @@ SpeedControlService::SpeedControlService(EventLoop &el,
 void SpeedControlService::start()
 {
     motorsDrivers_.init();
-    el_.subscribeForEvent<GuiSpeedRequest>([this](Event* ev){ this->reactOnGuiSpeedRequest(ev); });
+    requestedSpeedSubscription_ = el_.subscribeForEvent<GuiSpeedRequest>([this](Event* ev){ this->reactOnGuiSpeedRequest(ev); });
 }
 
 void SpeedControlService::reactOnGuiSpeedRequest(Event *ev)
 {
     auto speedRequest = ev->get<GuiSpeedRequest>();
+    std::cout << "reactOnGuiSpeedRequest: " << speedRequest->leftWheel_ << " " << speedRequest->rightWheel_ << std::endl;
     motorsDrivers_.setSpeed(speedRequest->leftWheel_, speedRequest->rightWheel_);
     messageSender_.send(createCurrentRequestedSpeed(speedRequest->leftWheel_, speedRequest->rightWheel_));
 }

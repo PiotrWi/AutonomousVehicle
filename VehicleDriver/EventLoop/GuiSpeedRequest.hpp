@@ -4,8 +4,8 @@
 
 struct GuiSpeedRequest
 {
-    unsigned int leftWheel_;
-    unsigned int rightWheel_;
+    int leftWheel_;
+    int rightWheel_;
 };
 
 template<>

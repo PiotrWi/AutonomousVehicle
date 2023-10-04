@@ -9,4 +9,18 @@ struct Speed
     int rightWheel;
 };
 
+struct IntegerPicture
+{
+    int format;
+    int rows;
+    int columns;
+    std::vector<unsigned char> pixels;
+};
+
+enum class CameraSide
+{
+    Left,
+    Right,
+};
+
 }  // namespace robot_interface

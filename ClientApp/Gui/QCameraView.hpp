@@ -1,15 +1,25 @@
 #pragma once
 
 #include <QWidget>
+#include <QLabel>
+#include <GuiController/CameraController.hpp>
 
 namespace gui
 {
 
 class QCameraView : public QWidget
 {
+Q_OBJECT;
 public:
-    explicit QCameraView();
-    Q_OBJECT;
+    explicit QCameraView(gui_controller::CameraSide cameraSide);
+signals:
+    void imageChanged(std::shared_ptr<QImage>);
+public:
+    void displayImage(std::shared_ptr<QImage>);
+private:
+    gui_controller::CameraSide cameraSide_;
+    gui_controller::CameraController cameraController_;
+    QLabel* image_;
 };
 
 }  // namespace gui

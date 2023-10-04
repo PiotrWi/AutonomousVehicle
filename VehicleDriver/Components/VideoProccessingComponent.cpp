@@ -4,7 +4,7 @@
 
 #include "opencv2/highgui.hpp"
 
-#include "ImageProcessing/RoadLineDetection.hpp"
+#include "VehicleDriver/ImageProcessing/ImageOperations/RoadLineDetection.hpp"
 
 namespace
 {

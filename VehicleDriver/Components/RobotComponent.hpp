@@ -2,6 +2,7 @@
 
 #include <memory>
 #include "Component.hpp"
+#include "../ApplicationContext.hpp"
 
 #include "EventLoop/EventLoop.hpp"
 #include "Networking/AccessPoint.hpp"
@@ -14,15 +15,16 @@ namespace components
 class RobotComponent : public Component
 {
 public:
-    RobotComponent();
+    explicit RobotComponent(ApplicationContext& applicationContext);
     void start() override;
 private:
-    EventLoop eventLoop_;
-    networking::AccessPoint access_point_;
-    networking::MessageSender messageSender_;
+    EventLoop& eventLoop_;
+    networking::AccessPoint& access_point_;
+    networking::MessageSender& messageSender_;
+
     services::SpeedControlService speedControlService_;
 };
 
-std::unique_ptr<Component> createRobotComponent();
+std::unique_ptr<Component> createRobotComponent(ApplicationContext& applicationContext);
 
 }  // namespace components

@@ -18,6 +18,7 @@ private:
     EventLoop& el_;
     drivers::MotorsDrivers motorsDrivers_;
     networking::MessageSender messageSender_;
+    EventLoop::SubscriptionPtr requestedSpeedSubscription_;
 };
 
 } // services

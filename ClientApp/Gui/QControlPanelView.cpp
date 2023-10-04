@@ -107,7 +107,7 @@ void QControlPanelView::fullfillSpeeds()
 {
     auto speeds = keyPressController_.getCurrentSetSpeeds();
     requestedLeftWheelSpeedOut_->setText(QString::number(speeds.leftMotorSpeed_));
-    requestedRightWheelSpeedOut_->setText(QString::number(speeds.leftMotorSpeed_));
+    requestedRightWheelSpeedOut_->setText(QString::number(speeds.rightMotorSpeed_));
 }
 
 void QControlPanelView::connectSpeedWidgetsToSpeedChanges()

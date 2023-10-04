@@ -15,13 +15,6 @@ RobotAccessPoint::RobotAccessPoint()
 
 void RobotAccessPoint::start()
 {
-    std::cout << " RobotAccessPoint::start" << std::endl;
-    auto asioReceiverThread = std::thread([&]()
-    {
-        std::cout << "RobotAccessPoint thread start" << std::endl;
-        io_service_.run();
-    });
-    asioReceiverThread.detach();
 }
 
 bool RobotAccessPoint::connect()
@@ -38,12 +31,13 @@ bool RobotAccessPoint::connect()
         std::cout << "connection failed" << std::endl;
         std::cout << "ec: " << ec.what() << std::endl;
 
-        messageReceiver_.reset();
+        connection_.reset();
         if (notifyAboutConnectionStateChange_) notifyAboutConnectionStateChange_(false);
         return false;
     }
 
-    messageReceiver_ = MessageReceiver{&sock_, [this](){disconnect();}, notifyMessage_};
+    connection_ = std::make_unique<Connection>(io_service_, &sock_, [this](){disconnect();}, notifyMessage_);
+    connection_->start();
     if (notifyAboutConnectionStateChange_)
     {
         std::cout << "goint to call calback" << std::endl;
@@ -55,7 +49,7 @@ bool RobotAccessPoint::connect()
 bool RobotAccessPoint::disconnect()
 {
     sock_.close();
-    messageReceiver_.reset();
+    connection_.reset();
     if (notifyAboutConnectionStateChange_) notifyAboutConnectionStateChange_(false);
     return true;
 }
@@ -72,9 +66,10 @@ void RobotAccessPoint::registerMessageCallback(std::function<void(std::string)> 
 
 void RobotAccessPoint::send(std::string s)
 {
-    if (not sock_.is_open())
-        return;
-    sock_.send(boost::asio::buffer(s));
+    if (connection_)
+    {
+        connection_->send(s);
+    }
 }
 
 bool RobotAccessPoint::isConnected()

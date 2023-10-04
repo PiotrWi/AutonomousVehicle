@@ -1,12 +1,12 @@
 #include "InputArgumentsParser.hpp"
+#include "ApplicationContext.hpp"
+#include <Application.hpp>
 
 int main(int argc, char** argv)
 {
-    auto components = createComponentsBasedOnParserInput(argc, argv);
+    Application app;
+    createComponentsBasedOnParserInput(argc, argv, app);
 
-    for (auto&& component: components)
-    {
-        component->start();
-    }
+    app.start();
     return 0;
 }

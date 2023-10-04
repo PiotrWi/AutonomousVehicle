@@ -16,6 +16,13 @@ if(GTest_FOUND)
             SysfsTestUtils/SequenceVerifier.cpp
             MotorDriverTests.cpp
             SysfsTestUtils/GpioSequences.cpp
-            SysfsTestUtils/PwMSequences.cpp)
-    target_link_libraries(ut ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} drivers)
+            SysfsTestUtils/PwMSequences.cpp
+            MessageDecoderTests.cpp)
+    target_link_libraries(ut
+            ${GTEST_LIBRARIES}
+            ${GTEST_MAIN_LIBRARIES}
+            drivers
+            eventLoop
+            opencv_highgui
+            tools)
 endif(GTest_FOUND)

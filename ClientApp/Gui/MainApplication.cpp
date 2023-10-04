@@ -10,8 +10,8 @@
 #include <GuiController/SetEnableManager.hpp>
 
 MainApplication::MainApplication()
-    : leftCameraView_(new gui::QCameraView)
-    , rightCameraView_(new gui::QCameraView)
+    : leftCameraView_(new gui::QCameraView(gui_controller::CameraSide::Left))
+    , rightCameraView_(new gui::QCameraView(gui_controller::CameraSide::Right))
     , ladarView_(new gui::QLadarView)
     , controlPanelView_(new gui::QControlPanelView)
 {

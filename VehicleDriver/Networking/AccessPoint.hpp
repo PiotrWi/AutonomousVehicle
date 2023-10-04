@@ -6,6 +6,7 @@
 #include <boost/asio.hpp>
 
 #include "Session.hpp"
+#include <Tools/SingletonAddOn.hpp>
 
 namespace networking
 {
@@ -21,7 +22,7 @@ private:
 private:
     boost::asio::io_service io_service_;
     boost::asio::ip::tcp::acceptor acceptor_;
-    std::optional<Session> session_;
+    std::unique_ptr<Session> session_;
     std::mutex sessionMutex_;
     std::function<void(const std::string&)> messageHandler_;
 };

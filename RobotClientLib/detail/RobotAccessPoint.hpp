@@ -1,12 +1,13 @@
 #pragma once
 
 #include <functional>
+#include <memory>
 #include <optional>
 
 #include <boost/asio.hpp>
 
 #include <Tools/SingletonAddOn.hpp>
-#include "MessageReceiver.hpp"
+#include "Connection.hpp"
 
 namespace backend
 {
@@ -28,7 +29,7 @@ private:
     boost::asio::io_service io_service_;
     boost::asio::ip::tcp::socket sock_;
 
-    std::optional<MessageReceiver> messageReceiver_;
+    std::unique_ptr<Connection> connection_;
 
     std::function<void(bool)> notifyAboutConnectionStateChange_;
     std::function<void(std::string)> notifyMessage_;
