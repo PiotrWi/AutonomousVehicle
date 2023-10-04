@@ -2,18 +2,21 @@
 
 Educational project from automotive domain.
 Its goal is to create mobile robots with sensor and utilizing some knowledge from ADAS systems.
-Project can be run in 2 environments:
+Project consist of 3 entities:
 
- - Local PC. Here we can execute some "hardware in the loop" tests before we deploy software to real target.
- - Raspberry PI based machine. 
-
+ - Robot application: application executed in Raspberry PI module. It consist as a driver.
+ - ClientApp: Gui application to controll a robot. 
+ - PythonAccessLib: Library to controll robot from python scripts.
+ 
 ## Vehicle ##
+
 Vehicle consist of:
 
  - Raspberry PI 4 version B
 
 ## Environment setup
-Build environment for PC
+### Build environment for PC ###
+
 Install boost libraries:
 
  - mkdir boost 
@@ -25,5 +28,18 @@ Install boost libraries:
  - sudo ./b2 install --prefix=/usr/local
 
 Install CV libraries
+Install GoogleTest and google Mock
+Install QT
 
- - mkdir opencv
+And then build as any CMake projects:
+
+ - mkdir build && cd build
+ - cmake ..
+ - make all
+
+### Build environment for RaspberryPi ###
+
+Robot driver is to be build on the module (Raspberry Pi) itself. It need to be installed:
+
+ - boost libraries:
+ - OpenCV library
