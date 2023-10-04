@@ -7,31 +7,6 @@
 
 using namespace std;
 
-/*
- *     auto message = "PublishImage: "s
-        + "LEFT "s
-        + std::to_string(image.type()) + " "s
-        + std::to_string(image.size().width) + "x" + std::to_string(image.size().height);
-
-    if (image.type() == CV_8UC3)
-    {
-        static std::vector<unsigned char> vec;
-        static std::string out;
-        vec.clear();
-        {
-            for (auto it = image.begin<cv::Vec3b>(); it != image.end<cv::Vec3b>(); ++it) {
-                vec.push_back((*it)[0]);
-                vec.push_back((*it)[1]);
-                vec.push_back((*it)[2]);
-            }
-        }
-        message += " PAYLOAD: "s + encodeBase64(vec) + "\n";
-    }
-    else
-    {
-        throw NotImplementedSerialization(image.type());
-    }
- */
 std::istream& operator>>(std::istream& stream, robot_interface::CameraSide& direction)
 {
      std::string out;

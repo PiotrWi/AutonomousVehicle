@@ -5,6 +5,7 @@
 #include <boost/algorithm/string.hpp>
 
 #include <Tools/Base64.hpp>
+#include <Tools/ExecutionTimeMeasurement.hpp>
 
 using namespace std;
 
@@ -48,16 +49,23 @@ std::string createPublishImage(CameraSide cameraSide, cv::Mat &image)
 
     if (image.type() == CV_8UC3)
     {
-        static std::vector<unsigned char> vec;
-        static std::string out;
-        vec.clear();
+        std::vector<unsigned char> vec;
+
+        std::string out;
         {
+            // risky - It makes an assumptions about internal alligment
+            vec.resize(image.size().width * image.size().height* 3);
+            memcpy(vec.data(), image.ptr(0, 0), vec.size());
+            // end of risky
+
+            /* // If there is a problem with risky sollution, bellow one is still valid.
             for (auto it = image.begin<cv::Vec3b>(); it != image.end<cv::Vec3b>(); ++it) {
                 vec.push_back((*it)[0]);
                 vec.push_back((*it)[1]);
                 vec.push_back((*it)[2]);
-            }
+            }*/
         }
+        RaiiExecutionTimeMeasurement timeMeasurement_Enc("encoding");
         message += " PAYLOAD: "s + Base64Encode(vec) + "\n";
     }
     else
