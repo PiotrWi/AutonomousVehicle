@@ -15,14 +15,14 @@ ImageHandler imageHandler_;
 
 void clearModelOnConnectionChange(bool)
 {
-
+    requestedSpeed_.clear();
+    imageHandler_.clear();
 }
 
 void init()
 {
     std::cout << "[RobotInterface] c_init call" << std::endl;
     auto& robotAccessPoint = backend::RobotAccessPoint::getInstance();
-    robotAccessPoint.start();
     robotAccessPoint.registerConnectionStatusCallback(clearModelOnConnectionChange);
     robotAccessPoint.registerMessageCallback([](auto&& message){
         messageDispatcher_.dispatchMessage(message);

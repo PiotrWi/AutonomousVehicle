@@ -1,6 +1,8 @@
 #include "QCameraView.hpp"
 
 #include <QLabel>
+#include <QSizePolicy>
+#include <QResizeEvent>
 
 namespace gui
 {
@@ -23,9 +25,18 @@ QCameraView::QCameraView(gui_controller::CameraSide cameraSide)
 
 void QCameraView::displayImage(std::shared_ptr<QImage> image)
 {
+    auto labelSize = image_->size();
+    auto scaled = image->scaled(labelSize.width(), labelSize.height(), Qt::AspectRatioMode::KeepAspectRatio);
+
     QPixmap pixMap;
-    pixMap.convertFromImage(*image);
+    pixMap.convertFromImage(scaled);
     image_->setPixmap(pixMap);
+}
+
+void QCameraView::resizeEvent(QResizeEvent *event)
+{
+    image_->resize(event->size());
+    QWidget::resizeEvent(event);
 }
 
 }  // namespace gui

@@ -20,7 +20,6 @@ void ImageFromCamera::execute()
 
 std::any ImageFromCamera::get(int outputPort)
 {
-
     return std::any(&image_);
 }
 

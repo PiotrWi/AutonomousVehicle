@@ -21,7 +21,6 @@ public:
     {
         producerOutputsReferences_[inputPort] = {producer, producerOutputPort};
     }
-
 private:
     virtual void execute(TArg& arg) = 0;
 

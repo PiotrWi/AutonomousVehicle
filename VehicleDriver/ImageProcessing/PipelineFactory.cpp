@@ -5,6 +5,7 @@
 #include "ImagePipelines/ImageFromCamera.hpp"
 #include "ImagePipelines/PreviewEntity.hpp"
 #include "ImagePipelines/PicturePublisher.hpp"
+#include "ImagePipelines/FlipImage.hpp"
 #include <Drivers/CameraDriver.hpp>
 
 namespace image_processing
@@ -32,8 +33,10 @@ std::unique_ptr<Pipeline> createDualCameraPreview()
 
     pipeline->add(new ImageFromCamera(std::move(leftCamera)), "leftCameraIn"s);
     pipeline->add(new ImageFromCamera(std::move(rightCamera)), "rightCameraIn"s);
-    pipeline->add(new PreviewEntity("PreviewLeft"), "previewLeft"s, {{0, "leftCameraIn", 0}});
-    pipeline->add(new PreviewEntity("PreviewRight"), "previewRight"s, {{0, "rightCameraIn", 0}});
+    pipeline->add(new FlipImage(), "flippedImageLeft"s, {{0, "leftCameraIn", 0}});
+    pipeline->add(new FlipImage(), "flippedImageRight"s, {{0, "rightCameraIn", 0}});
+    pipeline->add(new PreviewEntity("PreviewLeft"), "previewLeft"s, {{0, "flippedImageLeft", 0}});
+    pipeline->add(new PreviewEntity("PreviewRight"), "previewRight"s, {{0, "flippedImageRight", 0}});
 
     return pipeline;
 }
@@ -47,8 +50,10 @@ std::unique_ptr<Pipeline> createSingleCameraPublish(networking::MessageSender& m
 
     pipeline->add(new ImageFromCamera(std::move(leftCamera)), "leftCameraIn"s);
     pipeline->add(new ImageFromCamera(std::move(rightCamera)), "rightCameraIn"s);
-    pipeline->add(new PicturePublisher(messageSender, CameraSide::LEFT ), "previewLeft"s, {{0, "leftCameraIn", 0}});
-    pipeline->add(new PicturePublisher(messageSender, CameraSide::RIGHT ), "previewRight"s, {{0, "rightCameraIn", 0}});
+    pipeline->add(new FlipImage(), "flippedImageLeft"s, {{0, "leftCameraIn", 0}});
+    pipeline->add(new FlipImage(), "flippedImageRight"s, {{0, "rightCameraIn", 0}});
+    pipeline->add(new PicturePublisher(messageSender, CameraSide::LEFT ), "previewLeft"s, {{0, "flippedImageLeft", 0}});
+    pipeline->add(new PicturePublisher(messageSender, CameraSide::RIGHT ), "previewRight"s, {{0, "flippedImageRight", 0}});
 
     return pipeline;
 }

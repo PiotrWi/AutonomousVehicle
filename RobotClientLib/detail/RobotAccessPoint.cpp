@@ -13,16 +13,13 @@ RobotAccessPoint::RobotAccessPoint()
 {
 }
 
-void RobotAccessPoint::start()
-{
-}
-
 bool RobotAccessPoint::connect()
 {
     boost::system::error_code ec;
 
     boost::asio::ip::tcp::endpoint endpoint{
-        /*boost::asio::ip::address::from_string("172.16.1.64"),*/ boost::asio::ip::address::from_string("127.0.0.1"),
+        boost::asio::ip::address::from_string("172.16.1.64"),
+        // boost::asio::ip::address::from_string("127.0.0.1"),
         17831
     };
     sock_.connect({endpoint}, ec);

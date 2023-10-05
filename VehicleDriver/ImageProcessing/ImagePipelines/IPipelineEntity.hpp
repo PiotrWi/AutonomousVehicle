@@ -13,14 +13,14 @@ public:
     virtual ~IPipelineEntity() {}
 };
 
-class IProducerPipelineEntity : public IPipelineEntity
+class IProducerPipelineEntity : public virtual IPipelineEntity
 {
 public:
     virtual std::any get(int outputPort) = 0;
     virtual ~IProducerPipelineEntity() {}
 };
 
-class IConsumerPipelineEntity : public IPipelineEntity
+class IConsumerPipelineEntity : public virtual IPipelineEntity
 {
 public:
     virtual void setInput(int inputPort, IProducerPipelineEntity*, int producerOutputPort) = 0;

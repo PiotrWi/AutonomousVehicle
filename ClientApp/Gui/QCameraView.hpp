@@ -15,6 +15,7 @@ public:
 signals:
     void imageChanged(std::shared_ptr<QImage>);
 public:
+    void resizeEvent(QResizeEvent *event) override;
     void displayImage(std::shared_ptr<QImage>);
 private:
     gui_controller::CameraSide cameraSide_;

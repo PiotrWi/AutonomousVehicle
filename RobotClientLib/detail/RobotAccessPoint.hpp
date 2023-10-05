@@ -16,7 +16,6 @@ class RobotAccessPoint : public SingletonAddOn<RobotAccessPoint>
 {
 public:
     RobotAccessPoint();
-    void start();
     bool connect();
     bool disconnect();
     bool isConnected();

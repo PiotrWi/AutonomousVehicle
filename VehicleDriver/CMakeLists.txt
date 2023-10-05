@@ -83,6 +83,8 @@ add_executable(Autonomous_vehicle main.cpp
         Application.cpp
         Application.hpp
         Common/ImageTypes.hpp
+        ImageProcessing/ImagePipelines/FlipImage.cpp
+        ImageProcessing/ImagePipelines/FlipImage.hpp
 )
 
 target_link_libraries(Autonomous_vehicle
