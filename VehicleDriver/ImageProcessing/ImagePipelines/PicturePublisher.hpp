@@ -17,7 +17,7 @@ public:
                               CameraSide cammeraSide);
     void init() override;
 private:
-    void execute(cv::Mat& image);
+    void execute(cv::Mat& image) override;
 
     networking::MessageSender& messageSender_;
     CameraSide cammeraSide_;

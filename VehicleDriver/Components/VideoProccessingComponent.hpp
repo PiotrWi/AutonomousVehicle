@@ -9,8 +9,9 @@ namespace components
 class VideoProcessingComponent : public Component
 {
 public:
-    VideoProcessingComponent(const std::string& input);
+    explicit VideoProcessingComponent(const std::string& input);
     void start() override;
+    void stop() override;
 private:
     std::string input_;
 };

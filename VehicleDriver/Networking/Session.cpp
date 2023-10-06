@@ -10,8 +10,8 @@ Session::Session(boost::asio::ip::tcp::socket&& socket,
                  std::function<void()> notifyConnectionDroped,
                  std::function<void(const std::string&)> messageHandler)
     : socket_(std::move(socket))
-    , notifyConnectionDroped_(notifyConnectionDroped)
-    , messageHandler_(messageHandler)
+    , notifyConnectionDroped_(std::move(notifyConnectionDroped))
+    , messageHandler_(std::move(messageHandler))
 {
 }
 
@@ -34,7 +34,7 @@ void Session::receive_single()
             notifyConnectionDroped_();
             return ;
         }
-        std::string line(keepAlive.get()->begin(), bytes_transferred);
+        std::string line(keepAlive->begin(), bytes_transferred);
         std::cout << line << std::endl;
         messageHandler_(line);
         receive_single();

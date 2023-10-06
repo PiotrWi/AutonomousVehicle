@@ -2,9 +2,7 @@
 #include "ImageOperators.hpp"
 #include "HoughtOperators.hpp"
 
-namespace image_processing
-{
-namespace road_lane_detection
+namespace image_processing::road_lane_detection
 {
 
 cv::Mat applyLinesToImage(const cv::Mat& in)
@@ -19,5 +17,4 @@ cv::Mat applyLinesToImage(const cv::Mat& in)
     return out;
 }
 
-}  // namespace road_lane_detection
-}  // namespace image_processing
+}  // namespace image_processing::road_lane_detection

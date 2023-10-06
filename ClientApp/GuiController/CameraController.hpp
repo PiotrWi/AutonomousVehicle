@@ -18,7 +18,8 @@ enum class CameraSide
 class CameraController : public SingletonAddOn<CameraController>
 {
 public:
-    void subscribeForCameraImages(CameraSide cameraSide, std::function<void(std::shared_ptr<QImage>)> callback);
+    static void subscribeForCameraImages(CameraSide cameraSide,
+                                         const std::function<void(std::shared_ptr<QImage>)>& callback);
 };
 
 } // gui_controller

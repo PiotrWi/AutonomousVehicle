@@ -55,4 +55,8 @@ void VideoProcessingComponent::start()
     showMovie(inputVideo);
 }
 
+void VideoProcessingComponent::stop()
+{
+}
+
 }  // namespace components

@@ -3,7 +3,6 @@
 #include <iostream>
 #include <thread>
 #include <Tools/CreateTimmer.hpp>
-#include <Tools/ExecutionTimeMeasurement.hpp>
 
 namespace components
 {
@@ -34,7 +33,7 @@ void CameraProcessingComponent::start()
 
     tools::createRepeatingTimer(1000000/10, [this](){
         std::lock_guard<std::mutex> lock(framesToExecuteMutex_);
-        framesToExecute += pipelines_.size();
+        framesToExecute += static_cast<int>(pipelines_.size());
         for (int i = 0; i < pipelines_.size(); ++i)
         {
             notifyFramesToExecute_.notify_one();
@@ -44,7 +43,7 @@ void CameraProcessingComponent::start()
 
 void CameraProcessingComponent::run(image_processing::Pipeline& pipeline)
 {
-    while (true)
+    while (not stopped_.load())
     {
         {
             std::unique_lock lk(framesToExecuteMutex_);
@@ -53,6 +52,11 @@ void CameraProcessingComponent::run(image_processing::Pipeline& pipeline)
         }
         pipeline.execute();
     }
+}
+
+void CameraProcessingComponent::stop()
+{
+    stopped_ = true;
 }
 
 

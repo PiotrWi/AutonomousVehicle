@@ -3,7 +3,7 @@
 namespace pwm_sequences
 {
 
-void pushInitSequence(std::vector<std::vector<std::string>> &expectationsVector, std::string channelStr)
+void pushInitSequence(std::vector<std::vector<std::string>> &expectationsVector, const std::string& channelStr)
 {
     using namespace std;
 
@@ -24,7 +24,7 @@ void pushInitSequence(std::vector<std::vector<std::string>> &expectationsVector,
     expectationsVector.push_back(enablePwn);
 }
 
-void pushUninitializeSequence(std::vector<std::vector<std::string>> &expectationsVector, std::string channelStr)
+void pushUninitializeSequence(std::vector<std::vector<std::string>> &expectationsVector, const std::string& channelStr)
 {
     using namespace std;
 
@@ -33,13 +33,13 @@ void pushUninitializeSequence(std::vector<std::vector<std::string>> &expectation
     expectationsVector.push_back(disableSequence);
 }
 
-void pushPwmShallSetDuty10p(std::vector<std::vector<std::string>> &expectationsVector, std::string channelStr)
+void pushPwmShallSetDuty10p(std::vector<std::vector<std::string>> &expectationsVector, const std::string& channelStr)
 {
     using namespace std;
 
     auto dutyCycleSet = pwmShallSetDuty10p;
     instantiate(dutyCycleSet, "pwmChannel"s, channelStr);
     expectationsVector.push_back(dutyCycleSet);
-};
+}
 
 }  // namespace pwm_sequences

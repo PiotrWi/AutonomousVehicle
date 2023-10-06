@@ -13,7 +13,7 @@ public:
     explicit PreviewEntity (std::string windowName);
     void init() override;
 private:
-    void execute(cv::Mat& image);
+    void execute(cv::Mat& image) override;
     std::string windowName_;
 };
 

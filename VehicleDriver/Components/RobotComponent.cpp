@@ -1,13 +1,10 @@
 #include "RobotComponent.hpp"
 
-#include "EventLoop/MessageDecoder.hpp"
-
 namespace components
 {
 
 RobotComponent::RobotComponent(ApplicationContext& applicationContext)
         : eventLoop_(applicationContext.eventLoop_)
-        , access_point_(applicationContext.accessPoint_)
         , messageSender_(applicationContext.messageSender_)
         , speedControlService_(eventLoop_, messageSender_)
 {
@@ -16,6 +13,11 @@ RobotComponent::RobotComponent(ApplicationContext& applicationContext)
 void RobotComponent::start()
 {
     speedControlService_.start();
+}
+
+void RobotComponent::stop()
+{
+
 }
 
 std::unique_ptr<Component> createRobotComponent(ApplicationContext& applicationContext)

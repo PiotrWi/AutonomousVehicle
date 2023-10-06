@@ -8,8 +8,8 @@ Connection::Connection(boost::asio::io_service& ioService,
                        std::function<void(std::string)> notifyMessageReceived)
         : ioService_(ioService)
         , socket_(socket)
-        , notifyConnectionDroped_(notifyConnectionDroped)
-        , notifyMessageReceived_(notifyMessageReceived)
+        , notifyConnectionDroped_(std::move(notifyConnectionDroped))
+        , notifyMessageReceived_(std::move(notifyMessageReceived))
 {
 }
 
@@ -46,7 +46,7 @@ void Connection::receive_single()
     });
 }
 
-void Connection::send(std::string message)
+void Connection::send(std::string&& message)
 {
     std::lock_guard<std::mutex> lk(socketMutex_);
     socket_->send(boost::asio::buffer(message));

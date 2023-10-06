@@ -1,6 +1,6 @@
 #include "CreateTimmer.hpp"
 
-#include <signal.h>
+#include <csignal>
 #include <cassert>
 #include <iostream>
 
@@ -19,7 +19,7 @@ namespace tools
 
 int createRepeatingTimer(int microseconds, std::function<void()> callback)
 {
-    UserHandler = callback;
+    UserHandler = std::move(callback);
 
     sigevent sig = {};
     timer_t timerId;
@@ -38,7 +38,7 @@ int createRepeatingTimer(int microseconds, std::function<void()> callback)
     input.it_interval.tv_nsec = (microseconds % 1000000) * 1000;
     input.it_value.tv_sec = microseconds / 1000000;
     input.it_value.tv_nsec = (microseconds % 1000000) * 1000;
-    if (timer_settime(timerId, 0, &input, NULL))
+    if (timer_settime(timerId, 0, &input, nullptr))
     {
         std::cerr << "Timer start failed" << std::endl;
         perror("errno");

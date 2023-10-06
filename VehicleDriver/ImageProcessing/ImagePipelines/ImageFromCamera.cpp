@@ -20,7 +20,7 @@ void ImageFromCamera::execute()
 
 std::any ImageFromCamera::get(int outputPort)
 {
-    return std::any(&image_);
+    return {&image_};
 }
 
 }  // namespace image_processing

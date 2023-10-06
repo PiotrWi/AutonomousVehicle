@@ -4,13 +4,13 @@ struct FDRaiiWrapper
 {
     FDRaiiWrapper();
     explicit FDRaiiWrapper(int, void(*deleter)(int));
-    FDRaiiWrapper(FDRaiiWrapper&&);
-    FDRaiiWrapper& operator=(FDRaiiWrapper&&);
+    FDRaiiWrapper(FDRaiiWrapper&&) noexcept;
+    FDRaiiWrapper& operator=(FDRaiiWrapper&&) noexcept;
     ~FDRaiiWrapper();
 
-    int get();
+    int get() const;
 private:
     void conditionallyClose();
-    int fd_;
-    void(*deleter_)(int);
+    int fd_ = -1;
+    void(*deleter_)(int) = nullptr;
 };

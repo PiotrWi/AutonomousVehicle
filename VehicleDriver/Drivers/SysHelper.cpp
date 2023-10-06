@@ -8,7 +8,7 @@ void SysfsHelper::writeToSys(const char* loc, const std::string & value)
 {
     auto fd = openToWrite(loc);
     writeToSys(fd, value);
-};
+}
 
 FDRaiiWrapper SysfsHelper::openToWrite(const char* loc)
 {

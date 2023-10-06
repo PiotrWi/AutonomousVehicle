@@ -3,7 +3,8 @@
 namespace gpio_sentences
 {
 
-void pushInitSequence(std::vector<std::vector<std::string>> &expectationsVector, std::string pinStr)
+void pushInitSequence(std::vector<std::vector<std::string>> &expectationsVector,
+                      const std::string& pinStr)
 {
     using namespace std;
 
@@ -20,7 +21,8 @@ void pushInitSequence(std::vector<std::vector<std::string>> &expectationsVector,
     expectationsVector.push_back(setDefaultStateSequence);
 }
 
-void pushUninitializeSequence(std::vector<std::vector<std::string>> &expectationsVector, std::string pinStr)
+void pushUninitializeSequence(std::vector<std::vector<std::string>> &expectationsVector,
+                              const std::string& pinStr)
 {
     using namespace std;
 
@@ -29,7 +31,8 @@ void pushUninitializeSequence(std::vector<std::vector<std::string>> &expectation
     expectationsVector.push_back(uninitializeSequence);
 }
 
-void pushHighLowSequence(std::vector<std::vector<std::string>> &expectationsVector, std::string pinStr)
+void pushHighLowSequence(std::vector<std::vector<std::string>> &expectationsVector,
+                         const std::string& pinStr)
 {
     using namespace std;
 

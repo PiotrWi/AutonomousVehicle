@@ -8,8 +8,7 @@ namespace gui
 {
 
 QCameraView::QCameraView(gui_controller::CameraSide cameraSide)
-    : cameraSide_(cameraSide)
-    , cameraController_(gui_controller::CameraController::getInstance())
+    : cameraController_(gui_controller::CameraController::getInstance())
 {
     setMinimumSize(320, 240);
     setStyleSheet("background-color:black;color:white;");

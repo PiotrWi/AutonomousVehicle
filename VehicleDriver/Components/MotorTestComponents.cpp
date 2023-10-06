@@ -71,6 +71,11 @@ void MotorTestComponents::start()
     }
 }
 
+void MotorTestComponents::stop()
+{
+
+}
+
 std::unique_ptr<Component> createMotorTestComponent()
 {
     return std::make_unique<MotorTestComponents>();

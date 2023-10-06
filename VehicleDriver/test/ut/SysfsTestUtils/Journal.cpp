@@ -11,12 +11,12 @@ void Journal::clear()
     data_.clear();
 }
 
-void Journal::addLine(std::string line)
+void Journal::addLine(const std::string& line)
 {
     data_.emplace_back(line);
 }
 
-std::vector<std::string> Journal::getEntries()
+std::vector<std::string> Journal::getEntries() const
 {
     return data_;
 }

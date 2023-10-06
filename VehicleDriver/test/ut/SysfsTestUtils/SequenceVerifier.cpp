@@ -24,6 +24,11 @@ SequenceVerified::SequenceVerified(const std::vector<std::string>& allJournalEnt
 
 bool SequenceVerified::verify (std::vector<std::string> sequence)
 {
+    if (sequence.empty())
+    {
+        return true;
+    }
+
     auto sequenceIt = std::begin(sequence);
     for (auto journalIt = std::begin(journalEntities_); journalIt!= std::end(journalEntities_);)
     {
@@ -70,7 +75,7 @@ std::optional<std::vector<std::pair<std::string, std::string>>> SequenceVerified
                                                                              std::string& patternLine)
 {
     auto patternLineCpy = patternLine;
-    std::string::size_type pos = 0;
+    std::string::size_type pos;
     std::vector<std::pair<std::string, std::string>> patternToValue;
 
     while (pos = patternLineCpy.find("@{"), pos != std::string::npos )

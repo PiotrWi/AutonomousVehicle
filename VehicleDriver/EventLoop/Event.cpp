@@ -10,7 +10,7 @@ Event::~Event()
     }
 }
 
-unsigned int Event::getId()
+unsigned int Event::getId() const
 {
     return eventId_;
 }

@@ -15,6 +15,7 @@ class CameraProcessingComponent : public Component
 public:
     explicit CameraProcessingComponent(std::vector<std::unique_ptr<image_processing::Pipeline>>&& pipelines);
     void start() override;
+    void stop() override;
 private:
     void run(image_processing::Pipeline&);
 
@@ -22,6 +23,7 @@ private:
     std::mutex framesToExecuteMutex_;
     int framesToExecute = 0;
 
+    std::atomic<bool> stopped_ = false;
     std::vector<std::unique_ptr<image_processing::Pipeline>> pipelines_;
 };
 

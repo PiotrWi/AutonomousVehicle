@@ -29,7 +29,7 @@ robot_interface::CameraSide translateCameraSide(CameraSide side)
 
 }  // namespace
 
-void CameraController::subscribeForCameraImages(CameraSide cameraSide, std::function<void(std::shared_ptr<QImage>)> callback)
+void CameraController::subscribeForCameraImages(CameraSide cameraSide, const std::function<void(std::shared_ptr<QImage>)>& callback)
 {
     utils::DumpImages dumpImages("/home/pioter/tmp/ClientApp", to_string(cameraSide));
     robot_interface::subscribeForPicture(translateCameraSide(cameraSide), [callback, dumpImages](const robot_interface::IntegerPicture& picture)

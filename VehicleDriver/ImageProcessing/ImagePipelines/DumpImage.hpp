@@ -14,7 +14,7 @@ public:
     explicit DumpImage(const char* localization, const char* prefix);
     void init() override;
 private:
-    void execute(cv::Mat& image);
+    void execute(cv::Mat& image) override;
     const char *localization_;
     const char *prefix_;
     std::string dirrectory_;

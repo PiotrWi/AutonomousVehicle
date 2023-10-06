@@ -17,11 +17,11 @@ public:
     Event(Event&&) noexcept ;
 
     template<typename TConcreteEvent>
-    TConcreteEvent* get()
+    TConcreteEvent* get() const
     {
         return static_cast<TConcreteEvent*>(payload_);
     }
-    unsigned int getId();
+    unsigned int getId() const;
 private:
     unsigned int eventId_;
     void *payload_ = nullptr;

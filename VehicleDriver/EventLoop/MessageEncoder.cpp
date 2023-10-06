@@ -5,7 +5,6 @@
 #include <boost/algorithm/string.hpp>
 
 #include <Tools/Base64.hpp>
-#include <Tools/ExecutionTimeMeasurement.hpp>
 
 using namespace std;
 
@@ -26,7 +25,7 @@ std::string to_string(CameraSide cameraSide)
 class NotImplementedSerialization : public std::runtime_error
 {
 public:
-    NotImplementedSerialization(int type)
+    explicit NotImplementedSerialization(int type)
         : std::runtime_error("Serialization not implemented for cv type: "s + std::to_string(type)) {}
 };
 

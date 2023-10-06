@@ -3,7 +3,7 @@
 EventLoop::SubsciptionContext::SubsciptionContext(std::function<void(Event*)> handler, unsigned int id)
     : activeContex_(new ActiveContex(1, true))
     , id_(id)
-    , handler_(handler)
+    , handler_(std::move(handler))
 {
 }
 
@@ -36,27 +36,27 @@ EventLoop::SubsciptionContext::~SubsciptionContext()
     }
 }
 
-bool EventLoop::SubsciptionContext::isActive()
+bool EventLoop::SubsciptionContext::isActive() const
 {
     return activeContex_->isActive_;
 }
 
-unsigned int EventLoop::SubsciptionContext::getId()
+unsigned int EventLoop::SubsciptionContext::getId() const
 {
     return id_;
 }
 
-std::function<void()> EventLoop::SubsciptionContext::getClearOperator()
+std::function<void()> EventLoop::SubsciptionContext::getClearOperator() const
 {
-    return std::function<void()>([this](){ activeContex_->isActive_ = false; });
+    return [this](){ activeContex_->isActive_ = false; };
 }
 
 ////
 
 EventLoop::SubsciptionRaii::SubsciptionRaii(std::function<void()> setUnactiveAllLeavingInstances,
                                             std::function<void()> removeFromSubcribents)
-    : setUnactiveAllLeavingInstances_(setUnactiveAllLeavingInstances)
-    , removeFromSubcribents_(removeFromSubcribents)
+    : setUnactiveAllLeavingInstances_(std::move(setUnactiveAllLeavingInstances))
+    , removeFromSubcribents_(std::move(removeFromSubcribents))
 {
 }
 
@@ -78,7 +78,7 @@ void EventLoop::pushEvent(Event&& event)
 std::unique_ptr<EventLoop::SubsciptionRaii> EventLoop::subscribeForEvent(std::function<void(Event*)> handler, unsigned int eventId)
 {
     static unsigned int id = 0;
-    subscriptions_[eventId].emplace_back(handler, ++id);
+    subscriptions_[eventId].emplace_back(std::move(handler), ++id);
 
     auto deleter = [this, eventId, clearId = id](){
         auto elem = std::find_if(subscriptions_[eventId].begin(), subscriptions_[eventId].end(), [clearId](auto&& elem){

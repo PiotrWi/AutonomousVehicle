@@ -12,7 +12,7 @@ class EnableAble
 public:
     virtual void enable() = 0;
     virtual void disable() = 0;
-    virtual ~EnableAble() {};
+    virtual ~EnableAble() = default;
 };
 
 template<typename TObject>

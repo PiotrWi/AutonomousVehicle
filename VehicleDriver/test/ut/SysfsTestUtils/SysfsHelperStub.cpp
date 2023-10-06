@@ -17,7 +17,7 @@ void SysfsHelper::writeToSys(const char* loc, const std::string & val)
 {
     auto fd = openToWrite(loc);
     writeToSys(fd, val);
-};
+}
 
 FDRaiiWrapper SysfsHelper::openToWrite(const char* loc)
 {

@@ -9,8 +9,8 @@ namespace gui_controller
 class ConnectionController : public SingletonAddOn<ConnectionController>
 {
 public:
-    bool connect();
-    void disconnect();
+    static bool connect();
+    static void disconnect();
     void registerConnectionChanged(std::function<void(bool)> callback_);
 private:
     std::function<void(bool)> notifyConnectionStatusChange_;

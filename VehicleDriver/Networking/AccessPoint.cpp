@@ -8,7 +8,7 @@ namespace networking
 
 AccessPoint::AccessPoint(std::function<void(const std::string&)> messageHandler)
     : acceptor_(io_service_, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 17831))
-    , messageHandler_(messageHandler)
+    , messageHandler_(std::move(messageHandler))
 {
 }
 

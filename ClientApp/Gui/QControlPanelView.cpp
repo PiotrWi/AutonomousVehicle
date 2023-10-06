@@ -54,23 +54,6 @@ void QControlPanelView::keyPressEvent(QKeyEvent* ev)
     QWidget::keyPressEvent(ev);
 }
 
-void QControlPanelView::keyReleaseEvent(QKeyEvent *ev)
-{
-    std::cout << "[QControlPanelView] Key released" << ev->key() << std::endl;
-
-    auto key = gui_controller::keyArrowToEnumKey(ev->key());
-    if (not key)
-    {
-        QWidget::keyReleaseEvent(ev);
-        return;
-    }
-
-    std::cout << "[QControlPanelView] Key released: " << *gui_controller::keyArrowToName(ev->key()) << std::endl;
-    keyPressController_.setKeyReleased(*key);
-
-    QWidget::keyReleaseEvent(ev);
-}
-
 void QControlPanelView::start()
 {
     keyPressController_.start();

@@ -53,19 +53,19 @@ bool RobotAccessPoint::disconnect()
 
 void RobotAccessPoint::registerConnectionStatusCallback(std::function<void(bool)> callback)
 {
-    notifyAboutConnectionStateChange_ = callback;
+    notifyAboutConnectionStateChange_ = std::move(callback);
 }
 
 void RobotAccessPoint::registerMessageCallback(std::function<void(std::string)> callback)
 {
-    notifyMessage_ = callback;
+    notifyMessage_ = std::move(callback);
 }
 
 void RobotAccessPoint::send(std::string s)
 {
     if (connection_)
     {
-        connection_->send(s);
+        connection_->send(std::move(s));
     }
 }
 

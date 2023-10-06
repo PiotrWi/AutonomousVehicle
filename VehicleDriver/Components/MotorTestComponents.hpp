@@ -12,6 +12,7 @@ namespace components
 class MotorTestComponents : public Component
 {
     void start() override;
+    void stop() override;
 private:
     drivers::MotorsDrivers driver_;
 };

@@ -24,7 +24,6 @@ public:
     void stop();
 
     void keyPressEvent(QKeyEvent *event) override;
-    void keyReleaseEvent(QKeyEvent *event) override;
 private:
     void createSpeedsWidgets();
     void connectSpeedWidgetsToSpeedChanges();

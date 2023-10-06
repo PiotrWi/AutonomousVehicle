@@ -11,7 +11,7 @@ class RequestedSpeed : public IMessageHandler
 {
 public:
     void handle(const std::string& message) override;
-    std::string getPrefix() override;
+    std::string getPrefix() const override;
     void setRequestedSpeed(robot_interface::Speed);
     robot_interface::Speed getRequestedSpeed();
     unsigned int subscribeForRequestedSpeedChange(std::function<void(robot_interface::Speed )> callback);

@@ -7,14 +7,14 @@
 
 using namespace std;
 
-NotHandledMessage::NotHandledMessage(std::string message)
+NotHandledMessage::NotHandledMessage(const std::string& message)
     : std::logic_error("Not handled message"s + message )
 {
 }
 
 /* Syntax: Set speed: LeftWheelSpeed<-100:100> RigthWheelSpeed <-100:100>
  */
-Event decodeGuiSpeedRequest(const std::string message)
+Event decodeGuiSpeedRequest(const std::string& message)
 {
     auto* req = new GuiSpeedRequest();
     auto speeds = splitAndTrim(message, ':')[1];
@@ -22,10 +22,10 @@ Event decodeGuiSpeedRequest(const std::string message)
     std::stringstream ss(speeds);
     ss >> req->leftWheel_ >> req->rightWheel_;
 
-    return Event(getId<GuiSpeedRequest>(), req);
+    return {getId<GuiSpeedRequest>(), req};
 }
 
-Event decode(std::string message)
+Event decode(const std::string& message)
 {
     if (message.starts_with("Set speed: "))
     {

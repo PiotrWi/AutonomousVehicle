@@ -11,8 +11,8 @@ public:
     static Journal& getInstance();
 
     void clear();
-    void addLine(std::string );
-    std::vector<std::string> getEntries();
+    void addLine(const std::string& );
+    std::vector<std::string> getEntries() const;
 private:
     std::vector<std::string> data_;
 };

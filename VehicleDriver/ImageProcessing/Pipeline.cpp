@@ -20,12 +20,12 @@ void Pipeline::execute()
     }
 }
 
-void Pipeline::add(IProducerPipelineEntity *producer, std::string name)
+void Pipeline::add(IProducerPipelineEntity *producer, const std::string& name)
 {
     pipelineTasks_.emplace_back(producer, name);
 }
 
-void Pipeline::add(IConsumerPipelineEntity *consumer, std::string name, std::vector<PipelinePortMappings> portMapping)
+void Pipeline::add(IConsumerPipelineEntity *consumer, const std::string& name, std::vector<PipelinePortMappings> portMapping)
 {
     pipelineTasks_.emplace_back(consumer, name);
     for (auto &&singleMapping: portMapping) {

@@ -23,14 +23,14 @@ void FDRaiiWrapper::conditionallyClose()
     fd_ = 0;
 }
 
-FDRaiiWrapper::FDRaiiWrapper(FDRaiiWrapper&& other)
+FDRaiiWrapper::FDRaiiWrapper(FDRaiiWrapper&& other) noexcept
 {
     conditionallyClose();
     std::swap(this->fd_, other.fd_);
     std::swap(this->deleter_, other.deleter_);
 }
 
-FDRaiiWrapper& FDRaiiWrapper::operator=(FDRaiiWrapper&& other)
+FDRaiiWrapper& FDRaiiWrapper::operator=(FDRaiiWrapper&& other) noexcept
 {
     if (this == &other)
     {
@@ -47,7 +47,7 @@ FDRaiiWrapper::~FDRaiiWrapper()
     conditionallyClose();
 }
 
-int FDRaiiWrapper::get()
+int FDRaiiWrapper::get() const
 {
     return fd_;
 }

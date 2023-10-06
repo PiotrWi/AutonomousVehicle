@@ -21,9 +21,9 @@ class EventLoop
         SubsciptionContext& operator=(const SubsciptionContext&);
         ~SubsciptionContext();
 
-        bool isActive();
-        unsigned int getId();
-        std::function<void()> getClearOperator();
+        bool isActive() const;
+        unsigned int getId() const;
+        std::function<void()> getClearOperator() const;
     private:
         struct ActiveContex
         {

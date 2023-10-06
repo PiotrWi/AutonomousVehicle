@@ -9,7 +9,7 @@ class MessageDispatcher
 {
 public:
     void dispatchMessage(const std::string& message);
-    void subscribeFor(std::string prefix, std::function<void(std::string)>);
+    void subscribeFor(const std::string& prefix, std::function<void(std::string)>);
 private:
     std::vector<std::pair<std::string, std::function<void(std::string)>>> clients_;
 };

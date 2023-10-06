@@ -17,9 +17,9 @@ class RobotComponent : public Component
 public:
     explicit RobotComponent(ApplicationContext& applicationContext);
     void start() override;
+    void stop() override;
 private:
     EventLoop& eventLoop_;
-    networking::AccessPoint& access_point_;
     networking::MessageSender& messageSender_;
 
     services::SpeedControlService speedControlService_;

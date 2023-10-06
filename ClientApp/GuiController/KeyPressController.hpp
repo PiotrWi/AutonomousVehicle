@@ -33,19 +33,15 @@ public:
     void stop();
 
     void setKeyClicked(Key);
-    void setKeyReleased(Key);
 
     void subscribeToSpeeds(std::function<void(Speeds)> callback);
     Speeds getCurrentSetSpeeds();
 private:
     void sendRequestedSpeedToRobot();
 
-    QTimer timer_;
     Speeds desiredSpeeds_;
 
     std::function<void(int, int)> onRequestedSpeedChanged_;
-
-    bool keyPressed_[4];
 };
 
 }  // namespace gui_controller

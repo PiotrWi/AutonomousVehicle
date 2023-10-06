@@ -2,13 +2,9 @@
 
 #include "opencv2/opencv.hpp"
 
-namespace image_processing
+namespace image_processing::road_lane_detection
 {
-namespace road_lane_detection
-{
-
 
 cv::Mat applyLinesToImage(const cv::Mat& in);
 
-}  // namespace road_lane_detection
 }  // namespace image_processing

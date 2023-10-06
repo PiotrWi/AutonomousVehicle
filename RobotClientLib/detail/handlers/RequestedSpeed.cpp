@@ -12,9 +12,9 @@ void RequestedSpeed::handle(const std::string& message)
     reactOnChange(speed);
 }
 
-std::string RequestedSpeed::getPrefix()
+std::string RequestedSpeed::getPrefix() const
 {
-    return std::string("CurrentRequestedSpeed:");
+    return {"CurrentRequestedSpeed:"};
 }
 
 void RequestedSpeed::setRequestedSpeed(robot_interface::Speed speed)
@@ -33,7 +33,7 @@ robot_interface::Speed RequestedSpeed::getRequestedSpeed()
 unsigned int RequestedSpeed::subscribeForRequestedSpeedChange(std::function<void(robot_interface::Speed )> callback)
 {
     std::lock_guard<std::mutex> m(notifyClient_mutex);
-    notifyClient_ = callback;
+    notifyClient_ = std::move(callback);
     return 0;
 }
 
@@ -43,7 +43,7 @@ unsigned int RequestedSpeed::subscribeForRequestedSpeedChange(std::function<void
     std::lock_guard<std::mutex> m1(currentRequestedSpeed_mutex);
     std::lock_guard<std::mutex> m2(notifyClient_mutex);
     outCurrentValue = currentRequestedSpeed;
-    notifyClient_ = callback;
+    notifyClient_ = std::move(callback);
     return 0;
 }
 

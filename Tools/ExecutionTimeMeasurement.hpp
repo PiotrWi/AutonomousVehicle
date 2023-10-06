@@ -5,7 +5,7 @@
 
 struct RaiiExecutionTimeMeasurement
 {
-    RaiiExecutionTimeMeasurement(const char* prefix)
+    explicit RaiiExecutionTimeMeasurement(const char* prefix)
             : prefix_(prefix)
     {
         begin_ = std::chrono::system_clock::now();
@@ -24,7 +24,7 @@ private:
 struct RaiiMultipleStepExecutionTimeMeasurement
 {
 public:
-    RaiiMultipleStepExecutionTimeMeasurement(const char* prefix)
+    explicit RaiiMultipleStepExecutionTimeMeasurement(const char* prefix)
             : prefix_(prefix)
     {
         begin_ = std::chrono::system_clock::now();

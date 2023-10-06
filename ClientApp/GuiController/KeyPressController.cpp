@@ -49,7 +49,6 @@ void KeyPressController::stop()
 
 void KeyPressController::setKeyClicked(Key key)
 {
-    keyPressed_[static_cast<int>(key)] = true;
     if (key == Key::Up)
     {
         desiredSpeeds_ += Speeds{10, 10};
@@ -68,11 +67,6 @@ void KeyPressController::setKeyClicked(Key key)
     }
 
     sendRequestedSpeedToRobot();
-}
-
-void KeyPressController::setKeyReleased(Key key)
-{
-    keyPressed_[static_cast<int>(key)] = false;
 }
 
 void KeyPressController::subscribeToSpeeds(std::function<void(Speeds)> callback)

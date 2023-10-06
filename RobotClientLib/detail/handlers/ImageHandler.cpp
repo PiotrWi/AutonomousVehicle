@@ -52,7 +52,6 @@ void ImageHandler::handle(const std::string& message)
         return;
     }
 
-    std::string_view sw (message.begin() + payloadPosition + 9, message.end());
     out.pixels = Base64Decode(message.substr(payloadPosition + 9));
 
     function<void(robot_interface::IntegerPicture)> notifier;
@@ -65,7 +64,7 @@ void ImageHandler::handle(const std::string& message)
     notifier(out);
 }
 
-std::string ImageHandler::getPrefix()
+std::string ImageHandler::getPrefix() const
 {
     return "PublishImage:"s;
 }
@@ -84,7 +83,7 @@ void ImageHandler::subscribeForPicture(robot_interface::CameraSide cameraSide,
                                        std::function<void(robot_interface::IntegerPicture)> callback)
 {
     std::lock_guard<std::mutex> m(contentMutex_);
-    content_[cameraSide].first = callback;
+    content_[cameraSide].first = std::move(callback);
 }
 
 

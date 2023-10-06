@@ -52,7 +52,7 @@ public:
 class BinaryThreshold : public Threshold
 {
 public:
-    BinaryThreshold(double thresh) : Threshold(thresh, 255, cv::THRESH_BINARY)
+    explicit BinaryThreshold(double thresh) : Threshold(thresh, 255, cv::THRESH_BINARY)
     {}
 };
 

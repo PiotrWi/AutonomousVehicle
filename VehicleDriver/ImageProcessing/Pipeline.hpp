@@ -29,8 +29,8 @@ class Pipeline
 public:
     void init();
     void execute();
-    void add(IProducerPipelineEntity* producer, std::string name);
-    void add(IConsumerPipelineEntity* producer, std::string name,
+    void add(IProducerPipelineEntity* producer, const std::string& name);
+    void add(IConsumerPipelineEntity* producer, const std::string& name,
              std::vector<PipelinePortMappings> portMapping);
 private:
     std::vector<std::pair<IPipelineEntity*, std::string>> pipelineTasks_;

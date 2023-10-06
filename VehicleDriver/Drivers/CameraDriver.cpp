@@ -12,10 +12,15 @@ CameraDriver::CameraDriver(int cameraIndex)
 
 CameraDriver::~CameraDriver()
 {
+    if (isInitialized_)
+    {
+        cap_.release();
+    }
 }
 
 void CameraDriver::init()
 {
+    isInitialized_ = true;
     cap_.open(cameraIndex_);
     cap_.set(cv::CAP_PROP_FOURCC, cv::VideoWriter::fourcc('M', 'J', 'P', 'G'));
     cap_.set(cv::CAP_PROP_FRAME_WIDTH, 640);

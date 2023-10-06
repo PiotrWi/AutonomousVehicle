@@ -10,21 +10,21 @@ class IPipelineEntity
 public:
     virtual void init() = 0;
     virtual void execute() = 0;
-    virtual ~IPipelineEntity() {}
+    virtual ~IPipelineEntity() = default;
 };
 
 class IProducerPipelineEntity : public virtual IPipelineEntity
 {
 public:
     virtual std::any get(int outputPort) = 0;
-    virtual ~IProducerPipelineEntity() {}
+    ~IProducerPipelineEntity() override = default;
 };
 
 class IConsumerPipelineEntity : public virtual IPipelineEntity
 {
 public:
     virtual void setInput(int inputPort, IProducerPipelineEntity*, int producerOutputPort) = 0;
-    virtual ~IConsumerPipelineEntity() {}
+    ~IConsumerPipelineEntity() override = default;
 };
 
 }  // namespace image_processing

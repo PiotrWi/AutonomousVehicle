@@ -10,7 +10,7 @@ void FlipImage::execute(cv::Mat &arg)
 
 std::any FlipImage::get(int outputPort)
 {
-    return std::any(image_);
+    return {image_};
 }
 
 } // image_processing

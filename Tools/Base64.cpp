@@ -6,7 +6,7 @@ constexpr char encodingTable[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrst
 
 constexpr std::array<unsigned char, 255> createDecodingTable()
 {
-    std::array<unsigned char, 255> decTable;
+    std::array<unsigned char, 255> decTable = {};
     for (int i = 0; i < 64; ++i)
     {
         decTable[encodingTable[i]] = i;

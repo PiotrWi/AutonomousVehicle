@@ -35,7 +35,7 @@ std::vector<std::string> splitAndTrim(const std::string& in, char c)
     return out;
 }
 
-std::vector<std::string> splitAndTrimByStr(const std::string& in, std::string delimeter)
+std::vector<std::string> splitAndTrimByStr(const std::string& in, const std::string& delimeter)
 {
     std::vector<std::string> out;
     for (decltype(in.size()) i = 0; i < in.size();)
@@ -59,7 +59,7 @@ std::vector<std::string> splitNumbersAndLetters(const std::string& in)
         {
             number.push_back(in[i++]);
         }
-        if (number.size())
+        if (not number.empty())
         {
             out.push_back(number);
         }
@@ -69,7 +69,7 @@ std::vector<std::string> splitNumbersAndLetters(const std::string& in)
         {
             letters.push_back(in[i++]);
         }
-        if (letters.size())
+        if (not letters.empty())
         {
             out.push_back(letters);
         }

@@ -28,7 +28,7 @@ void DumpImage::execute(cv::Mat &image)
 {
     static int i = 0;
     std::string path = dirrectory_ + "/"s + prefix_ + "_"s + std::to_string(++i) + ".png"s;
-    cv::imwrite(path.c_str(), image);
+    cv::imwrite(path, image);
 }
 
 } // image_processing

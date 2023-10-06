@@ -17,7 +17,7 @@ void ConnectionController::disconnect()
 
 void ConnectionController::registerConnectionChanged(std::function<void(bool)> callback_)
 {
-    notifyConnectionStatusChange_ = callback_;
+    notifyConnectionStatusChange_ = std::move(callback_);
     robot_interface::subscribeForConnectionStatus([&](auto status) {
         if (notifyConnectionStatusChange_) notifyConnectionStatusChange_(status);
     } );

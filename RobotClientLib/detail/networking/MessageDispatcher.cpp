@@ -11,7 +11,7 @@ void MessageDispatcher::dispatchMessage(const std::string &message)
     }
 }
 
-void MessageDispatcher::subscribeFor(std::string prefix, std::function<void(std::string)> callback)
+void MessageDispatcher::subscribeFor(const std::string& prefix, std::function<void(std::string)> callback)
 {
     clients_.emplace_back(std::make_pair(prefix, callback));
 }
