@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-#include "RobotAccessPoint.hpp"
+#include "RobotClientLib/detail/networking/RobotAccessPoint.hpp"
 
 void RequestedSpeed::handle(const std::string& message)
 {

@@ -41,7 +41,7 @@ void Session::receive_single()
     });
 }
 
-void Session::send(std::string message)
+void Session::send(std::string&& message)
 {
     std::lock_guard<std::mutex> lg(socketMutex_);
     socket_.send(boost::asio::buffer(message));

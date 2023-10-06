@@ -3,9 +3,9 @@ project(Autonomous_vehicle)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 
-    SET(CMAKE_CXX_FLAGS  "-Og -g -std=c++20 -lrt -latomic -pthread") # due te opencv internal: -Wall -Wextra -Werror
+    SET(CMAKE_CXX_FLAGS  "-Og -g -std=c++20 -latomic -pthread") # due te opencv internal: -Wall -Wextra -Werror
 else()
-    SET(CMAKE_CXX_FLAGS  "-Ofast -std=c++20 -flto -lrt -latomic -pthread") # due te opencv internal: -Wall -Wextra -Werror
+    SET(CMAKE_CXX_FLAGS  "-Ofast -std=c++20 -flto -latomic -pthread") # due te opencv internal: -Wall -Wextra -Werror
 endif()
 
 

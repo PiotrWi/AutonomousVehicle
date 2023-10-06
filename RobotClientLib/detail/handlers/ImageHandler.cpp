@@ -2,8 +2,8 @@
 
 #include <iostream>
 #include <sstream>
-#include <Tools/StringAlgorithms.hpp>
-#include <Tools/Base64.hpp>
+#include "Tools/StringAlgorithms.hpp"
+#include "Tools/Base64.hpp"
 
 using namespace std;
 
@@ -55,9 +55,14 @@ void ImageHandler::handle(const std::string& message)
     std::string_view sw (message.begin() + payloadPosition + 9, message.end());
     out.pixels = Base64Decode(message.substr(payloadPosition + 9));
 
-    std::lock_guard<std::mutex> lock(contentMutex_);
-    std::swap(content_[side].second, out);
-    content_[side].first(content_[side].second);
+    function<void(robot_interface::IntegerPicture)> notifier;
+    {
+        std::lock_guard<std::mutex> lock(contentMutex_);
+        notifier = content_[side].first;
+        content_[side].second = out;
+    }
+
+    notifier(out);
 }
 
 std::string ImageHandler::getPrefix()

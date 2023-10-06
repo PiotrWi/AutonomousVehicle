@@ -1,10 +1,10 @@
 #include "../RobotInterface.hpp"
 
 #include <iostream>
-#include "RobotAccessPoint.hpp"
-#include "RequestedSpeed.hpp"
-#include "ImageHandler.hpp"
-#include "MessageDispatcher.hpp"
+#include "RobotClientLib/detail/networking/RobotAccessPoint.hpp"
+#include "RobotClientLib/detail/handlers/RequestedSpeed.hpp"
+#include "RobotClientLib/detail/handlers/ImageHandler.hpp"
+#include "RobotClientLib/detail/networking/MessageDispatcher.hpp"
 
 namespace robot_interface
 {

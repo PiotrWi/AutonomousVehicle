@@ -28,6 +28,7 @@ void Connection::start()
 
 void Connection::receive_single()
 {
+    std::lock_guard<std::mutex> lk(socketMutex_);
     boost::asio::async_read_until(*socket_, buffer_, '\n', [&](boost::system::error_code ec, std::size_t)
     {
         if (ec)
@@ -47,6 +48,7 @@ void Connection::receive_single()
 
 void Connection::send(std::string message)
 {
+    std::lock_guard<std::mutex> lk(socketMutex_);
     socket_->send(boost::asio::buffer(message));
 }
 

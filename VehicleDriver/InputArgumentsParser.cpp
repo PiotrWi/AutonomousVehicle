@@ -82,7 +82,8 @@ void createComponentsBasedOnParserInput(int argc, char** argv, Application& appl
         if (vm.count("robot_component"))
         {
             application.addComponent(components::createRobotComponent(application.getApplicationContext()));
-            auto pipeline = image_processing::createSingleCameraPublish(application.getApplicationContext().messageSender_);
+            auto pipeline = image_processing::createParallelDualCameraPublish(
+                    application.getApplicationContext().messageSender_);
             application.addComponent(components::createCameraProcessingComponent(std::move(pipeline)));
         }
     }

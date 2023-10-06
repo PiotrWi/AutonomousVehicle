@@ -21,7 +21,7 @@ void PicturePublisher::init()
 void PicturePublisher::execute(cv::Mat &image)
 {
     std::string out = createPublishImage(cammeraSide_, image);
-    messageSender_.send(out);
+    messageSender_.send(std::move(out));
 }
 
 }  // namespace image_processing

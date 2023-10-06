@@ -13,7 +13,7 @@ public:
                      std::function<void()> notifyConnectionDroped,
                      std::function<void(const std::string&)> messageHandler);
     void start();
-    void send(std::string message);
+    void send(std::string&& message);
 private:
     void receive_single();
 

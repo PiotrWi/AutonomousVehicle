@@ -18,10 +18,7 @@ std::string to_string(CameraSide cameraSide)
     {
         return "LEFT"s;
     }
-    if (CameraSide::RIGHT == cameraSide)
-    {
-        return "RIGHT"s;
-    }
+    return "RIGHT"s;
 }
 
 }  // namespace
@@ -65,7 +62,6 @@ std::string createPublishImage(CameraSide cameraSide, cv::Mat &image)
                 vec.push_back((*it)[2]);
             }*/
         }
-        RaiiExecutionTimeMeasurement timeMeasurement_Enc("encoding");
         message += " PAYLOAD: "s + Base64Encode(vec) + "\n";
     }
     else

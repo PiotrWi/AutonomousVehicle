@@ -8,41 +8,50 @@
 namespace components
 {
 
-CameraProcessingComponent::CameraProcessingComponent(std::unique_ptr<image_processing::Pipeline>&& pipeline)
-    : pipeline_(std::move(pipeline))
+CameraProcessingComponent::CameraProcessingComponent(std::vector<std::unique_ptr<image_processing::Pipeline>>&& pipelines)
+    : pipelines_(std::move(pipelines))
 {
 }
 
-std::unique_ptr<Component> createCameraProcessingComponent(std::unique_ptr<image_processing::Pipeline>&& pipeline)
+std::unique_ptr<Component> createCameraProcessingComponent(std::vector<std::unique_ptr<image_processing::Pipeline>>&& pipelines)
 {
-    return std::make_unique<CameraProcessingComponent>(std::move(pipeline));
+    return std::make_unique<CameraProcessingComponent>(std::move(pipelines));
 }
 
 void CameraProcessingComponent::start()
 {
-    std::thread t([this](){ run(); });
-    t.detach();
+    std::cout << "[CameraProcessingComponent] start" << std::endl;
+    for (auto& pipeline: pipelines_)
+    {
+        pipeline->init();
+    }
+
+    for (auto& pipeline: pipelines_)
+    {
+        std::thread t([&]() {run(*pipeline);} );
+        t.detach();
+    }
+
+    tools::createRepeatingTimer(1000000/10, [this](){
+        std::lock_guard<std::mutex> lock(framesToExecuteMutex_);
+        framesToExecute += pipelines_.size();
+        for (int i = 0; i < pipelines_.size(); ++i)
+        {
+            notifyFramesToExecute_.notify_one();
+        }
+    });
 }
 
-void CameraProcessingComponent::run()
+void CameraProcessingComponent::run(image_processing::Pipeline& pipeline)
 {
-    std::cout << "[CameraProcessingComponent] run" << std::endl;
-    pipeline_->init();
-    tools::createRepeatingTimer(1000000/10, [this](){
-        std::lock_guard<std::mutex> lock(shallReadFrameMutex);
-        shallReadFrame = true;
-        notifyFrameTime_.notify_one();
-    });
-
     while (true)
     {
         {
-            std::unique_lock lk(shallReadFrameMutex);
-            notifyFrameTime_.wait(lk, [this](){ return shallReadFrame; });
-            shallReadFrame = false;
+            std::unique_lock lk(framesToExecuteMutex_);
+            notifyFramesToExecute_.wait(lk, [this](){ return framesToExecute; });
+            framesToExecute -= 1;
         }
-        RaiiExecutionTimeMeasurement timeMeasurement("single camera frame");
-        pipeline_->execute();
+        pipeline.execute();
     }
 }
 

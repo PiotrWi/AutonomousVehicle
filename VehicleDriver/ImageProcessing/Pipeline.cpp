@@ -1,4 +1,5 @@
 #include "Pipeline.hpp"
+#include <Tools/ExecutionTimeMeasurement.hpp>
 
 namespace image_processing
 {
@@ -12,8 +13,10 @@ void Pipeline::init()
 
 void Pipeline::execute()
 {
+    RaiiMultipleStepExecutionTimeMeasurement timeMeasurement("Pipeline: ");
     for (auto &&[task, name]: pipelineTasks_) {
         task->execute();
+        timeMeasurement.step(name.c_str());
     }
 }
 

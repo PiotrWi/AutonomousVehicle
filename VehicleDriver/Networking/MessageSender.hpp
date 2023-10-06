@@ -11,7 +11,7 @@ class MessageSender
 {
 public:
     explicit MessageSender(AccessPoint& ap);
-    void send(const std::string& );
+    void send(std::string&&);
 private:
     AccessPoint& ap_;
 };

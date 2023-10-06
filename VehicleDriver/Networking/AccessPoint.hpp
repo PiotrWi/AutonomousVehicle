@@ -15,7 +15,7 @@ class AccessPoint
 {
 public:
     explicit AccessPoint(std::function<void(const std::string&)> messageHandler);
-    void send(std::string message);
+    void send(std::string&& message);
     void start();
 private:
     void accept_one();

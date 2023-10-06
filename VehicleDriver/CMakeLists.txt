@@ -85,6 +85,8 @@ add_executable(Autonomous_vehicle main.cpp
         Common/ImageTypes.hpp
         ImageProcessing/ImagePipelines/FlipImage.cpp
         ImageProcessing/ImagePipelines/FlipImage.hpp
+        ImageProcessing/ImagePipelines/DumpImage.cpp
+        ImageProcessing/ImagePipelines/DumpImage.hpp
 )
 
 target_link_libraries(Autonomous_vehicle
@@ -92,6 +94,7 @@ target_link_libraries(Autonomous_vehicle
         opencv_highgui
         drivers
         eventLoop
-        tools)
+        tools
+        rt)
 
 add_subdirectory(test EXCLUDE_FROM_ALL)

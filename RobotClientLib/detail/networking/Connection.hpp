@@ -18,6 +18,7 @@ private:
     void receive_single();
 
     boost::asio::io_service& ioService_;
+    std::mutex socketMutex_;
     boost::asio::ip::tcp::socket* socket_;
     boost::asio::streambuf buffer_;
     std::function<void()> notifyConnectionDroped_;

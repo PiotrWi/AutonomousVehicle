@@ -8,9 +8,9 @@ MessageSender::MessageSender(AccessPoint &ap)
 {
 }
 
-void MessageSender::send(const std::string &message)
+void MessageSender::send(std::string&& message)
 {
-    ap_.send(message);
+    ap_.send(std::move(message));
 }
 
 }  // namespace networking

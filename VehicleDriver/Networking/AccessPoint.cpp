@@ -46,11 +46,11 @@ void AccessPoint::accept_one()
     });
 }
 
-void AccessPoint::send(std::string message)
+void AccessPoint::send(std::string&& message)
 {
     if (session_)
     {
-        session_->send(message);
+        session_->send(std::move(message));
     }
 }
 

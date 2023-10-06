@@ -13,18 +13,18 @@ namespace components
 class CameraProcessingComponent : public Component
 {
 public:
-    explicit CameraProcessingComponent(std::unique_ptr<image_processing::Pipeline>&& pipeline);
+    explicit CameraProcessingComponent(std::vector<std::unique_ptr<image_processing::Pipeline>>&& pipelines);
     void start() override;
 private:
-    void run();
+    void run(image_processing::Pipeline&);
 
-    std::condition_variable notifyFrameTime_;
-    std::mutex shallReadFrameMutex;
-    bool shallReadFrame = false;
+    std::condition_variable notifyFramesToExecute_;
+    std::mutex framesToExecuteMutex_;
+    int framesToExecute = 0;
 
-    std::unique_ptr<image_processing::Pipeline> pipeline_;
+    std::vector<std::unique_ptr<image_processing::Pipeline>> pipelines_;
 };
 
-std::unique_ptr<Component> createCameraProcessingComponent(std::unique_ptr<image_processing::Pipeline>&& pipeline);
+std::unique_ptr<Component> createCameraProcessingComponent(std::vector<std::unique_ptr<image_processing::Pipeline>>&& pipelines);
 
 }  // namespace components
