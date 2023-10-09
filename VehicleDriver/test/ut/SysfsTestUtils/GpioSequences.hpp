@@ -44,8 +44,8 @@ const std::vector<std::string> pinShallBeSetToLow
                 std::string{"write fd=@{pinManipFD${pinNr}}, val=0"},
         };
 
-void pushInitSequence(std::vector<std::vector<std::string>> &expectationsVector, std::string pinStr);
-void pushUninitializeSequence(std::vector<std::vector<std::string>> &expectationsVector, std::string pinStr);
-void pushHighLowSequence(std::vector<std::vector<std::string>> &expectationsVector, std::string pinStr);
+void pushInitSequence(std::vector<std::vector<std::string>> &expectationsVector, const std::string& pinStr);
+void pushUninitializeSequence(std::vector<std::vector<std::string>> &expectationsVector, const std::string& pinStr);
+void pushHighLowSequence(std::vector<std::vector<std::string>> &expectationsVector, const std::string& pinStr);
 
 }  // namespace gpio_sentences

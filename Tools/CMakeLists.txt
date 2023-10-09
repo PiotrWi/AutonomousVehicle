@@ -9,6 +9,7 @@ add_library(tools STATIC
     Base64.cpp
         CurrentTime.hpp
         CurrentTime.cpp
+        Checksum.hpp
 )
 
 add_subdirectory(test EXCLUDE_FROM_ALL)

@@ -5,6 +5,7 @@
 #include <boost/algorithm/string.hpp>
 
 #include <Tools/Base64.hpp>
+#include <Tools/Checksum.hpp>
 
 using namespace std;
 
@@ -34,8 +35,6 @@ std::string createCurrentRequestedSpeed(int leftWheel, int rightWheel)
     return "CurrentRequestedSpeed: "s + std::to_string(leftWheel) + " "s + std::to_string(rightWheel) + "\n";
 }
 
-
-
 std::string createPublishImage(CameraSide cameraSide, cv::Mat &image)
 {
     auto message = "PublishImage: "s
@@ -47,21 +46,30 @@ std::string createPublishImage(CameraSide cameraSide, cv::Mat &image)
     {
         std::vector<unsigned char> vec;
 
-        std::string out;
+        if (image.isContinuous())
         {
-            // risky - It makes an assumptions about internal alligment
             vec.resize(image.size().width * image.size().height* 3);
             memcpy(vec.data(), image.ptr(0, 0), vec.size());
-            // end of risky
-
-            /* // If there is a problem with risky sollution, bellow one is still valid.
-            for (auto it = image.begin<cv::Vec3b>(); it != image.end<cv::Vec3b>(); ++it) {
+        }
+        else
+        {
+            std::cout << "Not continous matrix" << std::endl;
+            for (auto it = image.begin<cv::Vec3b>(); it != image.end<cv::Vec3b>(); ++it)
+            {
                 vec.push_back((*it)[0]);
                 vec.push_back((*it)[1]);
                 vec.push_back((*it)[2]);
-            }*/
+            }
         }
+        auto payload = Base64Encode(vec);
+        auto crc = calculateChecksum(payload.begin(), payload.end());
+        message += " CRC: "s + std::to_string(crc);
         message += " PAYLOAD: "s + Base64Encode(vec) + "\n";
+
+        if (not checkPayloadChecksum(message))
+        {
+            std::cout << "createPublishImage checksum not correct";
+        }
     }
     else
     {

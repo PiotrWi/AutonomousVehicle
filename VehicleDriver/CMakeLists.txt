@@ -87,6 +87,8 @@ add_executable(Autonomous_vehicle main.cpp
         ImageProcessing/ImagePipelines/FlipImage.hpp
         ImageProcessing/ImagePipelines/DumpImage.cpp
         ImageProcessing/ImagePipelines/DumpImage.hpp
+        AppConfig.hpp
+        AppConfig.cpp
 )
 
 target_link_libraries(Autonomous_vehicle

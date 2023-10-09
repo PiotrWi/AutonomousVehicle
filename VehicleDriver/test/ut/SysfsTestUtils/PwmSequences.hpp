@@ -55,8 +55,8 @@ const std::vector<std::string> pwmShallSetDuty10p
     std::string {"write fd=@{dutyCycleFd${pwmChannel}}, val=1000000"},
 };
 
-void pushInitSequence(std::vector<std::vector<std::string>> &expectationsVector, std::string channelStr);
-void pushUninitializeSequence(std::vector<std::vector<std::string>> &expectationsVector, std::string channelStr);
-void pushPwmShallSetDuty10p(std::vector<std::vector<std::string>> &expectationsVector, std::string channelStr);
+void pushInitSequence(std::vector<std::vector<std::string>> &expectationsVector, const std::string& channelStr);
+void pushUninitializeSequence(std::vector<std::vector<std::string>> &expectationsVector, const std::string& channelStr);
+void pushPwmShallSetDuty10p(std::vector<std::vector<std::string>> &expectationsVector, const std::string& channelStr);
 
 }  // namespace pwm_sequences

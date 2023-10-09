@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include <Tools/Checksum.hpp>
+
 Connection::Connection(boost::asio::io_service& ioService,
                        boost::asio::ip::tcp::socket *socket,
                        std::function<void()> notifyConnectionDroped,
@@ -41,7 +43,14 @@ void Connection::receive_single()
         std::getline(input_stream, message);
 
         notifyMessageReceived_(message);
-
+        if (not checkPayloadChecksum(message))
+        {
+            std::cout << "Checksum is incorrect" << std::endl;
+        }
+        else
+        {
+            std::cout << "Checksum is correct" << std::endl;
+        }
         receive_single();
     });
 }

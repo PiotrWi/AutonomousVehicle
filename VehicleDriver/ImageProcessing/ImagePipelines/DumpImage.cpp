@@ -10,7 +10,7 @@ namespace image_processing
 
 using namespace std;
 
-DumpImage::DumpImage(const char *localization, const char *prefix)
+DumpImage::DumpImage(std::string localization, const char *prefix)
     : localization_(localization)
     , prefix_(prefix)
 {

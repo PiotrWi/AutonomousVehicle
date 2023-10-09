@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 
+#include <Tools/Checksum.hpp>
+
 namespace networking
 {
 
@@ -40,11 +42,43 @@ void Session::receive_single()
         receive_single();
     });
 }
+/*
+void Session::send(std::string&& message)
+{
+    std::lock_guard<std::mutex> lg(socketMutex_);
+
+    auto msgBuffer = std::make_shared<std::string>();
+    std::swap(*msgBuffer, message);
+    auto len = msgBuffer->size();
+    boost::asio::async_write(socket_, boost::asio::buffer(*msgBuffer), [msgBuffer, len](auto&& ec, auto&& byte_transferred) {
+        if (ec)
+        {
+            std::cerr << "async_send failed" << std::endl;
+            std::cerr << "EC: " << ec.what();
+            return;
+        }
+        if (byte_transferred != len)
+        {
+            std::cout << "Bytes transfered: " << len << " " << byte_transferred << std::endl;
+        }
+    });
+}*/
 
 void Session::send(std::string&& message)
 {
     std::lock_guard<std::mutex> lg(socketMutex_);
-    socket_.send(boost::asio::buffer(message));
+    boost::system::error_code ec;
+    auto byte_transferred = boost::asio::write(socket_, boost::asio::buffer(message), ec);
+    if (byte_transferred != message.size())
+    {
+        std::cout << "Bytes transfered and message length differs: " << message.size() << " " << byte_transferred << std::endl;
+    }
+    if (ec)
+    {
+        std::cerr << "write failed" << std::endl;
+        std::cerr << "EC: " << ec.what();
+        return;
+    }
 }
 
 }  // namespace networking

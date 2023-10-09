@@ -11,11 +11,11 @@ namespace image_processing
 class DumpImage : public SingleInputConsumer_1<cv::Mat>
 {
 public:
-    explicit DumpImage(const char* localization, const char* prefix);
+    explicit DumpImage(std::string localization, const char* prefix);
     void init() override;
 private:
     void execute(cv::Mat& image) override;
-    const char *localization_;
+    std::string localization_;
     const char *prefix_;
     std::string dirrectory_;
 };

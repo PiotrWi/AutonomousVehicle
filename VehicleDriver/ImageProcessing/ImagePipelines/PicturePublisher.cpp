@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include <EventLoop/MessageEncoder.hpp>
-
+#include <Tools/Checksum.hpp>
 namespace image_processing
 {
 
