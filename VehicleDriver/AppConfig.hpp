@@ -6,5 +6,5 @@
 class AppConfig : public SingletonAddOn<AppConfig>
 {
 public:
-    std::string getCameraDumpDirectory();
+    std::string getCameraDumpDirectory() const;
 };

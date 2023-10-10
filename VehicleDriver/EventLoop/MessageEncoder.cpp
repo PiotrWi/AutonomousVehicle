@@ -66,10 +66,7 @@ std::string createPublishImage(CameraSide cameraSide, cv::Mat &image)
         message += " CRC: "s + std::to_string(crc);
         message += " PAYLOAD: "s + Base64Encode(vec) + "\n";
 
-        if (not checkPayloadChecksum(message))
-        {
-            std::cout << "createPublishImage checksum not correct";
-        }
+        VERIFY_CHECKSUM(message);
     }
     else
     {

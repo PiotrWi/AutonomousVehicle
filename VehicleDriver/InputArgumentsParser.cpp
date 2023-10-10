@@ -5,11 +5,12 @@
 
 #include <boost/program_options.hpp>
 
-#include "Components/Component.hpp"
-#include "Components/VideoProccessingComponent.hpp"
-#include "Components/CameraProcessingComponent.hpp"
-#include "Components/MotorTestComponents.hpp"
-#include "Components/RobotComponent.hpp"
+#include <Components/Component.hpp>
+#include <Components/VideoProccessingComponent.hpp>
+#include <Components/CameraProcessingComponent.hpp>
+#include <Components/MotorTestComponents.hpp>
+#include <Components/RobotComponent.hpp>
+#include <Components/CalibrationComponent.hpp>
 
 #include <ImageProcessing/PipelineFactory.hpp>
 
@@ -18,6 +19,7 @@
 //   ./Autonomous_vehicle --camera_processing_component
 //   ./Autonomous_vehicle --motor_test_component
 //   ./Autonomous_vehicle --robot_component
+//   ./Autonomous_vehicle --calibrate_component --input directory_with_calibration_data
 
 
 class ParsingError : public std::runtime_error { public: ParsingError(); };
@@ -32,7 +34,8 @@ auto getOptionsDescriptions()
         ("input", boost::program_options::value<std::string>(), "provides an input parameter")
         ("camera_processing_component", "process data from camera")
         ("motor_test_component", "Allow user to set speed on the motors to test it.")
-        ("robot_component", "Runs application to control robot");
+        ("robot_component", "Runs application to control robot")
+        ("calibrate_component", "Utility to calibrate camera.");
     return description;
 }
 
@@ -51,6 +54,13 @@ std::unique_ptr<components::Component> createVideoProcessingComponent(const boos
     if (not vm.contains("input")) throw ParsingError();
 
     return components::createVideoProcessingComponent(vm["input"].as<std::string>());
+}
+
+std::unique_ptr<components::Component> createCalibratingComponent(const boost::program_options::variables_map& vm)
+{
+    if (not vm.contains("input")) throw ParsingError();
+    auto input = vm["input"].as<std::string>();
+    return components::createCalibrationComponent(std::move(input));
 }
 
 void createComponentsBasedOnParserInput(int argc, char** argv, Application& application)
@@ -78,6 +88,10 @@ void createComponentsBasedOnParserInput(int argc, char** argv, Application& appl
         if (vm.count("motor_test_component"))
         {
             application.addComponent(components::createMotorTestComponent());
+        }
+        if (vm.count("calibrate_component"))
+        {
+            application.addComponent(createCalibratingComponent(vm));
         }
         if (vm.count("robot_component"))
         {

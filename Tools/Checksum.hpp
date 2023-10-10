@@ -1,7 +1,7 @@
 #pragma once
 
+#include <iostream>
 #include <string>
-#include <vector>
 #include <sstream>
 
 template <typename TIter, typename TEndTag>
@@ -35,3 +35,19 @@ inline bool checkPayloadChecksum(const std::string& in)
     auto checksumCalculatedFromPayload = calculateChecksum(payload.begin(), payloadEnd);
     return checksumCalculatedFromPayload == checksumInMessage;
 }
+
+namespace debug
+{
+
+inline void verifyChecksum(const std::string& in, const char* fcnName)
+{
+#ifdef ASSERTSON
+    if (not checkPayloadChecksum(in))
+    {
+        std::cout << "Checksum is incorrect in: fcnName" << std::endl;
+    }
+#endif
+}
+#define VERIFY_CHECKSUM(in) debug::verifyChecksum(in, __FUNCTION__)
+
+}  // namespace debug

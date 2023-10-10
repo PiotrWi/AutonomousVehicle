@@ -18,7 +18,7 @@ DumpImage::DumpImage(std::string localization, const char *prefix)
 
 void DumpImage::init()
 {
-    std::filesystem::path givenPath(localization_);
+    std::filesystem::path givenPath(localization_ + "/"s);
     givenPath += getCurrentTime();
     std::filesystem::create_directories(givenPath);
     dirrectory_ = givenPath.string();

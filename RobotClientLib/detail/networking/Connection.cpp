@@ -43,14 +43,7 @@ void Connection::receive_single()
         std::getline(input_stream, message);
 
         notifyMessageReceived_(message);
-        if (not checkPayloadChecksum(message))
-        {
-            std::cout << "Checksum is incorrect" << std::endl;
-        }
-        else
-        {
-            std::cout << "Checksum is correct" << std::endl;
-        }
+        VERIFY_CHECKSUM(message);
         receive_single();
     });
 }
