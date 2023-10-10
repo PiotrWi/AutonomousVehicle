@@ -16,7 +16,7 @@ void presentBoard(const cv::Mat& mat, const cv::Size& cornersSize, const std::ve
 {
     cv::drawChessboardCorners(mat, cornersSize, corners, true);
     cv::imshow("Calibration", mat);
-    cv::waitKey(1000);
+    cv::waitKey(50);
 }
 
 }  // namespace
@@ -56,14 +56,14 @@ void CalibrationComponent::start()
         image_points.push_back(corners);
 
         presentBoard(mat, cornersSize, corners);
-        if (image_points.size() == 54) break;
+        if (image_points.size() == 40) break;
     }
 
     for (auto i = 0u; i < image_points.size(); ++i)
     {
         object_points.push_back(std::vector<cv::Point3f>{});
         auto& opts = object_points.back();
-        opts.resize(image_points.size());
+        opts.resize(image_points[0].size());
         for (auto j=0; j<image_points[0].size(); ++j)
         {
             opts[j] = cv::Point3f ((float)(j/calib_table_cols), (float)(j%calib_table_cols), 0.f);
@@ -86,6 +86,11 @@ void CalibrationComponent::start()
 
     std::cout << "Show corrected" << std::endl;
 
+    cv::FileStorage fileStorage("instrincts_right.xml", cv::FileStorage::WRITE);
+    fileStorage << "image_width" << image_size.width << "image_height" << image_size.height
+                << "camera_matrix" << intrinsic_matrix << "diftortion_coefficients" << distorion_coeffs;
+    fileStorage.release();
+
     for (auto const& dir_entry : std::filesystem::directory_iterator{std::filesystem::path(calibrationFilesDirectory_) })
     {
         auto mat1 = cv::imread(dir_entry.path().string());
@@ -95,6 +100,8 @@ void CalibrationComponent::start()
         cv::imshow("Corrected", mat);
         cv::waitKey(1000);
     }
+
+
 }
 
 void CalibrationComponent::stop()
