@@ -56,7 +56,7 @@ void CalibrationComponent::start()
         image_points.push_back(corners);
 
         presentBoard(mat, cornersSize, corners);
-        if (image_points.size() == 40) break;
+        if (image_points.size() == 90) break;
     }
 
     for (auto i = 0u; i < image_points.size(); ++i)
@@ -66,7 +66,7 @@ void CalibrationComponent::start()
         opts.resize(image_points[0].size());
         for (auto j=0; j<image_points[0].size(); ++j)
         {
-            opts[j] = cv::Point3f ((float)(j/calib_table_cols), (float)(j%calib_table_cols), 0.f);
+            opts[j] = cv::Point3f ((j/calib_table_cols)*0.024, (float)(j%calib_table_cols)*0.024, 0.f);
         }
     }
 
@@ -80,16 +80,18 @@ void CalibrationComponent::start()
                                      cv::noArray(),
                                      cv::CALIB_ZERO_TANGENT_DIST | cv::CALIB_FIX_PRINCIPAL_POINT);
 
-    cv::Mat map1, map2;
-    cv::initUndistortRectifyMap(intrinsic_matrix, distorion_coeffs,
-                                cv::Mat(),intrinsic_matrix, image_size, CV_16SC2, map1, map2);
-
-    std::cout << "Show corrected" << std::endl;
+    std::cout << "Err: " << err << std::endl;
 
     cv::FileStorage fileStorage("instrincts_right.xml", cv::FileStorage::WRITE);
     fileStorage << "image_width" << image_size.width << "image_height" << image_size.height
                 << "camera_matrix" << intrinsic_matrix << "diftortion_coefficients" << distorion_coeffs;
     fileStorage.release();
+
+    cv::Mat map1, map2;
+    cv::initUndistortRectifyMap(intrinsic_matrix, distorion_coeffs,
+                                cv::Mat(),intrinsic_matrix, image_size, CV_16SC2, map1, map2);
+
+    std::cout << "Show corrected" << std::endl;
 
     for (auto const& dir_entry : std::filesystem::directory_iterator{std::filesystem::path(calibrationFilesDirectory_) })
     {
@@ -100,8 +102,6 @@ void CalibrationComponent::start()
         cv::imshow("Corrected", mat);
         cv::waitKey(1000);
     }
-
-
 }
 
 void CalibrationComponent::stop()

@@ -3,12 +3,14 @@
 extern "C"
 {
 
+// Connection interfaces
 void c_init();
 bool c_connect();
 void c_disconnect();
 bool c_isConnected();
 void c_subscribeForConnectionStatus(void (*callback)(bool));
 
+// Speed interfaces
 struct Speed
 {
     int leftWheel;
@@ -23,15 +25,20 @@ struct IntegerPicture
 {
     int format;
     int rows;
-    unsigned int* pixels;
+    int columns;
+    unsigned char* pixels;
+
 };
 
+// Picture interfaces
 enum Side
 {
     Left,
     Right
 };
 
-IntegerPicture getPicture(Side);
+void c_free_IntegerPicture(IntegerPicture*);
+IntegerPicture c_getPicture(Side);
+void c_subscribeForPicture(Side, void(*callback)(IntegerPicture));
 
 }  // extern "C"

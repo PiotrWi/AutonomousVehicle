@@ -19,6 +19,7 @@ void clearModelOnConnectionChange(bool)
     imageHandler_.clear();
 }
 
+// Connection interfaces
 void init()
 {
     std::cout << "[RobotInterface] c_init call" << std::endl;
@@ -64,6 +65,7 @@ void subscribeForConnectionStatus(std::function<void(bool)> callback)
     });
 }
 
+// Speed interfaces
 void setRequestedSpeed(Speed speed)
 {
     std::cout << "[RobotInterface] setRequestedSpeed call with args: " << speed.leftWheel << " " << speed.rightWheel << std::endl;
@@ -86,6 +88,7 @@ void subscribeForRequestedSpeedChange(std::function<void(Speed )> callback, Spee
     requestedSpeed_.subscribeForRequestedSpeedChange(callback, outCurrentValue);
 }
 
+// Picture interfaces
 void subscribeForPicture(CameraSide cameraSide, std::function<void(IntegerPicture)> callback)
 {
     imageHandler_.subscribeForPicture(cameraSide, callback);

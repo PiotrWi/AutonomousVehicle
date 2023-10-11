@@ -1,9 +1,26 @@
 #include "AppConfig.hpp"
 
-const char* CameraDumpDir = "/home/pioter/tmp";
-//const char* CameraDumpDir = "/home/pi/tmp";
+namespace
+{
+
+std::string homeDir = "/home/pioter";
+std::string CameraDumpDir = homeDir + "/tmp";
+std::string LeftCoefficientFileLoc = homeDir + "/proj/AuthonomousVehicle/VehicleDriver/Data/instrincts_left.xml";
+std::string RightCoefficientFileLoc = homeDir + "/proj/AuthonomousVehicle/VehicleDriver/Data/instrincts_right.xml";
+
+}  // namespace
 
 std::string AppConfig::getCameraDumpDirectory() const
 {
-    return std::string(CameraDumpDir);
+    return { CameraDumpDir };
+}
+
+std::string AppConfig::getLeftCoefficientFileLoc() const
+{
+    return { LeftCoefficientFileLoc };
+}
+
+std::string AppConfig::getRightCoefficientFileLoc() const
+{
+    return { RightCoefficientFileLoc };
 }
