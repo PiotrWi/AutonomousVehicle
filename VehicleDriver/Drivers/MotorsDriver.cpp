@@ -1,5 +1,13 @@
 #include "MotorsDriver.hpp"
 
+void validateSpeed(int motorSpeed)
+{
+    if ((motorSpeed > 100) | (motorSpeed < -100))
+    {
+        throw SpeedOutOfRange();
+    }
+}
+
 namespace drivers
 {
 
@@ -35,6 +43,9 @@ void MotorsDrivers::stop()
 
 void MotorsDrivers::setSpeed(int leftMotor, int rightMotor)
 {
+    validateSpeed(leftMotor);
+    validateSpeed(rightMotor);
+
     if (leftMotor > 0)
     {
         phasePinLeftMotor_.setHigh();

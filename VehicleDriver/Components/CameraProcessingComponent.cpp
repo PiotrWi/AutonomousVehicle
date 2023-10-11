@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <thread>
+
+#include <AppConfig.hpp>
 #include <Tools/CreateTimmer.hpp>
 
 namespace components
@@ -31,7 +33,8 @@ void CameraProcessingComponent::start()
         t.detach();
     }
 
-    tools::createRepeatingTimer(1000000/10, [this](){
+    auto cameraFps = AppConfig::getInstance().getCameraFps();
+    tools::createRepeatingTimer(1000000/cameraFps, [this](){
         std::lock_guard<std::mutex> lock(framesToExecuteMutex_);
         framesToExecute += static_cast<int>(pipelines_.size());
         for (int i = 0; i < pipelines_.size(); ++i)

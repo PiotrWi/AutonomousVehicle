@@ -40,8 +40,10 @@ std::vector<std::unique_ptr<Pipeline>> createDualCameraPreview()
     pipelines.back()->add(new ImageFromCamera(std::move(rightCamera)), "rightCameraIn"s);
     pipelines.back()->add(new FlipImage(), "flippedImageLeft"s, {{0, "leftCameraIn", 0}});
     pipelines.back()->add(new FlipImage(), "flippedImageRight"s, {{0, "rightCameraIn", 0}});
-    pipelines.back()->add(new PreviewEntity("PreviewLeft"), "previewLeft"s, {{0, "flippedImageLeft", 0}});
-    pipelines.back()->add(new PreviewEntity("PreviewRight"), "previewRight"s, {{0, "flippedImageRight", 0}});
+    pipelines.back()->add(new CorrectImage(AppConfig::getInstance().getLeftCoefficientFileLoc()), "correctedImageLeft", {{0, "flippedImageLeft"s, 0}});
+    pipelines.back()->add(new CorrectImage(AppConfig::getInstance().getRightCoefficientFileLoc()), "correctedImageRight", {{0, "flippedImageRight"s, 0}});
+    pipelines.back()->add(new PreviewEntity("PreviewLeft"), "previewLeft"s, {{0, "correctedImageLeft", 0}});
+    pipelines.back()->add(new PreviewEntity("PreviewRight"), "previewRight"s, {{0, "correctedImageRight", 0}});
 
     return pipelines;
 }

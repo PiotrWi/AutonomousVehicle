@@ -24,7 +24,7 @@ public:
     unsigned int getId() const;
 private:
     unsigned int eventId_;
-    void *payload_ = nullptr;
+    void *payload_ = nullptr;  // std::any may be equally good
     void(*deleter_)(void* payload) = nullptr;
 };
 

@@ -3,8 +3,16 @@
 #include "MotorsDriver.hpp"
 #include "GpioDriver.hpp"
 #include "PwmDriver.hpp"
+#include <stdexcept>
 
-// Left motor is lighter
+struct SpeedOutOfRange : public std::logic_error
+{
+public:
+    SpeedOutOfRange()
+            : std::logic_error("Speed out of range. It shall be in integer in range: <-100, 100>.") {}
+};
+
+void validateSpeed(int motorSpeed);
 
 namespace drivers
 {

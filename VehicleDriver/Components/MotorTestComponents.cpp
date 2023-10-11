@@ -4,30 +4,8 @@
 
 #include "../../Tools/StringAlgorithms.hpp"
 
-namespace
-{
-
-struct SpeedOutOfRange : public std::logic_error
-{
-public:
-    SpeedOutOfRange()
-        : std::logic_error("Speed out of range. It shall be in integer in range: <-100, 100>.") {}
-};
-
-void validateSpeed(int motorSpeed)
-{
-    if ((motorSpeed > 100) | (motorSpeed < -100))
-    {
-        throw SpeedOutOfRange();
-    }
-}
-
-}  // namespace
-
 namespace components
 {
-
-
 
 void MotorTestComponents::start()
 {
@@ -53,9 +31,6 @@ void MotorTestComponents::start()
             auto givenSpeeds = splitAndTrim(line, ' ');
             auto leftMotorSpeed = std::stoi(givenSpeeds[0]);
             auto rightMotorSpeed = std::stoi(givenSpeeds[1]);
-
-            validateSpeed(leftMotorSpeed);
-            validateSpeed(rightMotorSpeed);
 
             driver_.setSpeed(leftMotorSpeed, rightMotorSpeed);
         }

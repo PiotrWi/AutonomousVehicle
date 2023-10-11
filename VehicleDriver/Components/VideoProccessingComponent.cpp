@@ -8,7 +8,7 @@
 
 namespace
 {
-// TODO: Temporary. It shall be invested to some proper gui.
+// TODO: Temporary. It shall be invested to some proper gui. Or even pipeline and use single class.
 
 auto openVideo(const std::string& location)
 {
