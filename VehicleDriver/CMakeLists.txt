@@ -63,8 +63,8 @@ add_library(imageProcessing STATIC
         ImageProcessing/ImagePipelines/FlipImage.hpp
         ImageProcessing/ImagePipelines/DumpImage.cpp
         ImageProcessing/ImagePipelines/DumpImage.hpp
-        ImageProcessing/ImagePipelines/CorrectImage.cpp
-        ImageProcessing/ImagePipelines/CorrectImage.hpp
+        ImageProcessing/ImagePipelines/ApplyCalibration.cpp
+        ImageProcessing/ImagePipelines/ApplyCalibration.hpp
         ImageProcessing/Calibration.hpp
 )
 

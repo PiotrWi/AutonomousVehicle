@@ -13,4 +13,9 @@ std::any FlipImage::get(int outputPort)
     return {image_};
 }
 
+std::string FlipImage::getDefaultName() const
+{
+    return {"FlipImage"};
+}
+
 } // image_processing

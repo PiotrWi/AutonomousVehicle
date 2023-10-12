@@ -13,6 +13,7 @@ public:
     void init() override {}
     void execute(cv::Mat& arg)  override;
     std::any get(int outputPort) override;
+    virtual std::string getDefaultName() const override;
 private:
     cv::Mat* image_;
 };

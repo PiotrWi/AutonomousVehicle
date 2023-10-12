@@ -1,6 +1,7 @@
 #pragma once
 
 #include <any>
+#include <string>
 
 namespace image_processing
 {
@@ -10,6 +11,7 @@ class IPipelineEntity
 public:
     virtual void init() = 0;
     virtual void execute() = 0;
+    virtual std::string getDefaultName() const = 0;
     virtual ~IPipelineEntity() = default;
 };
 

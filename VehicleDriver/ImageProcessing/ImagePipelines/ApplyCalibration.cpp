@@ -1,18 +1,23 @@
-#include "CorrectImage.hpp"
+#include "ApplyCalibration.hpp"
 
 #include <tuple>
 
 #include <ImageProcessing/Calibration.hpp>
 
-
 namespace
 {
+
+auto to_string(cv::Size size)
+{
+    return "(" + std::to_string(size.width) + "x" + std::to_string(size.height) + ")";
+}
 
 bool validate(cv::Size calibrationSize, cv::Size imageSize)
 {
     if (calibrationSize != imageSize)
     {
-        throw std::logic_error("Callibration file was created for different image size.");
+        throw std::logic_error("Callibration file was created for different image size. Calibration size is: "
+            + to_string(calibrationSize) + ", image size is: " + to_string(imageSize));
     }
     return true;
 }
@@ -22,15 +27,16 @@ bool validate(cv::Size calibrationSize, cv::Size imageSize)
 namespace image_processing
 {
 
-CorrectImage::CorrectImage(std::string&& coefficientFile)
+ApplyCalibration::ApplyCalibration(std::string&& coefficientFile)
      : coefficientFile_(std::move(coefficientFile))
 {
 }
 
-void CorrectImage::init()
+void ApplyCalibration::init()
 {
     auto [camera_matrix, distorion_coeffs, image_size]
             = readCoeffsFromFile(coefficientFile_);
+    image_size_ = image_size;
     cv::initUndistortRectifyMap(camera_matrix,
                                 distorion_coeffs,
                                 cv::Mat(),
@@ -41,7 +47,7 @@ void CorrectImage::init()
                                 map2);
 }
 
-void CorrectImage::execute(cv::Mat &mat)
+void ApplyCalibration::execute(cv::Mat &mat)
 {
     static bool validateOnce = validate(image_size_, mat.size());
 
@@ -54,9 +60,14 @@ void CorrectImage::execute(cv::Mat &mat)
               cv::Scalar());
 }
 
-std::any CorrectImage::get(int outputPort)
+std::any ApplyCalibration::get(int outputPort)
 {
     return std::any(&adjustedImage_);
+}
+
+std::string ApplyCalibration::getDefaultName() const
+{
+    return {"ApplyCalibration"};
 }
 
 } // image_processing

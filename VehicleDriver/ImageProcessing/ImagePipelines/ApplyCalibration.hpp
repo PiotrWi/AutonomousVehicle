@@ -7,12 +7,13 @@
 namespace image_processing
 {
 
-class CorrectImage : public SingleInputConsumer_1<cv::Mat>, public IProducerPipelineEntity
+class ApplyCalibration : public SingleInputConsumer_1<cv::Mat>, public IProducerPipelineEntity
 {
 public:
-    explicit CorrectImage(std::string&& coefficientFile);
+    explicit ApplyCalibration(std::string&& coefficientFile);
     void init() override;
     std::any get(int outputPort) override;
+    virtual std::string getDefaultName() const override;
 private:
     void execute(cv::Mat&) override;
 

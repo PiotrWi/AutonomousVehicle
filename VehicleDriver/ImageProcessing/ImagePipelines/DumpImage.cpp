@@ -31,4 +31,9 @@ void DumpImage::execute(cv::Mat &image)
     cv::imwrite(path, image);
 }
 
+std::string DumpImage::getDefaultName() const
+{
+    return {"DumpImage"};
+}
+
 } // image_processing

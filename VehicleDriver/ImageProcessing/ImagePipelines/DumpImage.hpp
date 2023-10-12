@@ -13,6 +13,7 @@ class DumpImage : public SingleInputConsumer_1<cv::Mat>
 public:
     explicit DumpImage(std::string localization, const char* prefix);
     void init() override;
+    virtual std::string getDefaultName() const override;
 private:
     void execute(cv::Mat& image) override;
     std::string localization_;

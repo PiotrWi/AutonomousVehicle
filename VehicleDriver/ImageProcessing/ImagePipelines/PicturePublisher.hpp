@@ -16,6 +16,7 @@ public:
     explicit PicturePublisher(networking::MessageSender& messageSender,
                               CameraSide cammeraSide);
     void init() override;
+    virtual std::string getDefaultName() const override;
 private:
     void execute(cv::Mat& image) override;
 

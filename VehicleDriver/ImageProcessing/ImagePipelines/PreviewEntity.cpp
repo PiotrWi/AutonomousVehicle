@@ -22,6 +22,10 @@ void PreviewEntity::execute(cv::Mat &image)
     }
 }
 
+std::string PreviewEntity::getDefaultName() const
+{
+    return {"PicturePublisher"};
+}
 
 
 }  // namespace image_processing

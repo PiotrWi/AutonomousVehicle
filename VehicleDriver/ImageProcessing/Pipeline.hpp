@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <stdexcept>
 #include <vector>
 
@@ -24,14 +25,40 @@ struct PipelinePortMappings
     int producerOutputPort;
 };
 
+struct DefaultMapping {};
+
+class Pipeline;
+
+class PipeLineBuilder
+{
+public:
+    PipeLineBuilder& add(IProducerPipelineEntity* producer, const std::string& name);
+    PipeLineBuilder& add(IConsumerPipelineEntity* consumer, const std::string& name, std::vector<PipelinePortMappings>&& portMapping);
+    PipeLineBuilder& add(IConsumerPipelineEntity* consumer, const std::string& name, DefaultMapping df = {});
+    std::unique_ptr<Pipeline> build();
+private:
+    std::vector<std::pair<IPipelineEntity*, std::string>> pipelineTasks_;
+};
+
+class PipeLineBuilderWithPrefix : public PipeLineBuilder
+{
+public:
+    explicit PipeLineBuilderWithPrefix(std::string prefix);
+    PipeLineBuilderWithPrefix& add(IProducerPipelineEntity* producer);
+    PipeLineBuilderWithPrefix& add(IConsumerPipelineEntity* consumer, std::vector<PipelinePortMappings>&& portMapping);
+    PipeLineBuilderWithPrefix& add(IConsumerPipelineEntity* consumer, DefaultMapping df = {});
+private:
+    std::string prefix_;
+};
+
 class Pipeline
 {
 public:
+    Pipeline(std::vector<std::pair<IPipelineEntity*, std::string>>&& pipelineTasks);
     void init();
     void execute();
-    void add(IProducerPipelineEntity* producer, const std::string& name);
-    void add(IConsumerPipelineEntity* producer, const std::string& name,
-             std::vector<PipelinePortMappings> portMapping);
+
+    ~Pipeline();
 private:
     std::vector<std::pair<IPipelineEntity*, std::string>> pipelineTasks_;
 };

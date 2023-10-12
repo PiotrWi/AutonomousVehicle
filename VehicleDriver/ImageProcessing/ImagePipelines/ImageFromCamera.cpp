@@ -23,4 +23,9 @@ std::any ImageFromCamera::get(int outputPort)
     return {&image_};
 }
 
+std::string ImageFromCamera::getDefaultName() const
+{
+    return {"ImageFromCamera"};
+}
+
 }  // namespace image_processing

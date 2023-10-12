@@ -80,7 +80,7 @@ auto calibrate(const std::vector<std::vector<cv::Point3f>>& object_points, const
 
 auto dumpCoeffsToFile(const std::string& dumpFileName, cv::Size image_size, cv::Mat intrinsic_matrix, cv::Mat distorion_coeffs)
 {
-    cv::FileStorage fileStorage("instrincts_" + dumpFileName + "xml", cv::FileStorage::WRITE);
+    cv::FileStorage fileStorage("instrincts_" + dumpFileName + ".xml", cv::FileStorage::WRITE);
     fileStorage << "image_width" << image_size.width
         << "image_height" << image_size.height
         << "camera_matrix" << intrinsic_matrix
@@ -90,7 +90,7 @@ auto dumpCoeffsToFile(const std::string& dumpFileName, cv::Size image_size, cv::
 
 auto previewResults(std::string calibrationFilesDirectory, std::string dumpFileName)
 {
-    auto [camera_matrix, distorion_coeffs, size] = image_processing::readCoeffsFromFile(dumpFileName);
+    auto [camera_matrix, distorion_coeffs, size] = image_processing::readCoeffsFromFile("instrincts_" + dumpFileName + ".xml");
 
     cv::Mat map1, map2;
     cv::initUndistortRectifyMap(camera_matrix, distorion_coeffs,

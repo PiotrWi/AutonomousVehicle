@@ -14,6 +14,7 @@ public:
     void init() override;
     void execute() override;
     std::any get(int outputPort) override;
+    virtual std::string getDefaultName() const override;
 private:
     drivers::CameraDriver cameraDriver_;
     cv::Mat image_;

@@ -7,12 +7,12 @@
 namespace image_processing
 {
 
-inline auto readCoeffsFromFile(const std::string& dumpFileName)
+inline auto readCoeffsFromFile(const std::string& dumpFileLocation)
 {
     cv::Mat camera_matrix, distorion_coeffs;
     cv::Size size;
 
-    cv::FileStorage fileStorage("instrincts_" + dumpFileName + "xml", cv::FileStorage::READ);
+    cv::FileStorage fileStorage(dumpFileLocation, cv::FileStorage::READ);
     fileStorage["camera_matrix"] >> camera_matrix;
     fileStorage["distorion_coeffs"] >> distorion_coeffs;
     fileStorage["image_width"] >> size.width;

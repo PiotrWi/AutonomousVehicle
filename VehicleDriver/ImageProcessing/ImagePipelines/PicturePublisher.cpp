@@ -24,4 +24,9 @@ void PicturePublisher::execute(cv::Mat &image)
     messageSender_.send(std::move(out));
 }
 
+std::string PicturePublisher::getDefaultName() const
+{
+    return {"PicturePublisher"};
+}
+
 }  // namespace image_processing
