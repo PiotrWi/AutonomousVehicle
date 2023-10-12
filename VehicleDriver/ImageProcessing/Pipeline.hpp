@@ -54,10 +54,12 @@ private:
 class Pipeline
 {
 public:
-    Pipeline(std::vector<std::pair<IPipelineEntity*, std::string>>&& pipelineTasks);
+    explicit Pipeline(std::vector<std::pair<IPipelineEntity*, std::string>>&& pipelineTasks);
     void init();
     void execute();
 
+    std::any getOut() const;
+    std::any getOut(std::string in, int port) const;
     ~Pipeline();
 private:
     std::vector<std::pair<IPipelineEntity*, std::string>> pipelineTasks_;

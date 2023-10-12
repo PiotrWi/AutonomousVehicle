@@ -96,4 +96,21 @@ Pipeline::~Pipeline()
     }
 }
 
+std::any Pipeline::getOut() const
+{
+    return dynamic_cast<IProducerPipelineEntity *>(pipelineTasks_.back().first)->get(0);
+}
+
+std::any Pipeline::getOut(std::string in, int port) const
+{
+    for (auto &&[task, name]: pipelineTasks_)
+    {
+        if (name == in)
+        {
+            return dynamic_cast<IProducerPipelineEntity *>(task)->get(0);
+        }
+    }
+    return {};
+}
+
 }  // namespace image_processing

@@ -16,8 +16,9 @@ bool validate(cv::Size calibrationSize, cv::Size imageSize)
 {
     if (calibrationSize != imageSize)
     {
-        throw std::logic_error("Callibration file was created for different image size. Calibration size is: "
-            + to_string(calibrationSize) + ", image size is: " + to_string(imageSize));
+        std::cerr << "Callibration file was created for different image size. Calibration size is: "
+            + to_string(calibrationSize) + ", image size is: " + to_string(imageSize);
+        return false;
     }
     return true;
 }
@@ -49,15 +50,21 @@ void ApplyCalibration::init()
 
 void ApplyCalibration::execute(cv::Mat &mat)
 {
-    static bool validateOnce = validate(image_size_, mat.size());
-
-    cv::remap(mat,
-              adjustedImage_,
-              map1,
-              map2,
-              cv::INTER_LINEAR,
-              cv::BORDER_CONSTANT,
-              cv::Scalar());
+    static bool calibrationMatch = validate(image_size_, mat.size());
+    if (calibrationMatch)
+    {
+        cv::remap(mat,
+                  adjustedImage_,
+                  map1,
+                  map2,
+                  cv::INTER_LINEAR,
+                  cv::BORDER_CONSTANT,
+                  cv::Scalar());
+    }
+    else
+    {
+        adjustedImage_ = mat;
+    }
 }
 
 std::any ApplyCalibration::get(int outputPort)

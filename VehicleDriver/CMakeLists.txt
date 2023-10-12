@@ -97,6 +97,8 @@ add_executable(Autonomous_vehicle main.cpp
         Common/ImageTypes.hpp
         AppConfig.hpp
         AppConfig.cpp
+        Components/PrototypeComponent.cpp
+        Components/PrototypeComponent.hpp
 )
 
 target_link_libraries(Autonomous_vehicle

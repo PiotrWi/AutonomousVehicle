@@ -11,15 +11,16 @@
 #include <Components/MotorTestComponents.hpp>
 #include <Components/RobotComponent.hpp>
 #include <Components/CalibrationComponent.hpp>
+#include <Components/PrototypeComponent.hpp>
 
 #include <ImageProcessing/PipelineFactory.hpp>
 
 // Few examples how to run:
 //   ./Autonomous_vehicle --video_processing --input solidYellowLeft.mp4
-//   ./Autonomous_vehicle --camera_processing_component
-//   ./Autonomous_vehicle --motor_test_component
-//   ./Autonomous_vehicle --robot_component
-//   ./Autonomous_vehicle --calibrate_component --input directory_with_calibration_data
+//   ./Autonomous_vehicle --camera_processing
+//   ./Autonomous_vehicle --motor_test
+//   ./Autonomous_vehicle --robot
+//   ./Autonomous_vehicle --calibrate --input directory_with_calibration_data
 
 
 class ParsingError : public std::runtime_error { public: ParsingError(); };
@@ -32,10 +33,11 @@ auto getOptionsDescriptions()
         ("help", "shows this message")
         ("video_processing", "process video file")
         ("input", boost::program_options::value<std::string>(), "provides an input parameter")
-        ("camera_processing_component", "process data from camera")
-        ("motor_test_component", "Allow user to set speed on the motors to test it.")
-        ("robot_component", "Runs application to control robot")
-        ("calibrate_component", "Utility to calibrate camera.");
+        ("camera_processing", "process data from camera")
+        ("motor_test", "Allow user to set speed on the motors to test it.")
+        ("robot", "Runs application to control robot")
+        ("calibrate", "Utility to calibrate camera.")
+        ("prototype", "Utility to prototype algorithms");
     return description;
 }
 
@@ -44,9 +46,9 @@ void printHelp(const boost::program_options::options_description& desc)
     std::cout << desc << std::endl;
     std::cout << std::endl;
     std::cout << "If you like to process already collected movie, please use: " << std::endl << "./Autonomous_vehicle --video_processing --input [filename]";
-    std::cout << "If you like to proccess data from camera please use: " << std::endl << "./Autonomous_vehicle --camera_processing_component";
-    std::cout << "If you like to test motors: " << std::endl << "./Autonomous_vehicle --motor_test_component";
-    std::cout << "If you like to setup vehicle: " << std::endl << "./Autonomous_vehicle --robot_component";
+    std::cout << "If you like to proccess data from camera please use: " << std::endl << "./Autonomous_vehicle --camera_processing";
+    std::cout << "If you like to test motors: " << std::endl << "./Autonomous_vehicle --motor_test";
+    std::cout << "If you like to setup vehicle: " << std::endl << "./Autonomous_vehicle --robot";
 }
 
 std::unique_ptr<components::Component> createVideoProcessingComponent(const boost::program_options::variables_map& vm)
@@ -80,20 +82,25 @@ void createComponentsBasedOnParserInput(int argc, char** argv, Application& appl
         {
             application.addComponent(createVideoProcessingComponent(vm));
         }
-        if (vm.count("camera_processing_component"))
+        if (vm.count("camera_processing"))
         {
             auto pipeline = image_processing::createDualCameraPreview();
             application.addComponent(components::createCameraProcessingComponent(std::move(pipeline)));
         }
-        if (vm.count("motor_test_component"))
+        if (vm.count("motor_test"))
         {
             application.addComponent(components::createMotorTestComponent());
         }
-        if (vm.count("calibrate_component"))
+        if (vm.count("calibrate"))
         {
             application.addComponent(createCalibratingComponent(vm));
         }
-        if (vm.count("robot_component"))
+        if (vm.count("prototype"))
+        {
+            auto pipeline = image_processing::createSingleCorrectedImage();
+            application.addComponent(components::createPrototypeComponent(std::move(pipeline)));
+        }
+        if (vm.count("robot"))
         {
             application.addComponent(components::createRobotComponent(application.getApplicationContext()));
             auto pipeline = image_processing::createParallelCorrectedDualCameraPublish(application.getApplicationContext().messageSender_);

@@ -4,7 +4,6 @@
 #include <mutex>
 #include <condition_variable>
 #include "Component.hpp"
-#include <Drivers/CameraDriver.hpp>
 #include <ImageProcessing/Pipeline.hpp>
 
 namespace components

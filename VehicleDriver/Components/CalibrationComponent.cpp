@@ -42,7 +42,7 @@ auto calculateImagePoints(const std::string& calibrationFilesDirectory_)
         image_points.push_back(corners);
 
         presentBoard(mat, cornersSize, corners);
-        if (image_points.size() == 120) break;
+        // if (image_points.size() == 50) break;
     }
     return std::make_tuple(image_points, image_size);
 }
@@ -57,7 +57,7 @@ auto calculateObjectPoints(int objects, int cornersSize)
         opts.resize(cornersSize);
         for (auto j=0; j<cornersSize; ++j)
         {
-            opts[j] = cv::Point3f ((j/calib_table_cols), (float)(j%calib_table_cols), 0.f);
+            opts[j] = cv::Point3f ((float)(j/calib_table_cols)*0.24, (float)(j%calib_table_cols)*0.24, 0.f);
         }
     }
     return object_points;
@@ -129,7 +129,7 @@ void CalibrationComponent::start()
         std::cerr << "Directory given for calibration does not exist";
     }
 
-    auto dumpFileName = calibrationFilesDirectory_.substr(calibrationFilesDirectory_.find_last_of("/"), std::string::npos);
+    auto dumpFileName = calibrationFilesDirectory_.substr(1 + calibrationFilesDirectory_.find_last_of("/"), std::string::npos);
     auto [image_points, image_size] = calculateImagePoints(calibrationFilesDirectory_);
     auto object_points = calculateObjectPoints(image_points.size(), image_points[0].size());
     auto [intrinsic_matrix, distorion_coeffs] = calibrate(object_points, image_points, image_size);

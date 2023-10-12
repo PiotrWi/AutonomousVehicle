@@ -9,8 +9,8 @@ const std::string CameraDumpDir = homeDir + "/tmp";
 const std::string LeftCoefficientFileLoc = homeDir + "/proj/AuthonomousVehicle/VehicleDriver/Data/instrincts_left.xml";
 const std::string RightCoefficientFileLoc = homeDir + "/proj/AuthonomousVehicle/VehicleDriver/Data/instrincts_right.xml";
 const int cameraFps = 10;
-const int cameraWidth = 320;
-const int cameraHeight = 240;
+const int cameraWidth = 640;
+const int cameraHeight = 480;
 
 }  // namespace
 
