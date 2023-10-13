@@ -4,6 +4,7 @@
 
 #include <AppConfig.hpp>
 #include "ImagePipelines/ImageFromCamera.hpp"
+#include "ImagePipelines/ImageFromFile.hpp"
 #include "ImagePipelines/PreviewEntity.hpp"
 #include "ImagePipelines/PicturePublisher.hpp"
 #include "ImagePipelines/FlipImage.hpp"
@@ -23,8 +24,9 @@ std::vector<std::unique_ptr<Pipeline>> createSingleCorrectedImage()
     drivers::CameraDriver leftCamera(2);
     pipelines.emplace_back(
             PipeLineBuilderWithPrefix("left"s)
-                    .add(new ImageFromCamera(std::move(leftCamera)))
-                    .add(new FlipImage(), DefaultMapping{})
+                    .add(new ImageFromFile("/home/pioter/calibData/Right_14"))
+                    // .add(new ImageFromCamera(std::move(leftCamera)))
+                    // .add(new FlipImage(), DefaultMapping{})
                     .add(new ApplyCalibration(AppConfig::getInstance().getLeftCoefficientFileLoc()), DefaultMapping{})
                     .build());
     return pipelines;
@@ -69,7 +71,7 @@ std::vector<std::unique_ptr<Pipeline>> createParallelCorrectedDualCameraPublish(
                     .add(new FlipImage(), DefaultMapping{})
                     .add(new ApplyCalibration(AppConfig::getInstance().getLeftCoefficientFileLoc()), DefaultMapping{})
                     .add(new PicturePublisher(messageSender, CameraSide::LEFT ),  DefaultMapping{})
-                    .add(new DumpImage(AppConfig::getInstance().getCameraDumpDirectory(), "left"), {{0, "leftPicturePublisher", 0}})
+                    .add(new DumpImage(AppConfig::getInstance().getCameraDumpDirectory(), "left"), {{0, "leftApplyCalibration", 0}})
                     .build());
 
     pipelines.emplace_back(
@@ -78,7 +80,7 @@ std::vector<std::unique_ptr<Pipeline>> createParallelCorrectedDualCameraPublish(
                     .add(new FlipImage(), DefaultMapping{})
                     .add(new ApplyCalibration(AppConfig::getInstance().getRightCoefficientFileLoc()), DefaultMapping{})
                     .add(new PicturePublisher(messageSender, CameraSide::RIGHT ), DefaultMapping{})
-                    .add(new DumpImage(AppConfig::getInstance().getCameraDumpDirectory(), "right"), {{0, "rightPicturePublisher", 0}})
+                    .add(new DumpImage(AppConfig::getInstance().getCameraDumpDirectory(), "right"), {{0, "rightApplyCalibration", 0}})
                     .build());
 
     return pipelines;

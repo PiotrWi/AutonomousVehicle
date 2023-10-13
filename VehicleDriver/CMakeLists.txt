@@ -66,6 +66,8 @@ add_library(imageProcessing STATIC
         ImageProcessing/ImagePipelines/ApplyCalibration.cpp
         ImageProcessing/ImagePipelines/ApplyCalibration.hpp
         ImageProcessing/Calibration.hpp
+        ImageProcessing/ImagePipelines/ImageFromFile.hpp
+        ImageProcessing/ImagePipelines/ImageFromFile.cpp
 )
 
 add_executable(Autonomous_vehicle main.cpp

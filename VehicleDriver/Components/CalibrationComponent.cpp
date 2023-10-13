@@ -42,7 +42,7 @@ auto calculateImagePoints(const std::string& calibrationFilesDirectory_)
         image_points.push_back(corners);
 
         presentBoard(mat, cornersSize, corners);
-        // if (image_points.size() == 50) break;
+        if (image_points.size() == 30) break;
     }
     return std::make_tuple(image_points, image_size);
 }
@@ -84,14 +84,15 @@ auto dumpCoeffsToFile(const std::string& dumpFileName, cv::Size image_size, cv::
     fileStorage << "image_width" << image_size.width
         << "image_height" << image_size.height
         << "camera_matrix" << intrinsic_matrix
-        << "diftortion_coefficients" << distorion_coeffs;
+        << "distorion_coeffs" << distorion_coeffs;
     fileStorage.release();
 }
 
 auto previewResults(std::string calibrationFilesDirectory, std::string dumpFileName)
 {
     auto [camera_matrix, distorion_coeffs, size] = image_processing::readCoeffsFromFile("instrincts_" + dumpFileName + ".xml");
-
+    std::cout << "intrinsic_matrix: " << camera_matrix << std::endl << std::endl;
+    std::cout << "distorion_coeffs: " << distorion_coeffs << std::endl << std::endl;
     cv::Mat map1, map2;
     cv::initUndistortRectifyMap(camera_matrix, distorion_coeffs,
                                 cv::Mat(),camera_matrix, size, CV_16SC2, map1, map2);
@@ -134,7 +135,26 @@ void CalibrationComponent::start()
     auto object_points = calculateObjectPoints(image_points.size(), image_points[0].size());
     auto [intrinsic_matrix, distorion_coeffs] = calibrate(object_points, image_points, image_size);
 
+    std::cout << "intrinsic_matrix: " << intrinsic_matrix << std::endl << std::endl;
+    std::cout << "distorion_coeffs: " << distorion_coeffs << std::endl << std::endl;
+
     dumpCoeffsToFile(dumpFileName, image_size, intrinsic_matrix, distorion_coeffs);
+
+
+
+    cv::Mat map1, map2;
+    cv::initUndistortRectifyMap(intrinsic_matrix, distorion_coeffs,
+                                cv::Mat(),intrinsic_matrix, image_size, CV_16SC2, map1, map2);
+
+    /*for (auto const& dir_entry : std::filesystem::directory_iterator{std::filesystem::path(calibrationFilesDirectory_) })
+    {
+        auto mat1 = cv::imread(dir_entry.path().string());
+        cv::Mat mat;
+        cv::remap(mat1, mat, map1, map2, cv::INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar());
+
+        cv::imshow("Corrected", mat);
+        cv::waitKey(1000);
+    }*/
     previewResults(calibrationFilesDirectory_, dumpFileName);
 }
 
