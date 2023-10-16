@@ -24,9 +24,7 @@ std::vector<std::unique_ptr<Pipeline>> createSingleCorrectedImage()
     drivers::CameraDriver leftCamera(2);
     pipelines.emplace_back(
             PipeLineBuilderWithPrefix("left"s)
-                    .add(new ImageFromFile("/home/pioter/calibData/Right_14"))
-                    // .add(new ImageFromCamera(std::move(leftCamera)))
-                    // .add(new FlipImage(), DefaultMapping{})
+                    .add(new ImageFromFile("/home/pioter/calibData/Right_112"))
                     .add(new ApplyCalibration(AppConfig::getInstance().getLeftCoefficientFileLoc()), DefaultMapping{})
                     .build());
     return pipelines;

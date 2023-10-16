@@ -2,24 +2,29 @@
 
 #include <string>
 #include <tuple>
+#include <vector>
 #include <opencv2/opencv.hpp>
 
 namespace image_processing
 {
 
-inline auto readCoeffsFromFile(const std::string& dumpFileLocation)
-{
-    cv::Mat camera_matrix, distorion_coeffs;
-    cv::Size size;
+using TCameraMatrix = cv::Mat;
+using TDistortionMatrix = cv::Mat;
+using TImageSize = cv::Size;
+using TFound = bool;
+using TImageCalibrationPoints = std::vector<cv::Point2f>;
 
-    cv::FileStorage fileStorage(dumpFileLocation, cv::FileStorage::READ);
-    fileStorage["camera_matrix"] >> camera_matrix;
-    fileStorage["distorion_coeffs"] >> distorion_coeffs;
-    fileStorage["image_width"] >> size.width;
-    fileStorage["image_height"] >> size.height;
-    fileStorage.release();
+std::tuple<TCameraMatrix, TDistortionMatrix, TImageSize> readCoeffsFromFile(const std::string& dumpFileLocation);
 
-    return std::make_tuple(camera_matrix, distorion_coeffs, size);
-}
+TImageCalibrationPoints addCornersByHand(cv::Mat image, cv::Size cornersExpectedSize);
+std::tuple<TFound, TImageCalibrationPoints> findChessBoardCornersByOpenCv(cv::Mat mat, cv::Size2i size);
+
+void printCorners(std::string windowName, cv::Mat image, cv::Size size, const TImageCalibrationPoints& points);
+
+// sandbox functions:
+[[maybe_unused]]  // does not work
+std::tuple<TFound, TImageCalibrationPoints> findCornersByKMeans(cv::Mat mat, cv::Size2i size);
+[[maybe_unused]]  // does not work
+std::tuple<TFound, TImageCalibrationPoints> findCornerOnTransformedImage(cv::Mat image, cv::Size cornersSize);
 
 }  // namespace image_processing

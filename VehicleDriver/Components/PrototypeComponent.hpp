@@ -7,7 +7,9 @@
 
 namespace components
 {
-
+/*
+ * Sandbox component to prototype new implementations
+ */
 class PrototypeComponent : public Component
 {
 public:

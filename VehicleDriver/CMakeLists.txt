@@ -68,6 +68,7 @@ add_library(imageProcessing STATIC
         ImageProcessing/Calibration.hpp
         ImageProcessing/ImagePipelines/ImageFromFile.hpp
         ImageProcessing/ImagePipelines/ImageFromFile.cpp
+        ImageProcessing/Calibration.cpp
 )
 
 add_executable(Autonomous_vehicle main.cpp
@@ -101,6 +102,8 @@ add_executable(Autonomous_vehicle main.cpp
         AppConfig.cpp
         Components/PrototypeComponent.cpp
         Components/PrototypeComponent.hpp
+        Components/BirdEyeViewCalibration.cpp
+        Components/BirdEyeViewCalibration.hpp
 )
 
 target_link_libraries(Autonomous_vehicle

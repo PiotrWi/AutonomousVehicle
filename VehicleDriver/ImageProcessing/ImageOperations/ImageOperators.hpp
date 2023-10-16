@@ -9,7 +9,7 @@ class ToBinary
 {
 };
 
-cv::Mat operator|(const cv::Mat &in, const ToBinary &)
+inline cv::Mat operator|(const cv::Mat &in, const ToBinary &)
 {
     cv::Mat out;
     cv::cvtColor(in, out, cv::COLOR_BGR2GRAY);
@@ -34,7 +34,7 @@ public:
     {}
 };
 
-cv::Mat operator|(const cv::Mat &in, const AdaptiveThreshold &params)
+inline cv::Mat operator|(const cv::Mat &in, const AdaptiveThreshold &params)
 {
     cv::Mat out;
     cv::adaptiveThreshold(in, out, params.maxValue, params.method, params.type, params.blockSize, params.delta);
@@ -56,7 +56,7 @@ public:
     {}
 };
 
-cv::Mat operator|(const cv::Mat &in, const Threshold &params)
+inline cv::Mat operator|(const cv::Mat &in, const Threshold &params)
 {
     cv::Mat out;
     cv::threshold(in, out, params.thresh, params.maxValue, params.thresholdType);
@@ -72,7 +72,7 @@ public:
     int ksize;
 };
 
-cv::Mat operator|(const cv::Mat &in, const Sobel &params)
+inline cv::Mat operator|(const cv::Mat &in, const Sobel &params)
 {
     cv::Mat out;
     cv::Sobel(in, out, params.ddepth, params.xorder, params.yorder, params.ksize);
@@ -86,7 +86,7 @@ public:
     double sigmaX;
 };
 
-cv::Mat operator|(const cv::Mat &in, const GaussianBlur &params)
+inline cv::Mat operator|(const cv::Mat &in, const GaussianBlur &params)
 {
     cv::Mat out;
     cv::GaussianBlur(in, out, params.kSize, params.sigmaX);
@@ -100,7 +100,7 @@ public:
     double threshold2;
 };
 
-cv::Mat operator|(const cv::Mat &in, const Canny &params)
+inline cv::Mat operator|(const cv::Mat &in, const Canny &params)
 {
     cv::Mat out;
     cv::Canny(in, out, params.threshold1, params.threshold2);
@@ -113,13 +113,29 @@ public:
     std::vector<cv::Point> points;
 };
 
-cv::Mat operator|(const cv::Mat& in, const FilterByMask &params)
+inline cv::Mat operator|(const cv::Mat& in, const FilterByMask &params)
 {
     cv::Mat mask = cv::Mat::zeros(in.size(), CV_8U);
     cv::Mat out = in;
 
     cv::fillConvexPoly(mask, params.points.data(), params.points.size(), cv::Scalar(255));
     return cv::min(out, mask);
+}
+
+class MeanShift
+{
+public:
+    double sp;
+    double sr;
+    int maxLevel;
+};
+
+inline cv::Mat operator|(const cv::Mat in, const MeanShift& params)
+{
+    cv::Mat out = in;
+
+    cv::pyrMeanShiftFiltering(in, out, params.sp, params.sr, params.maxLevel);
+    return out;
 }
 
 }  // namespace image_processing

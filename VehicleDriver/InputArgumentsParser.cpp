@@ -12,6 +12,7 @@
 #include <Components/RobotComponent.hpp>
 #include <Components/CalibrationComponent.hpp>
 #include <Components/PrototypeComponent.hpp>
+#include <Components/BirdEyeViewCalibration.hpp>
 
 #include <ImageProcessing/PipelineFactory.hpp>
 
@@ -94,6 +95,11 @@ void createComponentsBasedOnParserInput(int argc, char** argv, Application& appl
         if (vm.count("calibrate"))
         {
             application.addComponent(createCalibratingComponent(vm));
+        }
+        if (vm.count("bird_eye_calibrate"))
+        {
+            auto pipeline = image_processing::createSingleCorrectedImage();
+            application.addComponent(components::createBirdEyeViewCalibration(std::move(pipeline)));
         }
         if (vm.count("prototype"))
         {

@@ -20,8 +20,10 @@ struct DoublePointLinesPlusColor
 
 cv::Mat operator+ (const cv::Mat& in, const DoublePointLinesPlusColor& params);
 cv::Mat operator+ (const cv::Mat& in, const RoThetaLinesPlusColor& params);
+cv::Mat operator+ (const cv::Mat &in, const std::vector<cv::Vec3f> &circles);
 
 RoThetaLinesPlusColor calculateHoughLines(const cv::Mat& in);
 DoublePointLinesPlusColor calculateHoughPLines(const cv::Mat& in);
+std::vector<cv::Vec3f> calculateHoughCircles(const cv::Mat &in);
 
 }  // namespace image_processing

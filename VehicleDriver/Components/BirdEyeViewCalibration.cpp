@@ -1,5 +1,5 @@
 #include <opencv2/opencv.hpp>
-#include "PrototypeComponent.hpp"
+#include "BirdEyeViewCalibration.hpp"
 
 #include <ImageProcessing/Calibration.hpp>
 
@@ -21,21 +21,21 @@ constexpr int calib_table_cols = 3;
 namespace components
 {
 
-std::unique_ptr<Component> createPrototypeComponent(std::vector<std::unique_ptr<image_processing::Pipeline>> &&pipelines)
+std::unique_ptr<Component> createBirdEyeViewCalibration(std::vector<std::unique_ptr<image_processing::Pipeline>> &&pipelines)
 {
-    return std::make_unique<PrototypeComponent>(std::move(pipelines));
+    return std::make_unique<BirdEyeViewCalibration>(std::move(pipelines));
 }
 
-PrototypeComponent::PrototypeComponent(std::vector<std::unique_ptr<image_processing::Pipeline>> &&pipelines)
-     : pipelines_(std::move(pipelines))
-{
-}
-
-void PrototypeComponent::stop()
+BirdEyeViewCalibration::BirdEyeViewCalibration(std::vector<std::unique_ptr<image_processing::Pipeline>> &&pipelines)
+        : pipelines_(std::move(pipelines))
 {
 }
 
-void PrototypeComponent::start()
+void BirdEyeViewCalibration::stop()
+{
+}
+
+void BirdEyeViewCalibration::start()
 {
     auto image = extractSingleFrameFromPipeline(*pipelines_.front());
     auto cornersSize = cv::Size (calib_table_cols, calib_table_rows);

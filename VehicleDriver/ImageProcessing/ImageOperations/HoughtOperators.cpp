@@ -37,6 +37,23 @@ cv::Mat operator+(const cv::Mat &in, const RoThetaLinesPlusColor &params)
     return out;
 }
 
+cv::Mat operator+(const cv::Mat &in, const std::vector<cv::Vec3f> &circles)
+{
+    const cv::Mat out = in;
+
+    for(auto&& circle : circles)
+    {
+        cv::circle(out,
+                   cv::Point(cvRound(circle[0]), cvRound(circle[1])),
+                   cvRound(circle[2]),
+                   255,
+                   2,
+                   cv::LINE_AA);
+    }
+
+    return out;
+}
+
 RoThetaLinesPlusColor calculateHoughLines(const cv::Mat &in)
 {
     RoThetaLinesPlusColor out;
@@ -49,6 +66,13 @@ DoublePointLinesPlusColor calculateHoughPLines(const cv::Mat &in)
     DoublePointLinesPlusColor out;
     cv::HoughLinesP(in, out.lines, 3, 0.1, 50, 20);
     return out;
+}
+
+std::vector<cv::Vec3f> calculateHoughCircles(const cv::Mat &in)
+{
+    std::vector<cv::Vec3f> circles;
+    cv::HoughCircles(in, circles, cv::HOUGH_GRADIENT, 1, 2);
+    return circles;
 }
 
 }  // namespace image_processing
