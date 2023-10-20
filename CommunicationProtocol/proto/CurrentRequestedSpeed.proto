@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+/* Message to ingorf clients about successfully set speeds on robot.
+   Message send in response to SetSpeed, or after some robot autonomous action.
+   Represents  percentage fulfill on PWM.
+   NOTE: Negative percentages means that robot is desired to move backwards. */
+message CurrentRequestedSpeed {
+  // Left wheel speed. Allowed values are integers in range <-100:100>
+  int32 leftWheel = 1;
+  // Right wheel speed. Allowed values are integers in range <-100:100>
+  int32 rightWheel = 2;
+}

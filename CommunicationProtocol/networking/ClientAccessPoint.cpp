@@ -1,25 +1,25 @@
-#include "RobotAccessPoint.hpp"
+#include "ClientAccessPoint.hpp"
 
 #include <iostream>
 #include <thread>
 
 #include <boost/asio/ip/tcp.hpp>
 
-namespace backend
+namespace networking
 {
 
-RobotAccessPoint::RobotAccessPoint()
+ClientAccessPoint::ClientAccessPoint()
     : sock_(io_service_)
 {
 }
 
-bool RobotAccessPoint::connect()
+bool ClientAccessPoint::connect()
 {
     boost::system::error_code ec;
 
     boost::asio::ip::tcp::endpoint endpoint{
-        boost::asio::ip::address::from_string("172.16.1.64"),
-        // boost::asio::ip::address::from_string("127.0.0.1"),
+        // boost::asio::ip::address::from_string("172.16.1.64"),
+        boost::asio::ip::address::from_string("127.0.0.1"),
         17831
     };
     sock_.connect({endpoint}, ec);
@@ -34,7 +34,7 @@ bool RobotAccessPoint::connect()
     }
 
     connection_ = std::make_unique<Connection>(io_service_, &sock_, [this](){disconnect();}, notifyMessage_);
-    connection_->start();
+    connection_->startIoServiceAndReceiving();
     if (notifyAboutConnectionStateChange_)
     {
         std::cout << "goint to call calback" << std::endl;
@@ -43,7 +43,7 @@ bool RobotAccessPoint::connect()
     return true;
 }
 
-bool RobotAccessPoint::disconnect()
+bool ClientAccessPoint::disconnect()
 {
     sock_.close();
     connection_.reset();
@@ -51,17 +51,17 @@ bool RobotAccessPoint::disconnect()
     return true;
 }
 
-void RobotAccessPoint::registerConnectionStatusCallback(std::function<void(bool)> callback)
+void ClientAccessPoint::registerConnectionStatusCallback(std::function<void(bool)> callback)
 {
     notifyAboutConnectionStateChange_ = std::move(callback);
 }
 
-void RobotAccessPoint::registerMessageCallback(std::function<void(std::string)> callback)
+void ClientAccessPoint::registerMessageCallback(std::function<void(std::string&)> callback)
 {
     notifyMessage_ = std::move(callback);
 }
 
-void RobotAccessPoint::send(std::string s)
+void ClientAccessPoint::send(std::string&& s)
 {
     if (connection_)
     {
@@ -69,9 +69,17 @@ void RobotAccessPoint::send(std::string s)
     }
 }
 
-bool RobotAccessPoint::isConnected()
+void ClientAccessPoint::send(std::vector<std::string>&& messages)
+{
+    if (connection_)
+    {
+        connection_->send(std::move(messages));
+    }
+}
+
+bool ClientAccessPoint::isConnected()
 {
     return sock_.is_open();
 }
 
-} // backend
+} // networking

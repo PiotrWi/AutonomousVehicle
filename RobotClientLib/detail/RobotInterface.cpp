@@ -1,15 +1,15 @@
 #include "../RobotInterface.hpp"
 
 #include <iostream>
-#include "RobotClientLib/detail/networking/RobotAccessPoint.hpp"
 #include "RobotClientLib/detail/handlers/RequestedSpeed.hpp"
 #include "RobotClientLib/detail/handlers/ImageHandler.hpp"
-#include "RobotClientLib/detail/networking/MessageDispatcher.hpp"
+#include "CommunicationProtocol/networking/MessageDispatcher.hpp"
+#include "CommunicationProtocol/networking/ClientAccessPoint.hpp"
 
 namespace robot_interface
 {
 
-MessageDispatcher messageDispatcher_;
+networking::MessageDispatcher messageDispatcher_;
 RequestedSpeed requestedSpeed_;
 ImageHandler imageHandler_;
 
@@ -22,35 +22,36 @@ void clearModelOnConnectionChange(bool)
 // Connection interfaces
 void init()
 {
-    std::cout << "[RobotInterface] c_init call" << std::endl;
-    auto& robotAccessPoint = backend::RobotAccessPoint::getInstance();
+    std::cout << "[RobotInterface] init call" << std::endl;
+    auto& robotAccessPoint = networking::ClientAccessPoint::getInstance();
+
     robotAccessPoint.registerConnectionStatusCallback(clearModelOnConnectionChange);
     robotAccessPoint.registerMessageCallback([](auto&& message){
         messageDispatcher_.dispatchMessage(message);
     });
 
-    messageDispatcher_.subscribeFor(requestedSpeed_.getPrefix(), [](auto&& message) {requestedSpeed_.handle(message); } );
-    messageDispatcher_.subscribeFor(imageHandler_.getPrefix(), [](auto&& message) {imageHandler_.handle(message); } );
+    messageDispatcher_.subscribeFor(std::function<void(const CurrentRequestedSpeed&)>([](const CurrentRequestedSpeed& message) { requestedSpeed_.handle(message); }));
+    messageDispatcher_.subscribeFor(std::function<void(const PublishImage&)>([](const PublishImage& message) { imageHandler_.handle(message); } ));
 }
 
 bool connect()
 {
-    std::cout << "[RobotInterface] c_connect call" << std::endl;
-    auto isConnected = backend::RobotAccessPoint::getInstance().connect();
-    std::cout << "[RobotInterface] c_connect return value: " << isConnected << std::endl;
+    std::cout << "[RobotInterface] connect call" << std::endl;
+    auto isConnected = networking::ClientAccessPoint::getInstance().connect();
+    std::cout << "[RobotInterface] connect return value: " << isConnected << std::endl;
     return isConnected;
 }
 
 void disconnect()
 {
-    std::cout << "[RobotInterface] c_disconnect call" << std::endl;
-    backend::RobotAccessPoint::getInstance().disconnect();
+    std::cout << "[RobotInterface] disconnect call" << std::endl;
+    networking::ClientAccessPoint::getInstance().disconnect();
 }
 
 bool isConnected()
 {
     std::cout << "[RobotInterface] isConnected call" << std::endl;
-    auto isConnected = backend::RobotAccessPoint::getInstance().isConnected();
+    auto isConnected = networking::ClientAccessPoint::getInstance().isConnected();
     std::cout << "[RobotInterface] isConnected call return value: " << isConnected << std::endl;
     return isConnected;
 }
@@ -58,7 +59,7 @@ bool isConnected()
 void subscribeForConnectionStatus(std::function<void(bool)> callback)
 {
     std::cout << "[RobotInterface] subscribeForConnectionStatus call" << std::endl;
-    backend::RobotAccessPoint::getInstance().registerConnectionStatusCallback([callback](bool status){
+    networking::ClientAccessPoint::getInstance().registerConnectionStatusCallback([callback](bool status){
         std::cout << "[RobotInterface] connection state change: " << status << std::endl;
         clearModelOnConnectionChange(status);
         callback(status);

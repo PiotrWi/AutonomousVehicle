@@ -7,7 +7,7 @@
 namespace image_processing
 {
 
-PicturePublisher::PicturePublisher(networking::MessageSender &messageSender,
+PicturePublisher::PicturePublisher(networking::MessageSender<networking::AccessPoint>& messageSender,
                                    CameraSide cammeraSide)
     : messageSender_(messageSender)
     , cammeraSide_(cammeraSide)
@@ -20,7 +20,7 @@ void PicturePublisher::init()
 
 void PicturePublisher::execute(cv::Mat &image)
 {
-    std::string out = createPublishImage(cammeraSide_, image);
+    auto out = createPublishImage(cammeraSide_, image);
     messageSender_.send(std::move(out));
 }
 

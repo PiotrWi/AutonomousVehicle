@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+/* Message to set desired speed in robot.
+    It sets percentage fulfill on PWM.
+    NOTE: Negative percentages means that robot is desired to move backwards.*/
+message SetSpeed {
+    // Left wheel speed. Allowed values are integers in range <-100:100>
+    int32 leftWheel = 1;
+    // Right wheel speed. Allowed values are integers in range <-100:100>
+    int32 rightWheel = 2;
+}

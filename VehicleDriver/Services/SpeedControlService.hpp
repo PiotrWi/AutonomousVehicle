@@ -2,7 +2,8 @@
 
 #include "EventLoop/EventLoop.hpp"
 #include "Drivers/MotorsDriver.hpp"
-#include "Networking/MessageSender.hpp"
+#include "CommunicationProtocol/networking/MessageSender.hpp"
+#include "CommunicationProtocol/networking/AccessPoint.hpp"
 
 namespace services
 {
@@ -10,14 +11,14 @@ namespace services
 class SpeedControlService
 {
 public:
-    explicit SpeedControlService(EventLoop& el, networking::MessageSender& messageSender);
+    explicit SpeedControlService(EventLoop& el, networking::MessageSender<networking::AccessPoint>& messageSender);
     void start();
 private:
     void reactOnGuiSpeedRequest(Event*);
 
     EventLoop& el_;
     drivers::MotorsDrivers motorsDrivers_;
-    networking::MessageSender messageSender_;
+    networking::MessageSender<networking::AccessPoint> messageSender_;
     EventLoop::SubscriptionPtr requestedSpeedSubscription_;
 };
 

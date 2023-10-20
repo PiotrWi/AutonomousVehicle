@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 project(Autonomous_vehicle)
+find_package(Protobuf REQUIRED)
 
 find_package(Boost)
 if(Boost_FOUND)
@@ -8,7 +9,7 @@ endif()
 
 find_package(OpenCV)
 if(OpenCV_FOUND)
-    include_directories(${OpenCV_INCLUDE_DIRS})
+    include_directories(SYSTEM ${OpenCV_INCLUDE_DIRS})
 endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
@@ -72,12 +73,6 @@ add_library(imageProcessing STATIC
 )
 
 add_executable(Autonomous_vehicle main.cpp
-        Networking/AccessPoint.hpp
-        Networking/AccessPoint.cpp
-        Networking/Session.cpp
-        Networking/Session.hpp
-        Networking/MessageSender.hpp
-        Networking/MessageSender.cpp
         Components/Component.hpp
         Components/VideoProccessingComponent.cpp
         Components/VideoProccessingComponent.hpp
@@ -113,7 +108,10 @@ target_link_libraries(Autonomous_vehicle
         imageProcessing
         drivers
         eventLoop
+        CommunicationProtocol
         tools
-        rt)
+        rt
+        ${Protobuf_LIBRARIES}
+        CommunicationProtocol)
 
 add_subdirectory(test EXCLUDE_FROM_ALL)

@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+/* For test purposes only only.*/
+message SimpleProto {
+  int32 value1 = 1;
+  int32 value2 = 2;
+}

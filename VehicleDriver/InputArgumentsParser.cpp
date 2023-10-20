@@ -16,14 +16,6 @@
 
 #include <ImageProcessing/PipelineFactory.hpp>
 
-// Few examples how to run:
-//   ./Autonomous_vehicle --video_processing --input solidYellowLeft.mp4
-//   ./Autonomous_vehicle --camera_processing
-//   ./Autonomous_vehicle --motor_test
-//   ./Autonomous_vehicle --robot
-//   ./Autonomous_vehicle --calibrate --input directory_with_calibration_data
-
-
 class ParsingError : public std::runtime_error { public: ParsingError(); };
 ParsingError::ParsingError() : std::runtime_error("Parsing error.") {}
 

@@ -6,13 +6,12 @@
 
 #include "Types.hpp"
 #include "IMessageHandler.hpp"
+#include <PublishImage.pb.h>
 
-
-class ImageHandler : public IMessageHandler
+class ImageHandler : public IMessageHandler<PublishImage>
 {
 public:
-    void handle(const std::string& message) override;
-    std::string getPrefix() const override;
+    void handle(const PublishImage& message) override;
     void clear() override;
 
     robot_interface::IntegerPicture getImage(robot_interface::CameraSide side);

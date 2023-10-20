@@ -3,7 +3,9 @@
 #include <sstream>
 
 #include "GuiSpeedRequest.hpp"
-#include "../../Tools/StringAlgorithms.hpp"
+#include <Tools/StringAlgorithms.hpp>
+
+#include <SetSpeed.pb.h>
 
 using namespace std;
 
@@ -14,22 +16,20 @@ NotHandledMessage::NotHandledMessage(const std::string& message)
 
 /* Syntax: Set speed: LeftWheelSpeed<-100:100> RigthWheelSpeed <-100:100>
  */
-Event decodeGuiSpeedRequest(const std::string& message)
+Event decodeGuiSpeedRequest(const SetSpeed& message)
 {
     auto* req = new GuiSpeedRequest();
-    auto speeds = splitAndTrim(message, ':')[1];
-
-    std::stringstream ss(speeds);
-    ss >> req->leftWheel_ >> req->rightWheel_;
+    req->leftWheel_ = message.leftwheel();
+    req->rightWheel_ = message.rightwheel();
 
     return {getId<GuiSpeedRequest>(), req};
 }
 
-Event decode(const std::string& message)
+Event decode(const google::protobuf::Message& message)
 {
-    if (message.starts_with("Set speed: "))
+    if (message.GetTypeName() == "SetSpeed")
     {
-        return decodeGuiSpeedRequest(message);
+        return decodeGuiSpeedRequest(static_cast<const SetSpeed&>(message));
     }
-    throw NotHandledMessage(message);
+    throw NotHandledMessage(message.GetTypeName());
 }

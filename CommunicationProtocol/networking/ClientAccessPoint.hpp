@@ -9,20 +9,21 @@
 #include "Tools/SingletonAddOn.hpp"
 #include "Connection.hpp"
 
-namespace backend
+namespace networking
 {
 
-class RobotAccessPoint : public SingletonAddOn<RobotAccessPoint>
+class ClientAccessPoint : public SingletonAddOn<ClientAccessPoint>
 {
 public:
-    RobotAccessPoint();
+    explicit ClientAccessPoint();
     bool connect();
     bool disconnect();
     bool isConnected();
 
-    void send(std::string s);
+    void send(std::string&& s);
+    void send(std::vector<std::string>&& messages);
 
-    void registerMessageCallback(std::function<void(std::string)> callback);
+    void registerMessageCallback(std::function<void(std::string&)> callback);
     void registerConnectionStatusCallback(std::function<void(bool)> callback);
 private:
     boost::asio::io_service io_service_;
@@ -31,7 +32,7 @@ private:
     std::unique_ptr<Connection> connection_;
 
     std::function<void(bool)> notifyAboutConnectionStateChange_;
-    std::function<void(std::string)> notifyMessage_;
+    std::function<void(std::string&)> notifyMessage_;
 };
 
-} // backend
+} // networking

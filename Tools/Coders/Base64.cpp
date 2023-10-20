@@ -2,6 +2,9 @@
 
 #include <array>
 
+namespace
+{
+
 constexpr char encodingTable[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 constexpr std::array<unsigned char, 255> createDecodingTable()
@@ -15,13 +18,17 @@ constexpr std::array<unsigned char, 255> createDecodingTable()
 }
 constexpr std::array<unsigned char, 255> decodingTable = createDecodingTable();
 
-std::string Base64Encode(const std::vector<unsigned char>& in)
+}  // namespace
+
+namespace tools::coders
+{
+
+std::string Base64Encode(const std::vector<unsigned char> &in)
 {
     std::string out;
-    int i;
-    for (i = 0; i + 3 <= in.size(); i += 3)
-    {
-        unsigned char i0 =   in[i + 0] & 0b00111111;
+    unsigned int i;
+    for (i = 0; i + 3 <= in.size(); i += 3) {
+        unsigned char i0 = in[i + 0] & 0b00111111;
         unsigned char i1 = ((in[i + 0] & 0b11000000) >> 6) | ((in[i + 1] & 0b00001111) << 2);
         unsigned char i2 = ((in[i + 1] & 0b11110000) >> 4) | ((in[i + 2] & 0b00000011) << 4);
         unsigned char i3 = ((in[i + 2] & 0b11111100) >> 2);
@@ -32,16 +39,14 @@ std::string Base64Encode(const std::vector<unsigned char>& in)
         out += encodingTable[i3];
     }
     // reminder
-    if ((in.size() - i) == 1)
-    {
+    if ((in.size() - i) == 1) {
         unsigned char i0 = in[i + 0] & 0b00111111;
         unsigned char i1 = ((in[i + 0] & 0b11000000) >> 6);
         out += encodingTable[i0];
         out += encodingTable[i1];
     }
-    if ((in.size() - i) == 2)
-    {
-        unsigned char i0 =   in[i + 0] & 0b00111111;
+    if ((in.size() - i) == 2) {
+        unsigned char i0 = in[i + 0] & 0b00111111;
         unsigned char i1 = ((in[i + 0] & 0b11000000) >> 6) | ((in[i + 1] & 0b00001111) << 2);
         unsigned char i2 = ((in[i + 1] & 0b11110000) >> 4);
         out += encodingTable[i0];
@@ -51,12 +56,11 @@ std::string Base64Encode(const std::vector<unsigned char>& in)
     return out;
 }
 
-std::vector<unsigned char> Base64Decode(const std::string& in)
+std::vector<unsigned char> Base64Decode(const std::string &in)
 {
     std::vector<unsigned char> out;
     unsigned int i;
-    for (i = 0; i + 4 <= in.size(); i+=4)
-    {
+    for (i = 0; i + 4 <= in.size(); i += 4) {
         auto c0 = decodingTable[in[i + 0]];
         auto c1 = decodingTable[in[i + 1]];
         auto c2 = decodingTable[in[i + 2]];
@@ -93,3 +97,5 @@ std::vector<unsigned char> Base64Decode(const std::string& in)
     }
     return out;
 }
+
+}  // namespace tools::coders

@@ -10,10 +10,12 @@ public:
     explicit Connection(boost::asio::io_service&,
                         boost::asio::ip::tcp::socket* socket,
                         std::function<void()> notifyConnectionDroped,
-                        std::function<void(std::string)>);
+                        std::function<void(std::string&)>);
 
-    void start();
+    void startReceiving();
+    void startIoServiceAndReceiving();
     void send(std::string&& message);
+    void send(std::vector<std::string>&& messages);
 private:
     void receive_single();
 
@@ -22,5 +24,5 @@ private:
     boost::asio::ip::tcp::socket* socket_;
     boost::asio::streambuf buffer_;
     std::function<void()> notifyConnectionDroped_;
-    std::function<void(std::string)> notifyMessageReceived_;
+    std::function<void(std::string&)> notifyMessageReceived_;
 };

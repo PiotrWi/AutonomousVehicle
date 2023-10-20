@@ -39,12 +39,13 @@ inline bool checkPayloadChecksum(const std::string& in)
 namespace debug
 {
 
-inline void verifyChecksum(const std::string& in, const char* fcnName)
+inline void verifyChecksum(const std::string& in [[maybe_unused]],
+                           const char* fcnName [[maybe_unused]])
 {
 #ifdef ASSERTSON
     if (not checkPayloadChecksum(in))
     {
-        std::cout << "Checksum is incorrect in: fcnName" << std::endl;
+        std::cout << "Checksum is incorrect in: " << fcnName << std::endl;
     }
 #endif
 }

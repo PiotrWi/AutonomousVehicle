@@ -1,24 +1,27 @@
 #include "StringAlgorithms.hpp"
 
-std::string ltrim(const std::string& in)
+namespace tools
 {
-    auto pos = in.find_first_not_of(' ');
+
+std::string ltrim(const std::string& in, char c)
+{
+    auto pos = in.find_first_not_of(c);
     if (pos != std::string::npos)
     {
-        return in.substr(in.find_first_not_of(' '));
+        return in.substr(in.find_first_not_of(c));
     }
     return in;
 }
 
-std::string rtrim(const std::string& in)
+std::string rtrim(const std::string& in, char cToTrim)
 {
-    auto count = std::find_if(in.rbegin(), in.rend(), [](char c) { return c != ' '; }) - in.rbegin();
+    auto count = std::find_if(in.rbegin(), in.rend(), [cToTrim](char c) { return c != cToTrim; }) - in.rbegin();
     return in.substr(0, in.size() - count);
 }
 
-std::string trim(const std::string& in)
+std::string trim(const std::string& in, char c)
 {
-    return rtrim(ltrim(in));
+    return rtrim(ltrim(in, c), c);
 }
 
 std::vector<std::string> splitAndTrim(const std::string& in, char c)
@@ -76,3 +79,5 @@ std::vector<std::string> splitNumbersAndLetters(const std::string& in)
     }
     return out;
 }
+
+}  // namespace tools

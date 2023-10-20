@@ -4,6 +4,8 @@
 #include <opencv2/opencv.hpp>
 
 #include <Common/ImageTypes.hpp>
+#include <CurrentRequestedSpeed.pb.h>
+#include <PublishImage.pb.h>
 
-std::string createCurrentRequestedSpeed(int leftWheel, int rightWheel);
-std::string createPublishImage(CameraSide cameraSide, cv::Mat& image);
+CurrentRequestedSpeed createCurrentRequestedSpeed(int leftWheel, int rightWheel);
+PublishImage createPublishImage(CameraSide cameraSide, cv::Mat& image);

@@ -4,7 +4,7 @@
 
 #include <boost/algorithm/string.hpp>
 
-#include <Tools/Base64.hpp>
+#include "Tools/Coders/Base64.hpp"
 #include <Tools/Checksum.hpp>
 
 using namespace std;
@@ -12,13 +12,13 @@ using namespace std;
 namespace
 {
 
-std::string to_string(CameraSide cameraSide)
+auto translate(CameraSide cameraSide)
 {
     if (CameraSide::LEFT == cameraSide)
     {
-        return "LEFT"s;
+        return PublishImage_Side_Left;
     }
-    return "RIGHT"s;
+    return PublishImage_Side_Right;
 }
 
 }  // namespace
@@ -30,17 +30,22 @@ public:
         : std::runtime_error("Serialization not implemented for cv type: "s + std::to_string(type)) {}
 };
 
-std::string createCurrentRequestedSpeed(int leftWheel, int rightWheel)
+CurrentRequestedSpeed createCurrentRequestedSpeed(int leftWheel, int rightWheel)
 {
-    return "CurrentRequestedSpeed: "s + std::to_string(leftWheel) + " "s + std::to_string(rightWheel) + "\n";
+    CurrentRequestedSpeed s;
+    s.set_leftwheel(leftWheel);
+    s.set_rightwheel(rightWheel);
+    return s;
 }
 
-std::string createPublishImage(CameraSide cameraSide, cv::Mat &image)
+PublishImage createPublishImage(CameraSide cameraSide, cv::Mat &image)
 {
-    auto message = "PublishImage: "s
-        + to_string(cameraSide) + " "s
-        + std::to_string(image.type()) + " "s
-        + std::to_string(image.size().width) + "x" + std::to_string(image.size().height);
+    PublishImage publishImage;
+
+    publishImage.set_side(translate(cameraSide));
+    publishImage.set_format(image.type());
+    publishImage.set_width(image.size().width);
+    publishImage.set_height(image.size().height);
 
     if (image.type() == CV_8UC3)
     {
@@ -61,17 +66,13 @@ std::string createPublishImage(CameraSide cameraSide, cv::Mat &image)
                 vec.push_back((*it)[2]);
             }
         }
-        auto payload = Base64Encode(vec);
-        auto crc = calculateChecksum(payload.begin(), payload.end());
-        message += " CRC: "s + std::to_string(crc);
-        message += " PAYLOAD: "s + Base64Encode(vec) + "\n";
-
-        VERIFY_CHECKSUM(message);
+        auto payload = tools::coders::Base64Encode(vec);
+        publishImage.set_imagepayload(std::move(payload));
     }
     else
     {
         throw NotImplementedSerialization(image.type());
     }
 
-    return message;
+    return publishImage;
 }

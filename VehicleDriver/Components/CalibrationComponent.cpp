@@ -47,7 +47,7 @@ auto calculateImagePoints(const std::string& calibrationFilesDirectory_)
 auto calculateObjectPoints(int objects, int cornersSize)
 {
     std::vector<std::vector<cv::Point3f>> object_points;
-    for (auto i = 0u; i < objects; ++i)
+    for (auto i = 0; i < objects; ++i)
     {
         object_points.push_back(std::vector<cv::Point3f>{});
         auto& opts = object_points.back();

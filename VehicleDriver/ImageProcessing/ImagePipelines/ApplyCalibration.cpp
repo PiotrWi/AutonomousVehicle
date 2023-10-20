@@ -67,7 +67,7 @@ void ApplyCalibration::execute(cv::Mat &mat)
     }
 }
 
-std::any ApplyCalibration::get(int outputPort)
+std::any ApplyCalibration::get(int)
 {
     return std::any(&adjustedImage_);
 }

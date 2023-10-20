@@ -56,7 +56,7 @@ std::vector<std::unique_ptr<Pipeline>> createDualCameraPreview()
     return pipelines;
 }
 
-std::vector<std::unique_ptr<Pipeline>> createParallelCorrectedDualCameraPublish(networking::MessageSender& messageSender)
+std::vector<std::unique_ptr<Pipeline>> createParallelCorrectedDualCameraPublish(networking::MessageSender<networking::AccessPoint>& messageSender)
 {
     std::vector<std::unique_ptr<Pipeline>> pipelines;
 

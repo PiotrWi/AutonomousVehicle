@@ -18,7 +18,7 @@ void ImageFromCamera::execute()
     cameraDriver_.getFrame(image_);
 }
 
-std::any ImageFromCamera::get(int outputPort)
+std::any ImageFromCamera::get(int)
 {
     return {&image_};
 }

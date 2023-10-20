@@ -5,8 +5,8 @@
 #include "../ApplicationContext.hpp"
 
 #include "EventLoop/EventLoop.hpp"
-#include "Networking/AccessPoint.hpp"
-#include "Networking/MessageSender.hpp"
+#include "CommunicationProtocol/networking/AccessPoint.hpp"
+#include <CommunicationProtocol/networking/MessageSender.hpp>
 #include "Services/SpeedControlService.hpp"
 
 namespace components
@@ -20,7 +20,7 @@ public:
     void stop() override;
 private:
     EventLoop& eventLoop_;
-    networking::MessageSender& messageSender_;
+    networking::MessageSender<networking::AccessPoint>& messageSender_;
 
     services::SpeedControlService speedControlService_;
 };

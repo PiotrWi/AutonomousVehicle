@@ -5,11 +5,15 @@ add_library(tools STATIC
     CreateTimmer.hpp
     CreateTimmer.cpp
     ExecutionTimeMeasurement.hpp
-    Base64.hpp
-    Base64.cpp
-        CurrentTime.hpp
-        CurrentTime.cpp
-        Checksum.hpp
+    CurrentTime.hpp
+    CurrentTime.cpp
+    Checksum.hpp
+    Coders/Base64.hpp
+    Coders/Base64.cpp
+    Coders/HuffmanCoding.hpp
+    Coders/HuffmanCoding.cpp
+    Coders/detail/heap.hpp
+    Coders/HuffmanDecoding.cpp
 )
 
 add_subdirectory(test EXCLUDE_FROM_ALL)

@@ -37,7 +37,7 @@ void CameraProcessingComponent::start()
     tools::createRepeatingTimer(1000000/cameraFps, [this](){
         std::lock_guard<std::mutex> lock(framesToExecuteMutex_);
         framesToExecute += static_cast<int>(pipelines_.size());
-        for (int i = 0; i < pipelines_.size(); ++i)
+        for (unsigned int i = 0; i < pipelines_.size(); ++i)
         {
             notifyFramesToExecute_.notify_one();
         }

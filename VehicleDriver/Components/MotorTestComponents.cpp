@@ -28,7 +28,7 @@ void MotorTestComponents::start()
         }
         try
         {
-            auto givenSpeeds = splitAndTrim(line, ' ');
+            auto givenSpeeds = tools::splitAndTrim(line, ' ');
             auto leftMotorSpeed = std::stoi(givenSpeeds[0]);
             auto rightMotorSpeed = std::stoi(givenSpeeds[1]);
 

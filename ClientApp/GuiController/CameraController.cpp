@@ -1,5 +1,7 @@
 #include "CameraController.hpp"
 
+#include <iostream>
+
 #include <RobotClientLib/RobotInterface.hpp>
 #include <utils/DumpImages.hpp>
 
@@ -34,6 +36,7 @@ void CameraController::subscribeForCameraImages(CameraSide cameraSide, const std
     utils::DumpImages dumpImages("/home/pioter/tmp/ClientApp", to_string(cameraSide));
     robot_interface::subscribeForPicture(translateCameraSide(cameraSide), [callback, dumpImages](const robot_interface::IntegerPicture& picture)
     {
+        std::cout << "CameraController::subscribeForCameraImages handle image with size: " << picture.pixels.size() << std::endl;
         auto qimage = std::make_shared<QImage>(picture.pixels.data(), picture.columns, picture.rows, QImage::Format::Format_BGR888);
         dumpImages.dump(*qimage);
 

@@ -107,7 +107,7 @@ std::any Pipeline::getOut(std::string in, int port) const
     {
         if (name == in)
         {
-            return dynamic_cast<IProducerPipelineEntity *>(task)->get(0);
+            return dynamic_cast<IProducerPipelineEntity *>(task)->get(port);
         }
     }
     return {};

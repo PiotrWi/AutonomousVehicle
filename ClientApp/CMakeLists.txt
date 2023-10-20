@@ -1,7 +1,8 @@
 find_package(Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
-
+find_package(Protobuf REQUIRED)
 find_package(Boost)
+
 if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
 endif()
@@ -43,4 +44,6 @@ target_link_libraries(ClientApp
         Qt6::Widgets
         AutonomousVehicleInterface
         tools
+        ${Protobuf_LIBRARIES}
+        CommunicationProtocol
 )

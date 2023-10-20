@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
-#include <Tools/Base64.hpp>
+#include "Tools/Coders/Base64.hpp"
+
+using namespace tools::coders;
 
 TEST(Base64, shallCodeEncode)
 {

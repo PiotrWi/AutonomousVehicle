@@ -3,56 +3,34 @@
 #include <iostream>
 #include <sstream>
 #include "Tools/StringAlgorithms.hpp"
-#include "Tools/Base64.hpp"
+#include "Tools/Coders/Base64.hpp"
 
 using namespace std;
 
-std::istream& operator>>(std::istream& stream, robot_interface::CameraSide& direction)
-{
-     std::string out;
-     stream >> out;
-     if (out == "LEFT"s)
-     {
-         direction = robot_interface::CameraSide::Left;
-     }
-     if (out == "RIGHT"s)
-     {
-         direction = robot_interface::CameraSide::Right;
-     }
-     return stream;
-}
 
 namespace
 {
 
-void fullfillRowsAndHeights(std::istream& stream, int& rows, int& columns)
+robot_interface::CameraSide translate(decltype(declval<PublishImage>().side()) side)
 {
-    std::string out;
-    stream >> out;
-    auto sizeVec = splitAndTrim(out, 'x');
-    rows = std::stoi(sizeVec[1]);
-    columns = std::stoi(sizeVec[0]);
+    if (side == PublishImage_Side_Left)
+    {
+        return robot_interface::CameraSide::Left;
+    }
+    return robot_interface::CameraSide::Right;
 }
 
 }  // namespace
 
-void ImageHandler::handle(const std::string& message)
+void ImageHandler::handle(const PublishImage& message)
 {
-    std::stringstream ss(message.substr(getPrefix().size()));
-    robot_interface::CameraSide side;
+    robot_interface::CameraSide side = translate(message.side());
     robot_interface::IntegerPicture out;
+    out.format = message.format();
+    out.rows = message.height();
+    out.columns = message.width();
 
-    ss >> side;
-    ss >> out.format;
-    fullfillRowsAndHeights(ss, out.rows, out.columns);
-
-    auto payloadPosition  = message.find("PAYLOAD:");
-    if (payloadPosition == std::string::npos)
-    {
-        return;
-    }
-
-    out.pixels = Base64Decode(message.substr(payloadPosition + 9));
+    out.pixels = tools::coders::Base64Decode(message.imagepayload().data() );
 
     function<void(robot_interface::IntegerPicture)> notifier;
     {
@@ -62,11 +40,6 @@ void ImageHandler::handle(const std::string& message)
     }
 
     notifier(out);
-}
-
-std::string ImageHandler::getPrefix() const
-{
-    return "PublishImage:"s;
 }
 
 void ImageHandler::clear()

@@ -28,7 +28,7 @@ std::string ImageFromFile::getDefaultName() const
     return {"ImageFromFile"};
 }
 
-std::any ImageFromFile::get(int outputPort)
+std::any ImageFromFile::get(int)
 {
     return {&image_};
 }

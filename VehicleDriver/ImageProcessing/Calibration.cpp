@@ -7,7 +7,7 @@ namespace image_processing
 namespace
 {
 
-void reactOnMouseClick(int event, int x, int y, int flags, void* param)
+void reactOnMouseClick(int event, int x, int y, int, void* param)
 {
     if (cv::EVENT_LBUTTONDOWN == event)
     {
@@ -41,7 +41,7 @@ TImageCalibrationPoints addCornersByHand(cv::Mat image, cv::Size cornersExpected
     cv::imshow("SetPointsByHand", image);
     cv::setMouseCallback("SetPointsByHand", reactOnMouseClick, &corners);
 
-    while (corners.size() != cornersExpectedSize.height*cornersExpectedSize.width)
+    while (corners.size() != static_cast<unsigned>(cornersExpectedSize.height*cornersExpectedSize.width))
     {
         cv::waitKey(15);
     }
@@ -75,7 +75,7 @@ std::tuple<TFound, TImageCalibrationPoints> findCornersByKMeans(cv::Mat mat, cv:
                cv::KMEANS_PP_CENTERS,
                centers);
 
-    for (auto i = 0u; i < size.height*size.width; ++i)
+    for (auto i = 0; i < size.height*size.width; ++i)
     {
         corners.push_back(centers.at<cv::Point2f>(i));
     }

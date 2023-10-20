@@ -8,7 +8,7 @@ void FlipImage::execute(cv::Mat &arg)
     cv::flip(*image_, *image_, -1);
 }
 
-std::any FlipImage::get(int outputPort)
+std::any FlipImage::get(int)
 {
     return {image_};
 }

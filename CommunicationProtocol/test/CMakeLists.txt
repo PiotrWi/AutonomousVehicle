@@ -1,0 +1,1 @@
+add_subdirectory(ut EXCLUDE_FROM_ALL)

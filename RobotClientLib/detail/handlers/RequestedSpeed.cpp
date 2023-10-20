@@ -2,26 +2,26 @@
 
 #include <sstream>
 
-#include "RobotClientLib/detail/networking/RobotAccessPoint.hpp"
+#include <SetSpeed.pb.h>
 
-void RequestedSpeed::handle(const std::string& message)
+#include "CommunicationProtocol/networking/ClientAccessPoint.hpp"
+#include "CommunicationProtocol/networking/MessageSender.hpp"
+
+void RequestedSpeed::handle(const CurrentRequestedSpeed& message)
 {
-    std::stringstream ss(message.substr(getPrefix().size()));
     robot_interface::Speed speed;
-    ss >> speed.leftWheel >> speed.rightWheel;
+    speed.leftWheel = message.leftwheel();
+    speed.rightWheel = message.rightwheel();
     reactOnChange(speed);
-}
-
-std::string RequestedSpeed::getPrefix() const
-{
-    return {"CurrentRequestedSpeed:"};
 }
 
 void RequestedSpeed::setRequestedSpeed(robot_interface::Speed speed)
 {
-    using namespace std;
-    auto message = "Set speed: "s + to_string(speed.leftWheel) + " "s + to_string(speed.rightWheel) + "/n";
-    backend::RobotAccessPoint::getInstance().send(message);
+    SetSpeed setSpeed;
+    setSpeed.set_leftwheel(speed.leftWheel);
+    setSpeed.set_rightwheel(speed.rightWheel);
+
+    networking::MessageSender(networking::ClientAccessPoint::getInstance()).send(std::move(setSpeed));
 }
 
 robot_interface::Speed RequestedSpeed::getRequestedSpeed()

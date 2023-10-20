@@ -6,7 +6,7 @@ namespace services
 {
 
 SpeedControlService::SpeedControlService(EventLoop &el,
-                                         networking::MessageSender& messageSender)
+                                         networking::MessageSender<networking::AccessPoint>& messageSender)
     : el_(el)
     , messageSender_(messageSender)
 {

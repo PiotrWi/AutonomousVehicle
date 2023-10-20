@@ -6,12 +6,12 @@
 #include "Types.hpp"
 
 #include "IMessageHandler.hpp"
+#include <CurrentRequestedSpeed.pb.h>
 
-class RequestedSpeed : public IMessageHandler
+class RequestedSpeed : public IMessageHandler<CurrentRequestedSpeed>
 {
 public:
-    void handle(const std::string& message) override;
-    std::string getPrefix() const override;
+    void handle(const CurrentRequestedSpeed& message) override;
     void setRequestedSpeed(robot_interface::Speed);
     robot_interface::Speed getRequestedSpeed();
     unsigned int subscribeForRequestedSpeedChange(std::function<void(robot_interface::Speed )> callback);

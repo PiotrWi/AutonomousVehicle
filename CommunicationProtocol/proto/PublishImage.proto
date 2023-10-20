@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+// Placeholder so far
+message PublishImage {
+  enum Format {
+    CV_8U3C = 0;
+  }
+
+  enum Side {
+    Left = 0;
+    Right = 1;
+  }
+
+  Side side = 1;
+  int32 format = 2;
+  uint32 width = 3;
+  uint32 height = 4;
+  bytes imagePayload = 5;
+}
