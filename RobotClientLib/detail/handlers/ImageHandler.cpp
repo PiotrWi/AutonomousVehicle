@@ -30,7 +30,8 @@ void ImageHandler::handle(const PublishImage& message)
     out.rows = message.height();
     out.columns = message.width();
 
-    out.pixels = tools::coders::Base64Decode(message.imagepayload().data() );
+    out.pixels.resize(message.imagepayload().size());
+    memcpy(out.pixels.data(), (unsigned char*)message.imagepayload().data(), out.pixels.size());
 
     function<void(robot_interface::IntegerPicture)> notifier;
     {

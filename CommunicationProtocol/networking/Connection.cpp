@@ -30,7 +30,6 @@ void Connection::startIoServiceAndReceiving()
         ioService_.reset();
         receive_single();
         ioService_.run();
-        std::cout << "end?" << std::endl;
     });
     asioReceiverThread.detach();
 }
@@ -50,7 +49,6 @@ void Connection::receive_single()
             return ;
         }
         std::string message(keepAlive->begin(), bytes_transferred);
-        std::cout << "Received something: " << bytes_transferred << ", " << message.substr(0, 50) << std::endl;
         notifyMessageReceived_(message);
         receive_single();
     });
@@ -64,13 +62,7 @@ void Connection::send(std::string&& message)
 
 void Connection::send(std::vector<std::string>&& messages)
 {
-    if (messages.empty())
-    {
-        std::cerr << "Connection::send with emtpy messages called" << std::endl;
-    }
     std::lock_guard<std::mutex> lk(socketMutex_);
-
-
     for (auto msg : messages)
     {
         boost::asio::write(*socket_, boost::asio::buffer(msg));

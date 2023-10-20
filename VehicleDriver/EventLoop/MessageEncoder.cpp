@@ -49,24 +49,10 @@ PublishImage createPublishImage(CameraSide cameraSide, cv::Mat &image)
 
     if (image.type() == CV_8UC3)
     {
-        std::vector<unsigned char> vec;
+        std::string payload;
 
-        if (image.isContinuous())
-        {
-            vec.resize(image.size().width * image.size().height* 3);
-            memcpy(vec.data(), image.ptr(0, 0), vec.size());
-        }
-        else
-        {
-            std::cout << "Not continous matrix" << std::endl;
-            for (auto it = image.begin<cv::Vec3b>(); it != image.end<cv::Vec3b>(); ++it)
-            {
-                vec.push_back((*it)[0]);
-                vec.push_back((*it)[1]);
-                vec.push_back((*it)[2]);
-            }
-        }
-        auto payload = tools::coders::Base64Encode(vec);
+        payload.resize(image.size().width * image.size().height * 3);
+        memcpy(payload.data(), image.ptr(0, 0), payload.size());
         publishImage.set_imagepayload(std::move(payload));
     }
     else
