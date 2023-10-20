@@ -1,5 +1,7 @@
 #include "HuffmanCoding.hpp"
 
+#include <iostream>
+
 namespace tools::coders
 {
 

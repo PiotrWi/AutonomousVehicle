@@ -5,6 +5,8 @@
 #include <boost/algorithm/string.hpp>
 
 #include "Tools/Coders/Base64.hpp"
+#include "Tools/Coders/HuffmanCoding.hpp"
+
 #include <Tools/Checksum.hpp>
 
 using namespace std;
@@ -19,6 +21,39 @@ auto translate(CameraSide cameraSide)
         return PublishImage_Side_Left;
     }
     return PublishImage_Side_Right;
+}
+
+[[maybe_unused]]
+auto fillPayloadNoEncoding(PublishImage &publishImage, cv::Mat &image)
+{
+    std::string payload;
+    payload.resize(image.size().width * image.size().height * 3);
+    memcpy(payload.data(), image.ptr(0, 0), payload.size());
+    publishImage.set_imagepayload(std::move(payload));
+}
+
+[[maybe_unused]]
+auto fillPayloadWithHuffmanCode(PublishImage &publishImage, cv::Mat &image)
+{
+    std::vector<unsigned char> imageData;
+    imageData.resize(image.size().width * image.size().height * 3);
+    memcpy(imageData.data(), image.ptr(0, 0), imageData.size());
+
+    std::string payload;
+    auto [payloadLen, codeTable, payloadVec] = tools::coders::encode(imageData);
+    payload.resize(payloadLen);
+    memcpy(payload.data(), payloadVec.data(), payloadVec.size());
+
+    publishImage.set_imagepayload(std::move(payload));
+
+    auto huffmanCode = new PublishImage_HuffmanCodingData();
+    huffmanCode->set_len(payloadLen);
+    for(auto code: codeTable)
+    {
+        huffmanCode->add_codevalue(code.mask);
+        huffmanCode->add_colelen(code.len);
+    }
+    publishImage.set_allocated_hufman(huffmanCode);
 }
 
 }  // namespace
@@ -49,11 +84,8 @@ PublishImage createPublishImage(CameraSide cameraSide, cv::Mat &image)
 
     if (image.type() == CV_8UC3)
     {
-        std::string payload;
-
-        payload.resize(image.size().width * image.size().height * 3);
-        memcpy(payload.data(), image.ptr(0, 0), payload.size());
-        publishImage.set_imagepayload(std::move(payload));
+        // fillPayloadNoEncoding(publishImage, image);
+        fillPayloadWithHuffmanCode(publishImage, image);
     }
     else
     {

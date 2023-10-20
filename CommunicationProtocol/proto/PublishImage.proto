@@ -2,6 +2,12 @@ syntax = "proto3";
 
 // Placeholder so far
 message PublishImage {
+  message HuffmanCodingData {
+    uint32 len = 1;
+    repeated uint32 codeValue = 2;
+    repeated uint32 coleLen = 3;
+  }
+
   enum Format {
     CV_8U3C = 0;
   }
@@ -16,4 +22,5 @@ message PublishImage {
   uint32 width = 3;
   uint32 height = 4;
   bytes imagePayload = 5;
+  optional HuffmanCodingData hufman = 6;
 }

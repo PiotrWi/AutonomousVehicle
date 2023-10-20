@@ -4,9 +4,32 @@
 #include <sstream>
 #include "Tools/StringAlgorithms.hpp"
 #include "Tools/Coders/Base64.hpp"
+#include "Tools/Coders/HuffmanCoding.hpp"
 
 using namespace std;
 
+void fillClassicImagePayload(robot_interface::IntegerPicture& out, const PublishImage& message)
+{
+    out.pixels.resize(message.imagepayload().size());
+    memcpy(out.pixels.data(), (unsigned char*)message.imagepayload().data(), out.pixels.size());
+}
+
+void fillImmageEncodedByHuffman(robot_interface::IntegerPicture& out, const PublishImage& message)
+{
+    std::vector<unsigned char> vec;
+    vec.resize(message.imagepayload().size());
+    memcpy(vec.data(), message.imagepayload().data(), vec.size());
+
+    tools::coders::TcodingTable codingTable;
+    for(int i = 0; i < 256; ++i)
+    {
+        codingTable[i].len = message.hufman().colelen(i);
+        codingTable[i].mask = message.hufman().codevalue(i);
+    }
+
+    auto codeLen = message.hufman().len();
+    out.pixels = tools::coders::decode(vec, codingTable, codeLen);
+}
 
 namespace
 {
@@ -30,8 +53,8 @@ void ImageHandler::handle(const PublishImage& message)
     out.rows = message.height();
     out.columns = message.width();
 
-    out.pixels.resize(message.imagepayload().size());
-    memcpy(out.pixels.data(), (unsigned char*)message.imagepayload().data(), out.pixels.size());
+    // fillClassicImagePayload(out, message);
+    fillImmageEncodedByHuffman(out, message);
 
     function<void(robot_interface::IntegerPicture)> notifier;
     {

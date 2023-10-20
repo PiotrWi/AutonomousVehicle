@@ -40,7 +40,7 @@ std::vector<std::string> serializeToString(unsigned int messageId, std::string &
     return strMessages;
 }
 
-unsigned int calculateMessagesNeeded(unsigned long payloadSize)
+unsigned int calculateMessagesNeeded(std::size_t payloadSize)
 {
     auto howManyMessagesNeeded = payloadSize / PayloadMaxLen;
     auto reminder = (payloadSize % PayloadMaxLen);

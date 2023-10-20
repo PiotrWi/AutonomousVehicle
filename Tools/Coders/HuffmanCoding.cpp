@@ -110,12 +110,6 @@ auto visit(const HuffmanTreeNode& node, std::array<CodeElement, ElementsToCode>&
     visit(*node.zeroChild, table, zero);
     CodeElement one = CodeElement(codeElement.len + 1u, codeElement.mask | (1u << codeElement.len));
     visit(*node.oneChild, table, one);
-    /*
-    CodeElement zero = CodeElement(codeElement.len + 1u, (codeElement.mask << 1) );
-    visit(*node.zeroChild, table, zero);
-    CodeElement one = CodeElement(codeElement.len + 1u, ((codeElement.mask << 1) | 1u ));
-    visit(*node.oneChild, table, one);
-     */
 }
 
 auto createCharToCode(HuffmanTree& tree)

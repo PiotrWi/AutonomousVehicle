@@ -91,3 +91,21 @@ TEST(HuffmanCodeShall, encodeDecodeFullSymbolsPattern)
 
     ASSERT_EQ(payloadToCompress, decodedStr);
 }
+
+TEST(HuffmanCodeShall, encodeDecodePartialSymbolsPattern)
+{
+    std::vector<unsigned char> payloadToCompress;
+    for (int i = 0; i < 5000; ++i)
+    {
+        payloadToCompress.push_back(15 + rand()%2);
+        payloadToCompress.push_back(15 + rand()%3);
+        payloadToCompress.push_back(15 + rand()%7);
+        payloadToCompress.push_back(15 + rand()%20);
+        payloadToCompress.push_back(15 + rand()%60);
+        payloadToCompress.push_back(15 + rand()%120);
+    }
+    auto [len, codingTable, codedStr] = encode(payloadToCompress);
+    auto decodedStr = decode(codedStr, codingTable, len);
+
+    ASSERT_EQ(payloadToCompress, decodedStr);
+}

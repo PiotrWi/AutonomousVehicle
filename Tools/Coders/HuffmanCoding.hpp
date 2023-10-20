@@ -9,7 +9,7 @@ namespace tools::coders
 struct CodeElement
 {
     unsigned char len = 0;
-    unsigned short mask = 0;
+    unsigned int mask = 0;
 };
 constexpr std::size_t ElementsToCode = 256;
 

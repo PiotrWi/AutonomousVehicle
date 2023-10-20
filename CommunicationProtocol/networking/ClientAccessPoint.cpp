@@ -18,7 +18,7 @@ bool ClientAccessPoint::connect()
     boost::system::error_code ec;
 
     boost::asio::ip::tcp::endpoint endpoint{
-        // boost::asio::ip::address::from_string("172.16.1.64"),
+        //boost::asio::ip::address::from_string("172.16.1.64"),
         boost::asio::ip::address::from_string("127.0.0.1"),
         17831
     };
@@ -37,7 +37,7 @@ bool ClientAccessPoint::connect()
     connection_->startIoServiceAndReceiving();
     if (notifyAboutConnectionStateChange_)
     {
-        std::cout << "goint to call calback" << std::endl;
+        std::cout << "going to call calback" << std::endl;
         notifyAboutConnectionStateChange_(true);
     }
     return true;
