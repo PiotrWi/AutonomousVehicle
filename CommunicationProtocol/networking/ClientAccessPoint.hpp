@@ -16,7 +16,7 @@ class ClientAccessPoint : public SingletonAddOn<ClientAccessPoint>
 {
 public:
     explicit ClientAccessPoint();
-    bool connect();
+    bool connect(const std::string& ip, unsigned int port);
     bool disconnect();
     bool isConnected();
 

@@ -7,6 +7,9 @@
 #include "Gui/QLadarVier.hpp"
 #include "GuiController/ConnectionController.hpp"
 
+namespace gui
+{
+
 class MainApplication : public QMainWindow
 {
     Q_OBJECT;
@@ -26,3 +29,5 @@ private:
 
     gui_controller::ConnectionController connectionController_;
 };
+
+}  // namespace gui

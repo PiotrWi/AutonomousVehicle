@@ -5,9 +5,9 @@
 namespace gui_controller
 {
 
-bool ConnectionController::connect()
+bool ConnectionController::connect(const std::string& ip, unsigned int port)
 {
-    return robot_interface::connect();
+    return robot_interface::connect(ip, port);
 }
 
 void ConnectionController::disconnect()

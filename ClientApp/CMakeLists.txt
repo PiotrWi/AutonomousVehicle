@@ -37,6 +37,8 @@ add_executable(ClientApp
         GuiController/CameraController.hpp
         utils/DumpImages.cpp
         utils/DumpImages.hpp
+        Gui/ConnectionDialog.cpp
+        Gui/ConnectionDialog.hpp
 )
 
 target_link_libraries(ClientApp

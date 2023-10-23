@@ -22,5 +22,5 @@ message PublishImage {
   uint32 width = 3;
   uint32 height = 4;
   bytes imagePayload = 5;
-  optional HuffmanCodingData hufman = 6;
+  HuffmanCodingData hufman = 6;
 }

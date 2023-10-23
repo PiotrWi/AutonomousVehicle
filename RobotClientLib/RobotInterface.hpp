@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <string>
 #include "Types.hpp"
 
 namespace robot_interface
@@ -9,7 +10,7 @@ namespace robot_interface
 // Connection interfaces
 void init();
 
-bool connect();
+bool connect(const std::string& ip, unsigned int port);
 void disconnect();
 bool isConnected();
 void subscribeForConnectionStatus(std::function<void(bool )> callback);

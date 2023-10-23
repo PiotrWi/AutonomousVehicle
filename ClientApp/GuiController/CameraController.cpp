@@ -1,7 +1,5 @@
 #include "CameraController.hpp"
 
-#include <iostream>
-
 #include <RobotClientLib/RobotInterface.hpp>
 #include <utils/DumpImages.hpp>
 

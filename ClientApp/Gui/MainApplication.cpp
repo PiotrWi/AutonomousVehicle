@@ -8,6 +8,64 @@
 #include <QStatusBar>
 
 #include <GuiController/SetEnableManager.hpp>
+#include "ConnectionDialog.hpp"
+
+namespace gui
+{
+
+namespace
+{
+
+void addFileMenu(QMenuBar* menuBar);
+void addConnectAction(QMenu* menu);
+void addDisconnectAction(QMenu* menu);
+
+void addFileMenu(QMenuBar* menuBar)
+{
+    auto fileMenu = new QMenu("File");
+
+    addConnectAction(fileMenu);
+    addDisconnectAction(fileMenu);
+
+    menuBar->addMenu(fileMenu);
+}
+
+void addConnectAction(QMenu* menu)
+{
+    auto connectAction = new QAction("Connect");
+    menu->connect(connectAction, &QAction::triggered,
+                  [mainWindow = menu->parentWidget()](auto&&){
+                      std::cout << "Connect clicked" << std::endl;
+                      auto connectionDialog = new ConnectionDialog(mainWindow);
+                      auto retVal = connectionDialog->exec();
+                      auto ipParameters = connectionDialog->getValue();
+
+                      if (retVal && ipParameters)
+                      {
+                          gui_controller::ConnectionController::getInstance().connect(ipParameters->ip_, ipParameters->port_);
+                      }
+                  } );
+    connectAction->setEnabled(true);
+    gui_controller::SetEnableManager::getInstance().registerItem(connectAction, gui_controller::EnabledWhenConnectionDown{});
+
+    menu->addAction(connectAction);
+}
+
+void addDisconnectAction(QMenu* menu)
+{
+    auto connectAction = new QAction("Disconnect");
+    menu->connect(connectAction, &QAction::triggered,
+                  [](auto&&){
+                      std::cout << "Disconnect clicked" << std::endl;
+                      gui_controller::ConnectionController::getInstance().disconnect();
+                  } );
+    connectAction->setEnabled(false);
+    gui_controller::SetEnableManager::getInstance().registerItem(connectAction, gui_controller::EnabledWhenConnectionUp{});
+
+    menu->addAction(connectAction);
+}
+
+}  // namespace
 
 MainApplication::MainApplication()
     : leftCameraView_(new gui::QCameraView(gui_controller::CameraSide::Left))
@@ -62,56 +120,11 @@ QWidget* MainApplication::createCentralWidget()
     return cWidget;
 }
 
-namespace
-{
 
-void addFileMenu(QMenuBar* menuBar);
-void addConnectAction(QMenu* menu);
-void addDisconnectAction(QMenu* menu);
-
-void addFileMenu(QMenuBar* menuBar)
-{
-    auto fileMenu = new QMenu("File");
-
-    addConnectAction(fileMenu);
-    addDisconnectAction(fileMenu);
-
-    menuBar->addMenu(fileMenu);
-}
-
-void addConnectAction(QMenu* menu)
-{
-    auto connectAction = new QAction("Connect");
-    menu->connect(connectAction, &QAction::triggered,
-            [&](auto&&){
-                std::cout << "Connect clicked" << std::endl;
-                gui_controller::ConnectionController::getInstance().connect();
-            } );
-    connectAction->setEnabled(true);
-    gui_controller::SetEnableManager::getInstance().registerItem(connectAction, gui_controller::EnabledWhenConnectionDown{});
-
-    menu->addAction(connectAction);
-}
-
-void addDisconnectAction(QMenu* menu)
-{
-    auto connectAction = new QAction("Disconnect");
-    menu->connect(connectAction, &QAction::triggered,
-                  [&](auto&&){
-                      std::cout << "Disconnect clicked" << std::endl;
-                      gui_controller::ConnectionController::getInstance().disconnect();
-                  } );
-    connectAction->setEnabled(false);
-    gui_controller::SetEnableManager::getInstance().registerItem(connectAction, gui_controller::EnabledWhenConnectionUp{});
-
-    menu->addAction(connectAction);
-}
-
-}  // namespace
 
 QWidget* MainApplication::createMenuWidget()
 {
-    auto menuBar = new QMenuBar();
+    auto menuBar = new QMenuBar(this);
 
     addFileMenu(menuBar);
 
@@ -122,3 +135,5 @@ QStatusBar* MainApplication::createStatusBar()
 {
     return new QStatusBar();
 }
+
+}  // namespace gui

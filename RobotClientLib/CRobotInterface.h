@@ -5,7 +5,7 @@ extern "C"
 
 // Connection interfaces
 void c_init();
-bool c_connect();
+bool c_connect(const char* ip, unsigned int port);
 void c_disconnect();
 bool c_isConnected();
 void c_subscribeForConnectionStatus(void (*callback)(bool));

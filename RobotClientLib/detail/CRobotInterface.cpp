@@ -10,9 +10,10 @@ void c_init()
     robot_interface::init();
 }
 
-bool c_connect()
+bool c_connect(const char* ip, unsigned int port)
 {
-    return robot_interface::connect();
+
+    return robot_interface::connect(std::string(ip), port);
 }
 
 void c_disconnect()

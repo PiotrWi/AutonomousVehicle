@@ -4,6 +4,7 @@
 #include "CommunicationProtocol/Message.hpp"
 
 #include "Tools/Checksum.hpp"
+#include <Tools/ExecutionTimeMeasurement.hpp>
 
 Connection::Connection(boost::asio::io_service& ioService,
                        boost::asio::ip::tcp::socket *socket,
@@ -49,6 +50,9 @@ void Connection::receive_single()
             return ;
         }
         std::string message(keepAlive->begin(), bytes_transferred);
+
+        RaiiExecutionTimeMeasurement t("receive_single");
+
         notifyMessageReceived_(message);
         receive_single();
     });

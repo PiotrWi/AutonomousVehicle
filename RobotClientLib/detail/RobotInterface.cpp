@@ -34,10 +34,10 @@ void init()
     messageDispatcher_.subscribeFor(std::function<void(const PublishImage&)>([](const PublishImage& message) { imageHandler_.handle(message); } ));
 }
 
-bool connect()
+bool connect(const std::string& ip, unsigned int port)
 {
     std::cout << "[RobotInterface] connect call" << std::endl;
-    auto isConnected = networking::ClientAccessPoint::getInstance().connect();
+    auto isConnected = networking::ClientAccessPoint::getInstance().connect(ip, port);
     std::cout << "[RobotInterface] connect return value: " << isConnected << std::endl;
     return isConnected;
 }

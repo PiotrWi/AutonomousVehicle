@@ -9,7 +9,7 @@ int main(int argc, char** argv)
     robot_interface::init();
 
     QApplication app(argc, argv);
-    MainApplication window;
+    gui::MainApplication window;
     window.show();
     return app.exec();
 }
