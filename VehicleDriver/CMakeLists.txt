@@ -21,12 +21,15 @@ add_library(drivers STATIC
         Drivers/MotorsDriver.hpp
         Drivers/PwmDriver.cpp
         Drivers/PwmDriver.hpp
-        Drivers/SysHelper.hpp
-        Drivers/SysHelper.cpp
-        Drivers/FDRaiiWrapper.cpp
-        Drivers/FDRaiiWrapper.hpp
+        Drivers/Helpers/SysHelper.hpp
+        Drivers/Helpers/SysHelper.cpp
+        Drivers/Helpers/FDRaiiWrapper.cpp
+        Drivers/Helpers/FDRaiiWrapper.hpp
         Drivers/CameraDriver.cpp
         Drivers/CameraDriver.hpp
+        Drivers/EncodersDriver.cpp
+        Drivers/EncodersDriver.hpp
+        Drivers/EPoolReactor/EpollReactor.hpp
 )
 
 add_library(eventLoop STATIC
@@ -99,6 +102,12 @@ add_executable(Autonomous_vehicle main.cpp
         Components/PrototypeComponent.hpp
         Components/BirdEyeViewCalibration.cpp
         Components/BirdEyeViewCalibration.hpp
+        Drivers/EPoolReactor/IEpollHandler.hpp
+        Drivers/detail/GpioDriverBase.hpp
+        Drivers/detail/GpioDriverBase.cpp
+        Drivers/EPoolReactor/EpoolReactor.cpp
+        Services/EncoderService.cpp
+        Services/EncoderService.hpp
 )
 
 target_link_libraries(Autonomous_vehicle

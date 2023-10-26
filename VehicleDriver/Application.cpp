@@ -8,6 +8,7 @@ void Application::start()
     {
         component->start();
     }
+    applicationContext.epollReactor_.run();
 
     while (true)
     {

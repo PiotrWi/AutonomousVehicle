@@ -8,6 +8,7 @@
 #include "CommunicationProtocol/networking/AccessPoint.hpp"
 #include <CommunicationProtocol/networking/MessageSender.hpp>
 #include "Services/SpeedControlService.hpp"
+#include "Services/EncoderService.hpp"
 
 namespace components
 {
@@ -23,6 +24,7 @@ private:
     networking::MessageSender<networking::AccessPoint>& messageSender_;
 
     services::SpeedControlService speedControlService_;
+    services::EncoderService encoderService_;
 };
 
 std::unique_ptr<Component> createRobotComponent(ApplicationContext& applicationContext);

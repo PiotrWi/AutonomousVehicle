@@ -69,7 +69,7 @@ std::vector<std::unique_ptr<Pipeline>> createParallelCorrectedDualCameraPublish(
                     .add(new FlipImage(), DefaultMapping{})
                     .add(new ApplyCalibration(AppConfig::getInstance().getLeftCoefficientFileLoc()), DefaultMapping{})
                     .add(new PicturePublisher(messageSender, CameraSide::LEFT ),  DefaultMapping{})
-                    .add(new DumpImage(AppConfig::getInstance().getCameraDumpDirectory(), "left"), {{0, "leftApplyCalibration", 0}})
+                    .add(new DumpImage(AppConfig::getInstance().getDumpDirectory(), "left"), {{0, "leftApplyCalibration", 0}})
                     .build());
 
     pipelines.emplace_back(
@@ -78,7 +78,7 @@ std::vector<std::unique_ptr<Pipeline>> createParallelCorrectedDualCameraPublish(
                     .add(new FlipImage(), DefaultMapping{})
                     .add(new ApplyCalibration(AppConfig::getInstance().getRightCoefficientFileLoc()), DefaultMapping{})
                     .add(new PicturePublisher(messageSender, CameraSide::RIGHT ), DefaultMapping{})
-                    .add(new DumpImage(AppConfig::getInstance().getCameraDumpDirectory(), "right"), {{0, "rightApplyCalibration", 0}})
+                    .add(new DumpImage(AppConfig::getInstance().getDumpDirectory(), "right"), {{0, "rightApplyCalibration", 0}})
                     .build());
 
     return pipelines;

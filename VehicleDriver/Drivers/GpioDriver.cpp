@@ -2,71 +2,104 @@
 
 #include <string>
 
-#include "SysHelper.hpp"
-
-namespace
-{
-
-const char* GpioLocation = "/sys/class/gpio";
-const char* GpioExportLocation = "/sys/class/gpio/export";
-const char* GpioUnexportLocation = "/sys/class/gpio/unexport";
-
-}  // namespace
+#include "VehicleDriver/Drivers/Helpers/SysHelper.hpp"
 
 namespace drivers
 {
 
-using namespace std;
+const char in[] = "in";
+const char out[] = "out";
+
+const char *GpioValueLocation = "/sys/class/gpio/export";
+
+GpioInputDriver::GpioInputDriver(int pinNr)
+    : GpioDriverBase<in>(pinNr)
+{
+}
+
+void GpioInputDriver::init()
+{
+    auto valueLoc = GpioLocation + std::string("/gpio") + std::to_string(this->pinNr_) + "/value";
+    fd_ = SysfsHelper::openToRead(valueLoc.c_str());
+
+    GpioDriverBase::init();
+}
+
+GpioInputDriver::~GpioInputDriver()
+{
+    deinitialize();
+}
+
+int GpioInputDriver::read()
+{
+    auto val = SysfsHelper::readFromSys(fd_);
+    return std::stoi(val);
+}
 
 GpioOutputDriver::GpioOutputDriver(int pinNr)
-    : pinNr_(pinNr)
-    , isInitialized_(false)
+    : GpioDriverBase<out>(pinNr)
 {
-}
-
-void GpioOutputDriver::init()
-{
-    isInitialized_ = true;
-
-    auto pinStr = std::to_string(pinNr_);
-    SysfsHelper::writeToSys(GpioExportLocation, pinStr);
-
-    auto directionLoc = GpioLocation + "/gpio"s + pinStr + "/direction";
-    SysfsHelper::writeToSys(directionLoc.c_str(), std::string("out"));
-
-    auto valueLoc = GpioLocation + "/gpio"s + pinStr + "/value";
-
-    fd_ = SysfsHelper::openToWrite(valueLoc.c_str());
-    setLow();
-}
-
-void GpioOutputDriver::deinitialize()
-{
-    if (not isInitialized_)
-    {
-        return;
-    }
-
-    auto pinStr = std::to_string(pinNr_);
-    SysfsHelper::writeToSys(GpioUnexportLocation, pinStr);
-    fd_.~FDRaiiWrapper();
-
-    isInitialized_ = false;
 }
 
 void GpioOutputDriver::setHigh()
 {
-    SysfsHelper::writeToSys(fd_, "1"s);
+    SysfsHelper::writeToSys(fd_, std::string{"1"});
 }
 
 void GpioOutputDriver::setLow()
 {
-    SysfsHelper::writeToSys(fd_, "0"s);
+    SysfsHelper::writeToSys(fd_, std::string{"0"});
 }
 
 GpioOutputDriver::~GpioOutputDriver()
 {
     deinitialize();
+}
+
+void GpioOutputDriver::init()
+{
+    GpioDriverBase::init();
+    auto valueLoc = GpioLocation + std::string("/gpio") + std::to_string(this->pinNr_) + "/value";
+    fd_ = SysfsHelper::openToWrite(valueLoc.c_str());
+    setLow();
+}
+
+GpioInputDriverEpollHandler::GpioInputDriverEpollHandler(int pinNr)
+        : GpioInputDriver(pinNr)
+{
+}
+
+void GpioInputDriverEpollHandler::init(std::function<void(bool)> onChange)
+{
+    onChange_ = onChange;
+    GpioInputDriver::init();
+
+    initEdges();
+}
+
+void GpioInputDriverEpollHandler::initEdges()
+{
+    auto edgeLoc = GpioLocation + std::string("/gpio") + std::to_string(this->pinNr_) + "/edge";
+    SysfsHelper::writeToSys(edgeLoc.c_str(), std::string {"both"});
+}
+
+std::vector<int> GpioInputDriverEpollHandler::getDescriptorsToObserve() const
+{
+    return {fd_.get()};
+}
+
+void GpioInputDriverEpollHandler::onAvailable(int)
+{
+    readEdges();
+}
+
+void GpioInputDriverEpollHandler::readEdges()
+{
+    auto newVal = read();
+    if (onChange_)
+    {
+        onChange_(newVal);
+    }
 }
 
 }  // drivers

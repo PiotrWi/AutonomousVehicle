@@ -1,7 +1,6 @@
 #include "ApplicationContext.hpp"
 #include <EventLoop/MessageDecoder.hpp>
 
-// tmp: to be considered how to dispatch messages.
 #include <SetSpeed.pb.h>
 
 ApplicationContext::ApplicationContext()
