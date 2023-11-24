@@ -28,7 +28,7 @@ void EpollReactor::run()
         {
             perror("failed to add epoll add");
         }
-}
+    }
 
     std::thread t([&](){
         epoll_event events[64];
@@ -47,6 +47,7 @@ void EpollReactor::run()
             }
         }
     });
+    t.detach();
 }
 
 void EpollReactor::registerEpollHandler(IEpollHandler* handler)

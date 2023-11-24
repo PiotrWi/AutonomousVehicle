@@ -1,5 +1,6 @@
 #include "GpioDriver.hpp"
 
+#include <iostream>
 #include <string>
 
 #include "VehicleDriver/Drivers/Helpers/SysHelper.hpp"
@@ -33,6 +34,9 @@ GpioInputDriver::~GpioInputDriver()
 int GpioInputDriver::read()
 {
     auto val = SysfsHelper::readFromSys(fd_);
+
+    std::cout << val << std::endl;  // TMP
+
     return std::stoi(val);
 }
 

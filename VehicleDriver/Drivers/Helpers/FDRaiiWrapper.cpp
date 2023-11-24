@@ -1,5 +1,6 @@
 #include "FDRaiiWrapper.hpp"
 
+#include <iostream>
 #include <utility>
 
 FDRaiiWrapper::FDRaiiWrapper()
@@ -18,7 +19,9 @@ void FDRaiiWrapper::conditionallyClose()
 {
     if (deleter_ && fd_ > 0)
     {
+        std::cout << "Closing FD: " << fd_ << std::endl;
         deleter_(fd_);
+
     }
     fd_ = 0;
 }

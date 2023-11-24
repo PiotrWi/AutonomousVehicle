@@ -22,10 +22,10 @@ void EncoderService::initDumpFiles()
     auto dirBase = AppConfig::getInstance().getDumpDirectory();
     auto timeStr = getCurrentTime();
 
-    get(Side::Left, EncoderPort::c1).dumpFile_.open(dirBase + "leftC1" + timeStr);
-    get(Side::Left, EncoderPort::c2).dumpFile_.open(dirBase + "leftC2" + timeStr);
-    get(Side::Right, EncoderPort::c1).dumpFile_.open(dirBase + "rightC1" + timeStr);
-    get(Side::Right, EncoderPort::c2).dumpFile_.open(dirBase + "rightC2" + timeStr);
+    get(Side::Left, EncoderPort::c1).dumpFile_.open(dirBase + "/leftC1" + timeStr);
+    get(Side::Left, EncoderPort::c2).dumpFile_.open(dirBase + "/leftC2" + timeStr);
+    get(Side::Right, EncoderPort::c1).dumpFile_.open(dirBase + "/rightC1" + timeStr);
+    get(Side::Right, EncoderPort::c2).dumpFile_.open(dirBase + "/rightC2" + timeStr);
 }
 
 void EncoderService::start()
