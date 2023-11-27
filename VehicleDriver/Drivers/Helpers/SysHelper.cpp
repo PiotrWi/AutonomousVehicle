@@ -27,6 +27,7 @@ FDRaiiWrapper SysfsHelper::openToRead(const char *loc)
 std::string SysfsHelper::readFromSys(FDRaiiWrapper& fd)
 {
     char buf[80];
+    lseek(fd.get(), 0, SEEK_DATA);
     auto ret = read(fd.get(), buf, 80);
     if (ret < 0)
     {

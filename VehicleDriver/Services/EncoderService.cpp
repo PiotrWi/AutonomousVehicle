@@ -36,7 +36,7 @@ void EncoderService::start()
     leftEncoder_.init(epollReactor_,
                       std::bind(&EncoderService::onEncoderTick, this, std::ref(get(Side::Left, EncoderPort::c1)), _1),
                       std::bind(&EncoderService::onEncoderTick, this, std::ref(get(Side::Left, EncoderPort::c2)), _1));
-    leftEncoder_.init(epollReactor_,
+    rightEncoder_.init(epollReactor_,
                       std::bind(&EncoderService::onEncoderTick, this, std::ref(get(Side::Right, EncoderPort::c1)), _1),
                       std::bind(&EncoderService::onEncoderTick, this, std::ref(get(Side::Right, EncoderPort::c2)), _1));
 }

@@ -7,6 +7,8 @@
 
 #include <sys/epoll.h>
 
+namespace { const int MAX_EVENTS = 64;}
+
 namespace drivers::epoll_reactor
 {
 
@@ -18,24 +20,24 @@ void EpollReactor::run()
         perror("Failed to create epoll ");
     }
 
+    epoll_event events[MAX_EVENTS];
+    int i = 0;
     for (auto && [descriptor, handler] : handlerToDescriptors_)
     {
-        epoll_event ee;
-        ee.data.fd = descriptor;
-        ee.events = EPOLLPRI | EPOLLET;
-        auto ret = epoll_ctl(epollDescriptor_.get(), EPOLL_CTL_ADD, descriptor, &ee);
+        events[i].data.fd = descriptor;
+        events[i].events = EPOLLPRI | EPOLLET;
+        auto ret = epoll_ctl(epollDescriptor_.get(), EPOLL_CTL_ADD, descriptor, &events[i]);
         if (ret < 0)
         {
             perror("failed to add epoll add");
         }
+        i++
     }
 
     std::thread t([&](){
-        epoll_event events[64];
-
         while (true)
         {
-            auto eventsCount = epoll_wait(epollDescriptor_.get(), events, 64, -1);
+            auto eventsCount = epoll_wait(epollDescriptor_.get(), events, MAX_EVENTS, -1);
             if (eventsCount < 0)
             {
                 perror("epoll_wait failed");

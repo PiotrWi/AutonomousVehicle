@@ -18,9 +18,6 @@ void EncoderDriver::init(epoll_reactor::EpollReactor & epollReactor,
 
     epollReactor.registerEpollHandler(&c1PortGpio_);
     epollReactor.registerEpollHandler(&c2PortGpio_);
-
-    onC1Change(c1PortGpio_.read());
-    onC2Change(c2PortGpio_.read());
 }
 
 } // drivers

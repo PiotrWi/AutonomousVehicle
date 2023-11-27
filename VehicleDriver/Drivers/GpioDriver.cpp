@@ -20,10 +20,10 @@ GpioInputDriver::GpioInputDriver(int pinNr)
 
 void GpioInputDriver::init()
 {
+    GpioDriverBase::init();
+
     auto valueLoc = GpioLocation + std::string("/gpio") + std::to_string(this->pinNr_) + "/value";
     fd_ = SysfsHelper::openToRead(valueLoc.c_str());
-
-    GpioDriverBase::init();
 }
 
 GpioInputDriver::~GpioInputDriver()
@@ -35,7 +35,7 @@ int GpioInputDriver::read()
 {
     auto val = SysfsHelper::readFromSys(fd_);
 
-    std::cout << val << std::endl;  // TMP
+    std::cout << "GpioInputDriver[" << fd_.get() << "]:" << val << std::endl;  // TMP
 
     return std::stoi(val);
 }
@@ -63,6 +63,7 @@ GpioOutputDriver::~GpioOutputDriver()
 void GpioOutputDriver::init()
 {
     GpioDriverBase::init();
+
     auto valueLoc = GpioLocation + std::string("/gpio") + std::to_string(this->pinNr_) + "/value";
     fd_ = SysfsHelper::openToWrite(valueLoc.c_str());
     setLow();
@@ -76,9 +77,11 @@ GpioInputDriverEpollHandler::GpioInputDriverEpollHandler(int pinNr)
 void GpioInputDriverEpollHandler::init(std::function<void(bool)> onChange)
 {
     onChange_ = onChange;
-    GpioInputDriver::init();
-
+    GpioDriverBase::init();
     initEdges();
+
+    auto valueLoc = GpioLocation + std::string("/gpio") + std::to_string(this->pinNr_) + "/value";
+    fd_ = SysfsHelper::openToRead(valueLoc.c_str());
 }
 
 void GpioInputDriverEpollHandler::initEdges()
